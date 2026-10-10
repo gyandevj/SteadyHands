@@ -15,7 +15,7 @@ $RepoRoot = $PSScriptRoot
 
 Write-Host ""
 Write-Host "============================================================" -ForegroundColor Cyan
-Write-Host "          SteadyHand — Hackathon Quick Start" -ForegroundColor Cyan
+Write-Host "          SteadyHand --- Hackathon Quick Start" -ForegroundColor Cyan
 Write-Host "============================================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -82,7 +82,7 @@ Write-Host "4. Open the test form below and click 'Enable on this page'!" -Foreg
 Write-Host "------------------------------------------------------------" -ForegroundColor DarkGray
 Write-Host ""
 
-$FormUri = "file:///" + $FormPath.Replace("\", "/")
+$FormUri = "file:///" + ($FormPath -replace '\\', '/')
 Start-Process $FormUri
 
 Write-Host "Starting SteadyHand WebSocket Bridge on ${ListenHost}:${Port}..." -ForegroundColor Cyan
