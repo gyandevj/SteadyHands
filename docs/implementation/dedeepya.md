@@ -347,6 +347,12 @@ flowchart TD
 4. **Haptic Pulse Notifications:**
    - Dev must tag samples with `haptic_active=True` during motor pulses and provide `haptic.pulse` start/end timestamps to allow blanking.
 
+### 7.1 Proposed Additions to Shared Contracts (`packages/contracts`)
+Recorded for Dev's review (does not modify `packages/contracts/` directly):
+1. **Filter Kind Union:** Extend `filter.kind` in `AssistanceConfig` schema to explicitly validate `'exponential' | 'one_euro'`.
+2. **Pointer Mode Union:** Clarify `mode` enum in `AssistanceConfig` as `'native' | 'stabilized' | 'raw_virtual'`.
+3. **Target Kind Union:** Ensure `kind` in `Target` supports `'focus' | 'toggle' | 'button'`.
+
 ---
 
 ## 8. Interfaces Needed from Person 3 (Extension & Browser)

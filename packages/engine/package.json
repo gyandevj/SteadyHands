@@ -1,0 +1,23 @@
+{
+  "name": "@steadyhand/engine",
+  "version": "0.1.0",
+  "description": "Pure TypeScript pointer stabilization, target acquisition, and dwell engine",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "node --experimental-strip-types --test tests/engine/*.test.ts"
+  },
+  "keywords": [
+    "accessibility",
+    "pointer",
+    "dwell",
+    "one-euro",
+    "smoothing"
+  ],
+  "author": "Dedeepya (SteadyHand Team)",
+  "license": "MIT"
+}

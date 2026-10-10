@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Service Registration — Fixture Layout 1</title>
+  <link rel="stylesheet" href="./styles/fixture.css" />
+</head>
+<body>
+  <header>
+    <h1>Service Registration</h1>
+    <p>Test Layout 1: Single-column standard form controls with semantic markup.</p>
+  </header>
+
+  <main class="fixture-card">
+    <form id="registration-form" onsubmit="event.preventDefault(); document.getElementById('confirmation').hidden = false;">
+      <div class="form-group">
+        <label for="reg-name">Full Name</label>
+        <input type="text" id="reg-name" name="name" required placeholder="Alex Mercer" autocomplete="name" />
+      </div>
+
+      <div class="form-group">
+        <label for="reg-email">Email Address</label>
+        <input type="email" id="reg-email" name="email" required placeholder="alex@example.com" autocomplete="email" />
+      </div>
+
+      <div class="form-group">
+        <label for="reg-password">Password</label>
+        <input type="password" id="reg-password" name="password" required placeholder="••••••••" autocomplete="new-password" />
+      </div>
+
+      <fieldset>
+        <legend>Select Subscription Tier</legend>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" name="plan" value="starter" checked />
+            Starter Tier (Free)
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="plan" value="professional" />
+            Professional Tier ($15/mo)
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="form-group">
+        <div class="checkbox-group">
+          <label class="checkbox-label" for="reg-terms">
+            <input type="checkbox" id="reg-terms" required />
+            I agree to the Terms of Service and Privacy Policy
+          </label>
+          <label class="checkbox-label" for="reg-newsletter">
+            <input type="checkbox" id="reg-newsletter" />
+            Receive periodic product announcements
+          </label>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" id="reg-cancel" onclick="document.getElementById('registration-form').reset();">Cancel</button>
+        <button type="submit" id="reg-submit">Complete Registration</button>
+      </div>
+    </form>
+
+    <div id="confirmation" hidden style="margin-top: 1.5rem; padding: 1rem; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; color: #065f46;">
+      Registration submitted successfully.
+    </div>
+  </main>
+</body>
+</html>
