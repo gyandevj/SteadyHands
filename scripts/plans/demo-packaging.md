@@ -14,7 +14,7 @@ Existing implementation: none. Planned `scripts/build-extension.sh`: call Person
 
 ## Interfaces and data flow
 
-After real pnpm workspace and Python installation, perform scoped checks, call installed extension/dashboard build scripts where supplied, verify packaged MV3 uses local assets/no remote code, include actual endpoint and pairing instructions without token. Treat synthetic example messages as demos, not measured evidence. Record exact versions, validated contract fixtures and source labels. Worker/browser integration belongs to Person 3.
+After the real npm workspace and Python installation, perform scoped checks, call installed extension/dashboard build scripts where supplied, verify packaged MV3 uses local assets/no remote code, include actual endpoint and pairing instructions without token. Treat synthetic example messages as demos, not measured evidence. Record exact versions, validated contract fixtures and source labels. Worker/browser integration belongs to Person 3.
 
 ## Implementation sequence
 

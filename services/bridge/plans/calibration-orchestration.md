@@ -6,7 +6,7 @@ Dev manages session ID, phase, capture duration, cancellation and result publica
 
 ## Current state
 
-The [HTTP routes](../../../docs/contracts.md#8-http-api) mention `stationary|intentional` but Person 4's documented function is `calibrate_stationary`; no intentional-phase algorithm, rejection schema or duration has been finalized. No backend session exists.
+The [HTTP routes](../../../docs/contracts.md#8-http-api) mention `stationary|intentional` but only the stationary phase has an implemented function. Person 4's merged and verified `calibrate_stationary(samples, capability)` enforces ≥64 samples spanning ≥800 ms, no invalid/saturated samples, mean gravity 0.85–1.15 g, and noise σ ≤ 0.05 g, returning `state="complete"|"rejected"` with reasons (`insufficient_samples`, `duration_too_short`, `sensor_read_error`, `sensor_saturation`, `invalid_gravity_magnitude`, `excessive_motion_during_stationary_phase`). Intentional phase remains unimplemented and must be rejected with a clear reason. See [analysis integration](analysis-integration.md).
 
 ## Exact proposed files
 
@@ -14,7 +14,7 @@ Existing implementation: none. Planned `src/steadyhand_bridge/pipeline/calibrati
 
 ## Interfaces and data flow
 
-`POST /v1/calibration/start` with phase/request ID -> session ID; GET progress -> state; POST finish with request ID -> baseline or rejection. Proposed states `capturing`, `ready`, `complete`, `rejected`, `cancelled` need agreement with Kripa/Person 4 before models. Window receives `g` acceleration and MCU `t_us`; sensor metadata includes verified mount/range/ODR/boot; a reboot or mount/config change invalidates baseline. Only call `steadyhand_signal.calibrate_stationary(samples, sensor_metadata)` with actual agreed types. Intentional phase remains unimplemented until owner defines semantics.
+`POST /v1/calibration/start` with phase/request ID -> session ID; GET progress -> state; POST finish with request ID -> baseline or rejection. Proposed session states `capturing`, `complete`, `rejected` (the library returns only `complete|rejected`; `capturing` is backend-owned) need Kripa sign-off before models. Window receives `g` acceleration and MCU `t_us`; sensor metadata includes verified mount/range/ODR/boot; a reboot or mount/config change invalidates baseline. Call the actual `steadyhand_signal.calibrate_stationary(samples, capability)`; map `CalibrationResult.reasons` straight through. Intentional phase remains unimplemented until its owner defines semantics.
 
 ## Implementation sequence
 

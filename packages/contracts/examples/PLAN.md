@@ -6,7 +6,7 @@ Supply one JSON fixture collection proving identical TypeScript and Python bound
 
 ## Current state
 
-Directory empty. [Contracts](../../../docs/contracts.md) embeds illustrative JSON, including an example LIS3DHTR that is explicitly **not** the identified sensor. No parser/check script or capture exists.
+Directory empty. [Contracts](../../../docs/contracts.md) embeds illustrative JSON, including an example LIS3DHTR that is explicitly **not** the identified sensor. No parser/check script or capture exists. Dedeepya's `fixtures/synthetic/signals/*.json` (merged) already use the exact `SensorSample` field names (`seq`, `t_us`, `a_g`, `valid`, `saturated`, `haptic_active`) and are the first realistic inputs for the M3 replay boundary; they are a different file shape (`signal_id/seed/odr_hz/duration_s/components/samples`) from the canonical frames, so do not copy them into `examples/`.
 
 ## Exact proposed files
 

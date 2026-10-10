@@ -6,7 +6,7 @@ Adapters produce canonical, source-labeled device metadata and timestamped batch
 
 ## Current state
 
-Directory empty. No MCU/Linux API, capture format, or sensor has been verified. Read [bridge README](../../../README.md), [master](../../../../../docs/implementation/dev.md), and [canonical contracts](../../../../../docs/contracts.md).
+Directory empty. No MCU/Linux API or sensor has been verified. Dedeepya's synthetic fixtures exist and are usable now (`fixtures/synthetic/signals/*.json`: `{signal_id, seed, odr_hz, duration_s, components[], samples[]}` with `SensorSample` fields); the planned `fixtures/recorded/` provenance schema (`sensor_recording_v1`) and `fixtures/validate_recording.py` are not implemented and no real capture exists. Read [bridge README](../../../README.md), [master](../../../../../docs/implementation/dev.md), [analysis integration](../../../plans/analysis-integration.md), and [canonical contracts](../../../../../docs/contracts.md).
 
 ## Exact proposed files
 
@@ -14,7 +14,17 @@ Existing: none. Planned `base.py`: typed bounded producer interface `start`, `re
 
 ## Interfaces and data flow
 
-`device.hello` and `sensor.batch` fields, `g` and increasing MCU `t_us` follow [contracts](../../../../../docs/contracts.md#6-device-and-sample-frames); maximum 50 samples/batch, target ~10. Record host receive monotonic time separately, compare `seq`, `batch_seq`, `boot_id`, `stream_id`, errors and loss. Replay must preserve provenance while conveying that playback is not a current live connection; agree recording mapping with Person 4 rather than implementing their proposed private schema.
+`device.hello` and `sensor.batch` fields, `g` and increasing MCU `t_us` follow [contracts](../../../../../docs/contracts.md#6-device-and-sample-frames); maximum 50 samples/batch, target ~10. Record host receive monotonic time separately, compare `seq`, `batch_seq`, `boot_id`, `stream_id`, errors and loss. Replay must preserve provenance while conveying that playback is not a current live connection; agree recording mapping with Person 4 rather than implementing their private schema.
+
+Source labeling is derived from the input, never from the socket:
+
+| Mode / input | Reported `source` | Rule |
+| --- | --- | --- |
+| `mock` (M2) | `synthetic` | deterministic generator, explicit synthetic label everywhere |
+| `replay` of `fixtures/synthetic/signals/*.json` (M3) | `synthetic` | fixture metadata identifies generated data |
+| `replay` of `sensor_recording_v1` provenance capture (M4/M6) | `recorded` | only with implemented provenance validation and a real capture |
+| `uno_q` after verified round trip (M4/M5) | `live` | only with build-record evidence and fresh samples |
+| any adapter failed/offline | `unavailable` | state, not a fourth data stream; never silently substitute another adapter |
 
 ## Implementation sequence
 

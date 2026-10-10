@@ -6,7 +6,7 @@ Build an independently diagnosable, bounded MCU sensor acquisition system for De
 
 ## Current state
 
-[README](README.md) and [build record](build-record.md) exist; `steadyhand/` is empty. The sensor model, wiring, core version, installed MCU/Linux bridge, data route, ODR and any motor are unverified. See [master](../../docs/implementation/dev.md), [hardware](../../docs/hardware.md), and [contracts](../../docs/contracts.md).
+[README](README.md) and [build record](build-record.md) exist; `steadyhand/` is empty. Person 4's sensor analysis is merged into `origin/main` and verified importable (22/22 tests), so the software analysis half of M4 is ready; nothing physical is verified. The sensor model, wiring, core version, installed MCU/Linux bridge, data route, ODR and any motor remain unverified; the build record is empty evidence, not proof. The identification/diagnostic track ([identification](plans/hardware-identification.md)) can run in parallel with M1–M3 software work, but no model-specific acquisition code may be written before identity and bus are proven. See [master](../../docs/implementation/dev.md), [hardware](../../docs/hardware.md), and [contracts](../../docs/contracts.md).
 
 ## Exact proposed files
 

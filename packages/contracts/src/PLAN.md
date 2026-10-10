@@ -6,11 +6,11 @@ Keep one strict, exported TypeScript contract boundary for settings, device/samp
 
 ## Current state
 
-Directory empty; no TypeScript files, compiler configuration or installed runtime schema library. Read [contracts README](../README.md), [master](../../../docs/implementation/dev.md) and [canonical contract](../../../docs/contracts.md).
+Directory empty; no TypeScript files, compiler configuration or installed runtime schema library. Dedeepya's `packages/engine/src/types.ts` is merged and already matches the canonical shapes, so settings/device/engine types can be copied structurally rather than redesigned. Runtime schema strategy: dependency-free hand-written validators in `schemas.ts` (no zod or similar until an owner agreement justifies the dependency). Read [contracts README](../README.md), [master](../../../docs/implementation/dev.md) and [canonical contract](../../../docs/contracts.md).
 
 ## Exact proposed files
 
-Existing source: none. Planned `index.ts`: explicit public exports; `settings.ts`: `AssistanceConfig` schema/type and revision validation; `device.ts`: `device.hello`, `sensor.batch`, `motion.frame`, quality/source/timestamp schema/type; `messages.ts`: agreed worker/UI and HTTP/WS envelopes after consumer review; `schemas.ts`: reusable finite number/version/JSON-safe-int validators and parse helpers, not duplicated competing payloads; `uiAdapter.ts`: declared popup/options/DeviceClient adapter methods/types with cleanup after Kripa/Person 3 agreement. `package.json`, `tsconfig.json` live in parent, Python models in `services/bridge`.
+Existing source: none. Planned `index.ts`: explicit public exports; `settings.ts`: `AssistanceConfig` schema/type and revision validation (structurally identical to `packages/engine/src/types.ts`, including `mode: 'native' | 'stabilized' | 'raw_virtual'` and `filter.kind: 'exponential' | 'one_euro'`); `device.ts`: `device.hello` (including optional `resolution_bits`), `sensor.batch`, `motion.frame`, quality/source/timestamp schema/type; `messages.ts`: agreed worker/UI and HTTP/WS envelopes after consumer review; `schemas.ts`: reusable finite number/version/JSON-safe-int validators and parse helpers, not duplicated competing payloads; `uiAdapter.ts`: `PopupAdapter`/`OptionsAdapter` (`getState`, `enablePage`, `disablePage`, `updateSettings(patch)`, `subscribe`) and dashboard `DeviceClient` (`connect`, `subscribe`, `startCalibration`, `finishCalibration`, `exportSession`) per Person 3's merged `docs/implementation/extension.md` and [contracts §11](../../../docs/contracts.md#11-ui-adapters). `package.json`, `tsconfig.json` live in parent, Python models in `services/bridge`.
 
 ## Interfaces and data flow
 
