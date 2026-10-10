@@ -6,7 +6,7 @@ Focused pytest checks prove contract agreement, lifecycle recovery, source hones
 
 ## Current state
 
-This directory is empty; no installed service, test runner configuration or board captures. Read [service README](../README.md), [master](../../../docs/implementation/dev.md), and [testing guidance](../../../docs/testing.md).
+This directory is empty; no installed service, test runner configuration or board captures. Person 4's analysis suite passes on this host (22/22 with `PYTHONPATH=analysis/src`) and her `fixtures/synthetic/signals/*.json` are available for boundary tests; engine tests are run from the repo root (`node --test "tests/engine/*.test.ts"`, 28/28). Read [service README](../README.md), [master](../../../docs/implementation/dev.md), [analysis integration](../plans/analysis-integration.md), and [testing guidance](../../../docs/testing.md).
 
 ## Exact proposed files
 
@@ -14,7 +14,7 @@ Existing: none. Planned `test_protocol.py`: shared JSON accepted/rejected by Pyt
 
 ## Interfaces and data flow
 
-Tests import `steadyhand_bridge.main:create_app` with injectable deterministic adapter and clock; use [canonical examples](../../../packages/contracts/examples/PLAN.md), not copies with drifting values. Check `[g, MCU µs]` independently of host monotonic clock; assert `source` and `quality` separately. Analysis fixtures come from Person 4 after types agreed.
+Tests import `steadyhand_bridge.main:create_app` with injectable deterministic adapter and clock; use [canonical examples](../../../packages/contracts/examples/PLAN.md), not copies with drifting values. Check `[g, MCU µs]` independently of host monotonic clock; assert `source` and `quality` separately. `test_analysis_integration.py` reads Person 4's actual `fixtures/synthetic/signals/*.json` and asserts the translation table in [analysis integration](../plans/analysis-integration.md) (5/8 Hz within one FFT bin, quiet → null recommendation, gapped/saturated → non-recommending quality, calibration accept/reject) against the real installed library — not a stub.
 
 ## Implementation sequence
 

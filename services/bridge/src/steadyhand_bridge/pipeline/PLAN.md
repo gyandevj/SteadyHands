@@ -6,7 +6,7 @@ The service owns timestamped acquisition supervision, bounded rolling windows, h
 
 ## Current state
 
-Directory empty, Person 4's library not in this checkout's base; no live samples or physical pulse. Read [service README](../../../README.md), [contracts](../../../../../docs/contracts.md), and [analysis boundary](../../../../../analysis/README.md).
+Directory empty; Person 4's library is implemented and merged into `origin/main` (verified importable, 22/22 tests on this host) but is not in the stale local `planning/dev` tree — cut implementation from `origin/main`. No live samples or physical pulse. Read [service README](../../../README.md), [contracts](../../../../../docs/contracts.md), [analysis boundary](../../../../../analysis/README.md), and [analysis integration](../../../plans/analysis-integration.md).
 
 ## Exact proposed files
 
@@ -15,6 +15,8 @@ Existing: none. Planned `acquisition.py`: drain adapter, validate packets, maint
 ## Interfaces and data flow
 
 Adapter `sensor.batch` (`g`, MCU `t_us`, seq, boot/stream, counters) -> receive monotonic time and bounded ring -> clean two-second window -> Person 4 result -> [canonical `motion.frame`](../../../../../docs/contracts.md#7-derived-frame) around 250 ms. Host monotonic clock governs stale after starting 500 ms without a **new** sample, not heartbeat. Missing metrics are `null`. Do not compute a substitute FFT or fake recommendation while the analysis library is unavailable.
+
+Concurrency and backpressure: one serialized analysis worker per stream (dedicated thread, never inline on the WS event loop), immutable `list(buffer)` snapshots, bounded input queue with drop-oldest plus counters when the worker falls behind, and newest-state-wins publication to clients (derived frames are replaceable; only close irrecoverably slow clients). `analysis_runner.py` is the only module that calls `steadyhand_signal.analyze_window(samples, calibration=None, capability=None, last_haptic_pulse_end_us=None)`; see the translation table in [analysis integration](../../../plans/analysis-integration.md).
 
 ## Implementation sequence
 

@@ -6,7 +6,7 @@ Dev provides a local FastAPI sensor/advisory service with replaceable adapters. 
 
 ## Current state
 
-Only [README](README.md) exists; `src/steadyhand_bridge/` and `tests/` contain empty subdirectories, without Python packaging, service code or installed bridge evidence. Read [master](../../docs/implementation/dev.md) and [canonical contracts](../../docs/contracts.md).
+Only [README](README.md) exists; `src/steadyhand_bridge/` and `tests/` contain empty subdirectories, without Python packaging, service code or installed bridge evidence. Person 4's `analysis/steadyhand_signal` is implemented and merged into `origin/main` (PR #1) and was verified on this host (22/22 pytest, importable, zero deps); Person 3's WS expectations are in `docs/implementation/extension.md` (`ws://127.0.0.1:8765/v1/stream`, first-frame `client.auth`, 20 s ping, backoff, snapshot caching). The local `planning/dev` tree predates those merges — cut the implementation branch from `origin/main`. Read [master](../../docs/implementation/dev.md), [canonical contracts](../../docs/contracts.md), and [analysis integration](plans/analysis-integration.md).
 
 ## Exact proposed files
 
@@ -14,15 +14,15 @@ Existing: `README.md` (preserve). Planned: `pyproject.toml` (build backend, type
 
 ## Interfaces and data flow
 
-Launch-time mode `mock|replay|uno_q` selects one producer -> validated `sensor.batch` -> bounded acquisition and Person 4 `steadyhand_signal` -> canonical `motion.frame` -> HTTP/WS derived state. Use `g`, MCU microseconds and separate host monotonic receipt time; maintain boot/stream IDs, loss counters and freshness independently of socket health. See [contracts](../../docs/contracts.md), especially sections 5–10. Snapshot/health and replay-provenance payload gaps remain unagreed with Person 3, Kripa and Person 4; see [master decisions](../../docs/implementation/dev.md#verification-gates-open-decisions-and-fallbacks).
+Launch-time mode `mock|replay|uno_q` selects one producer -> validated `sensor.batch` -> bounded acquisition and Person 4 `steadyhand_signal` -> canonical `motion.frame` -> HTTP/WS derived state. Use `g`, MCU microseconds and separate host monotonic receipt time; maintain boot/stream IDs, loss counters and freshness independently of socket health. See [contracts](../../docs/contracts.md), especially sections 5–10. Snapshot/health and replay-provenance payload gaps remain unagreed with Person 3, Kripa and Person 4; see [master decisions](../../docs/implementation/dev.md#11-open-decisions-and-integration-requests).
 
-## Implementation sequence
+## Implementation sequence (mapped to master-plan milestones)
 
-1. Verify Python environment; package minimal app factory and public `/health` with test.
-2. Implement strict canonical models against shared examples; add explicit synthetic producer and bounded consumption.
-3. Add auth, HTTP, WS snapshot/subscriptions, slow-client policy and reconnect checks using fake analysis only with explicit synthetic labels.
-4. Import actual Person 4 library and handle quality, calibration and reset, then add replay and verified UNO Q adapter.
-5. Add optional sessions; haptics only after physical verification; document real launch commands.
+1. **M1 contracts:** canonical wire models and cross-language fixtures land in `packages/contracts` + `src/steadyhand_bridge/{contracts,models}.py`; minimal `pyproject.toml`.
+2. **M2 mock service:** installable app factory, public `/health`, protected `/v1/device`, mock adapter, bounded buffers, auth, WS snapshot/subscriptions, slow-client policy; frames carry `warming_up`/null motion until M3; never label mock as live.
+3. **M3 analysis:** import the actual Person 4 library, wire `pipeline/analysis_runner.py` + `pipeline/calibration.py`, replay synthetic fixtures, calibration endpoints; see [analysis integration](plans/analysis-integration.md).
+4. **M4/M5 hardware:** verified UNO Q adapter only after the bridge round-trip gate; live `source` and disconnect/reboot recovery through the same pipeline.
+5. **M6 release:** optional sessions/export; haptics only after physical verification; real launch commands and demo fallback.
 
 ## Failure and recovery behavior
 

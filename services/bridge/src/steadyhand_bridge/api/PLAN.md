@@ -6,7 +6,7 @@ The API exposes authenticated sensor/advisory state, calibration, non-personal s
 
 ## Current state
 
-Directory empty. [Contracts](../../../../../docs/contracts.md#8-http-api) list routes and event names, but snapshot/subscription and full error schemas are still to be agreed with Person 3 and Kripa. Read [service README](../../../README.md).
+Directory empty. [Contracts](../../../../../docs/contracts.md#8-http-api) list routes and event names, but snapshot/subscription and full error schemas are still to be agreed with Person 3 and Kripa. Person 3's merged `docs/implementation/extension.md` already assumes `ws://127.0.0.1:8765/v1/stream`, first-frame `client.auth`, 20 s `client.ping` keepalive, exponential backoff (1–30 s), snapshot caching, and manifest host permissions for `http://127.0.0.1:8765/*` and `ws://127.0.0.1:8765/*`; M2 freezes a first version of these payloads with examples and allows only additive consumer-requested changes afterwards. Read [service README](../../../README.md) and [master](../../../../../docs/implementation/dev.md).
 
 ## Exact proposed files
 
