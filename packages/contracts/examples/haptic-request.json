@@ -1,0 +1,7 @@
+{
+  "v": 1,
+  "type": "haptic.request",
+  "command_id": "session-17-selection-4",
+  "duration_ms": 40,
+  "reason": "selection_confirmed"
+}

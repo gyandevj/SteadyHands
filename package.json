@@ -1,0 +1,18 @@
+{
+  "name": "steadyhand",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "test": "node --test \"packages/contracts/tests/*.test.ts\"",
+    "test:contracts": "node --test \"packages/contracts/tests/*.test.ts\"",
+    "typecheck": "tsc --noEmit -p packages/contracts/tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}

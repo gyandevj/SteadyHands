@@ -1,0 +1,33 @@
+{
+  "v": 1,
+  "type": "motion.frame",
+  "source": "fake_hardware",
+  "boot_id": "",
+  "stream_id": "fixture-stream-1",
+  "frame_seq": -1,
+  "window": {
+    "start_us": 4000000,
+    "end_us": 2000000,
+    "fresh_samples": -5
+  },
+  "quality": {
+    "state": "super_good",
+    "reasons": "not_an_array",
+    "measured_hz": -10.0,
+    "missing_fraction": 1.5,
+    "max_gap_ms": -1.0
+  },
+  "motion": {
+    "status": "miraculous",
+    "dominant_hz": 999.0,
+    "band_rms_g": -0.5,
+    "band_power_ratio": 2.0,
+    "peak_concentration": -1.0
+  },
+  "recommendation": {
+    "id": "rec-invalid",
+    "preset": "turbo_ultra",
+    "requires_user_acceptance": "yes_please",
+    "reason_code": ""
+  }
+}
