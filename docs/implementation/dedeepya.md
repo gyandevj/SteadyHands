@@ -478,3 +478,22 @@ DELIVERABLES:
 
 Run all tests and provide a concise summary of created files, test results, and the handoff interface for Person 3. Stop before implementing One Euro filter or Python analysis.
 ```
+
+---
+
+## 14. Hardware Diagnostics & Testing Resolution Record
+
+**Issue Diagnosed:**
+- When opening `apps/fixtures/monitor.html`, the user reported seeing continuous oscillating sine wave data that did not react or spike when the physical accelerometer sensor was moved.
+
+**Root Cause:**
+1. **Bluetooth Serial Link Conflict:** On the user's Windows machine, Bluetooth created virtual serial ports `COM3` and `COM4`, while the physical Arduino UNO Q / R4 was plugged into `COM5` (VID:PID `2341:1002`). The quickstart script took the first COM port (`COM3`), failing to talk to the physical hardware and falling back to running `python -m steadyhand_bridge --mode mock`.
+2. **Mock Adapter Sine Wave:** The mock adapter generates a synthetic 5.0 Hz sine wave ($0.04g$ amplitude) by design. In mock mode, physical hand movements cannot affect the synthetic wave.
+3. **Inter-Batch Gap Threshold on 64 Hz Hardware:** Once connected to the real Arduino over `COM5`, the MCU flushes batches at ~100 ms intervals over 115200 baud serial. The analytical window validation rule previously defaulted `max_gap_ms_threshold = 40.0 ms`, falsely flagging normal ~118 ms inter-batch flush intervals as `gap_exceeded` / `invalid`.
+
+**Resolution & Coordination:**
+1. **`quickstart.ps1` Autodetection:** Added `-DevicePort` parameter and prioritized USB / Arduino hardware (`p.vid == 0x2341` or `USB` in `hwid`) over Bluetooth virtual ports (`BTHENUM`).
+2. **`analysis/src/steadyhand_signal/__init__.py` Tuning:** In `analyze_window()`, tuned `max_gap_ms_threshold` to `150.0 ms` for $\le 64\text{ Hz}$ hardware serial streams, allowing the pure numerical FFT pipeline to remain `good` without false gap invalidations.
+3. **Live Hardware Verification:** Verified that `steadyhand_bridge` in `uno_q` mode on `COM5` continuously reads live MMA7660FC samples, streaming dynamic accelerations and computing live 3.0–12.0 Hz spectral analysis in `monitor.html`.
+
+
