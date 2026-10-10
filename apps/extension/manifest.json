@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "SteadyHand",
+  "version": "0.1.0",
+  "description": "Stabilized virtual pointer, target assistance, and cancellable dwell for webpage controls.",
+  "minimum_chrome_version": "116",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "http://127.0.0.1:8765/*",
+    "ws://127.0.0.1:8765/*"
+  ],
+  "background": {
+    "service_worker": "worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "SteadyHand Assistance",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "assets/icon-16.png",
+      "48": "assets/icon-48.png",
+      "128": "assets/icon-128.png"
+    }
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "icons": {
+    "16": "assets/icon-16.png",
+    "48": "assets/icon-48.png",
+    "128": "assets/icon-128.png"
+  }
+}

@@ -1,0 +1,147 @@
+:host {
+  all: initial;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none !important;
+  z-index: 2147483647;
+  overflow: hidden;
+}
+
+.steadyhand-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none !important;
+}
+
+/* Stabilized virtual pointer */
+.steadyhand-pointer {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  transform: translate(-50%, -50%);
+  pointer-events: none !important;
+  transition: transform 0.04s cubic-bezier(0, 0, 0.2, 1);
+  will-change: left, top;
+  z-index: 10;
+}
+
+.steadyhand-pointer-dot {
+  width: 14px;
+  height: 14px;
+  margin: 3px;
+  background: #38bdf8;
+  border: 2.5px solid #0f172a;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+}
+
+.steadyhand-pointer.ambiguous .steadyhand-pointer-dot {
+  background: #fbbf24;
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
+}
+
+/* Candidate target bounding box outline */
+.steadyhand-candidate-box {
+  position: fixed;
+  border: 2px solid #38bdf8;
+  border-radius: 6px;
+  background: rgba(56, 189, 248, 0.12);
+  pointer-events: none !important;
+  box-sizing: border-box;
+  opacity: 0;
+  transition: opacity 0.12s ease, border-color 0.12s ease;
+  z-index: 5;
+}
+
+.steadyhand-candidate-box.visible {
+  opacity: 1;
+}
+
+.steadyhand-candidate-box.ambiguous {
+  border-color: #fbbf24;
+  background: rgba(251, 191, 36, 0.12);
+}
+
+/* Dwell progress circle */
+.steadyhand-dwell-ring {
+  position: fixed;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+  pointer-events: none !important;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 9;
+}
+
+.steadyhand-dwell-ring.active {
+  opacity: 1;
+}
+
+.steadyhand-dwell-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.steadyhand-dwell-circle-bg {
+  fill: none;
+  stroke: rgba(15, 23, 42, 0.5);
+  stroke-width: 4;
+}
+
+.steadyhand-dwell-circle-fg {
+  fill: none;
+  stroke: #38bdf8;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 113;
+  stroke-dashoffset: 113;
+  transition: stroke-dashoffset 0.05s linear;
+}
+
+/* Status badge at top-right */
+.steadyhand-status-badge {
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #f8fafc;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  pointer-events: none !important;
+  z-index: 20;
+  user-select: none;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.steadyhand-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #34d399;
+}
+
+.steadyhand-status-dot.synthetic {
+  background: #38bdf8;
+}
+
+.steadyhand-status-dot.unavailable {
+  background: #94a3b8;
+}
