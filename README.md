@@ -9,7 +9,23 @@ SteadyHand is an accessibility system designed for individuals with hand tremors
 
 ---
 
-## 🚀 Quick Start: How to Run
+## ⚡ One-Click Teammate Quick Start
+
+If you just cloned or pulled this repository and want to run and test immediately:
+
+```powershell
+# From the repository root:
+.\quickstart.ps1
+```
+
+* **Auto-detects physical Arduino hardware**: If plugged in, automatically detects the COM port and starts in Hardware mode.
+* **Zero-hardware fallback**: If no Arduino is connected, automatically launches in Mock mode with realistic simulated tremor data.
+* **Builds & Prepares Extension**: Ensures the Chrome extension bundle is compiled in `apps/extension/dist/`.
+* **Launches Test Form**: Automatically opens the test registration form in your browser so you can test stabilized cursor and dwell clicks right away!
+
+---
+
+## 🚀 Step-by-Step Manual Guide
 
 ### 1. Prerequisites
 - **Node.js** v18+ and `npm`
