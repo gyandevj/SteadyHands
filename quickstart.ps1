@@ -7,7 +7,8 @@
 param(
     [string]$Port = "8765",
     [string]$ListenHost = "127.0.0.1",
-    [string]$Token = "steadyhand-dev-token-secret"
+    [string]$Token = "steadyhand-dev-token-secret",
+    [string]$DevicePort = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -46,14 +47,16 @@ python -m pip install -q -e "$RepoRoot\services\bridge" pyserial | Out-Null
 
 # 3. Check for Connected Hardware vs Mock Mode
 Write-Host "[3/4] Detecting hardware..." -ForegroundColor Yellow
-$HardwarePort = ""
-try {
-    $PyCmd = 'import serial.tools.list_ports as lp; pts = [p.device for p in lp.comports()]; print(pts[0] if pts else "")'
-    $Detected = python -c $PyCmd 2>$null
-    if ($Detected) {
-        $HardwarePort = "$Detected".Trim()
-    }
-} catch {}
+$HardwarePort = $DevicePort
+if ($HardwarePort -eq "") {
+    try {
+        $PyCmd = 'import serial.tools.list_ports as lp; pts = [p.device for p in lp.comports() if (p.vid == 0x2341 or "USB" in (p.hwid or "").upper())]; pts = pts or [p.device for p in lp.comports() if "BTH" not in (p.hwid or "").upper() and "BLUETOOTH" not in (p.description or "").upper()]; print(pts[0] if pts else "")'
+        $Detected = python -c $PyCmd 2>$null
+        if ($Detected) {
+            $HardwarePort = "$Detected".Trim()
+        }
+    } catch {}
+}
 
 $LaunchMode = "mock"
 if ($HardwarePort -ne "") {

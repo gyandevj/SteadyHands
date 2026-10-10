@@ -73,9 +73,12 @@ def analyze_window(
         )
 
     # 2. Window validation
+    # Allow inter-batch flush gap threshold tuned to hardware ODR (~150 ms for <=64 Hz serial batches, 40 ms for high-rate streams)
+    max_gap = 150.0 if (cap.odr_hz and cap.odr_hz <= 64.0) else 40.0
     quality = validate_window(
         samples,
         expected_odr_hz=cap.odr_hz,
+        max_gap_ms_threshold=max_gap,
         range_g=cap.range_g,
     )
     if quality.state == "invalid":
