@@ -215,6 +215,8 @@ export interface ExtensionUIState {
   deviceSource: SourceState;
   deviceQuality: QualityState;
   deviceMotion: MotionStatus;
+  dominantHz?: number | null;
+  bandRmsG?: number | null;
   recommendation: { id: string; preset: string } | null;
 }
 

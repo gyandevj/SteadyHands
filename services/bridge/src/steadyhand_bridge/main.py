@@ -132,6 +132,7 @@ def create_app(config: Optional[BridgeConfig] = None) -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=cfg.allowed_origins,
+        allow_origin_regex=r"^chrome-extension://.*",
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],

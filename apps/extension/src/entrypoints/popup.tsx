@@ -65,16 +65,24 @@ async function renderFallbackPopup(container: HTMLElement) {
       <div style="background:#0f172a; border:1px solid #334155; border-radius:6px; padding:8px 10px; font-size:11px; display:flex; flex-direction:column; gap:4px;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <span style="color:#94a3b8;">Sensor Feed:</span>
-          <span style="color:${deviceBadgeColor}; font-weight:600;">● ${deviceLabel}</span>
+          <span id="sh-sensor-label" style="color:${deviceBadgeColor}; font-weight:600;">● ${deviceLabel}</span>
         </div>
         ${isConnected ? `
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <span style="color:#94a3b8;">Trackpad Tremor:</span>
-          <span style="color:${tremorColor}; font-weight:600;">${tremorText}</span>
+          <span id="sh-tremor-label" style="color:${tremorColor}; font-weight:600;">${tremorText}</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="color:#94a3b8;">Dominant Frequency:</span>
+          <span id="sh-hz-label" style="color:#f8fafc; font-weight:600;">${state.dominantHz ? state.dominantHz.toFixed(1) + ' Hz' : 'Quiet / Calibrated'}</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="color:#94a3b8;">Tremor Amplitude:</span>
+          <span id="sh-amp-label" style="color:#f8fafc; font-weight:600;">${state.bandRmsG ? (state.bandRmsG * 1000).toFixed(0) + ' mg' : '< 10 mg'}</span>
         </div>` : `
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <span style="color:#94a3b8;">Stabilizer:</span>
-          <span style="color:#38bdf8; font-weight:600;">1-Euro Local Filter</span>
+          <span id="sh-stabilizer-label" style="color:#38bdf8; font-weight:600;">1-Euro Local Filter</span>
         </div>`}
       </div>
 
@@ -145,6 +153,40 @@ async function renderFallbackPopup(container: HTMLElement) {
     e.preventDefault();
     popupAdapter.openOptions();
   });
+
+  // Polling update loop (400ms) for real-time sensor & tremor data display
+  const pollTimer = setInterval(async () => {
+    const fresh = await popupAdapter.getState();
+    const freshConnected = fresh.transportStatus === 'connected';
+    const freshLive = freshConnected && fresh.deviceSource === 'live';
+    const freshMock = freshConnected && fresh.deviceSource === 'synthetic';
+
+    const lbl = document.getElementById('sh-sensor-label');
+    if (lbl) {
+      lbl.style.color = freshLive ? '#10b981' : (freshMock ? '#38bdf8' : '#94a3b8');
+      lbl.textContent = `● ${freshLive ? 'Arduino UNO R4 (Live COM5)' : (freshMock ? 'Mock Stream (Bridge)' : 'Standalone (Local Filter)')}`;
+    }
+
+    const trem = document.getElementById('sh-tremor-label');
+    if (trem) {
+      trem.style.color = fresh.deviceMotion === 'tremor' ? '#f59e0b' : '#34d399';
+      trem.textContent = fresh.deviceMotion === 'tremor'
+        ? 'Tremor Detected: Active Compensation'
+        : (fresh.deviceMotion === 'intentional' ? 'Active Movement' : 'Resting / Calibrated');
+    }
+
+    const hz = document.getElementById('sh-hz-label');
+    if (hz) {
+      hz.textContent = fresh.dominantHz ? `${fresh.dominantHz.toFixed(1)} Hz` : 'Quiet / Calibrated';
+    }
+
+    const amp = document.getElementById('sh-amp-label');
+    if (amp) {
+      amp.textContent = fresh.bandRmsG ? `${(fresh.bandRmsG * 1000).toFixed(0)} mg` : '< 10 mg';
+    }
+  }, 400);
+
+  window.addEventListener('unload', () => clearInterval(pollTimer));
 }
 
 document.addEventListener('DOMContentLoaded', initPopup);

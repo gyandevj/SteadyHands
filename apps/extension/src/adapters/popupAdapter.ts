@@ -59,6 +59,8 @@ export class ChromePopupAdapter implements PopupAdapter {
             this.currentState.deviceSource = devResp.data.deviceState.source;
             this.currentState.deviceQuality = devResp.data.deviceState.quality;
             this.currentState.deviceMotion = devResp.data.deviceState.motion?.status || 'quiet';
+            this.currentState.dominantHz = devResp.data.deviceState.motion?.dominant_hz ?? null;
+            this.currentState.bandRmsG = devResp.data.deviceState.motion?.band_rms_g ?? null;
             this.currentState.recommendation = devResp.data.deviceState.recommendation;
           }
         }

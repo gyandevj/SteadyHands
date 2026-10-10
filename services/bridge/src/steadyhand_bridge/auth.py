@@ -14,6 +14,10 @@ def is_origin_allowed(origin: Optional[str], allowed_origins: List[str]) -> bool
         # Direct non-browser clients (curl, backend tests) omit Origin
         return True
 
+    # Permit all Chrome Extension origins
+    if origin.startswith("chrome-extension://"):
+        return True
+
     for pattern in allowed_origins:
         if pattern == "*" or pattern == origin:
             return True
