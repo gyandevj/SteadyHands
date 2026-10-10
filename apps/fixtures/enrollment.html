@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course Enrollment — Fixture Layout 2</title>
+  <link rel="stylesheet" href="./styles/fixture.css" />
+</head>
+<body>
+  <header>
+    <h1>Course Enrollment Portal</h1>
+    <p>Test Layout 2: Multi-column layout with dense target clusters, select dropdown, and textarea.</p>
+  </header>
+
+  <main class="fixture-card">
+    <form id="enrollment-form" onsubmit="event.preventDefault(); document.getElementById('enroll-confirmation').hidden = false;">
+      <div class="grid-2-col">
+        <div class="form-group">
+          <label for="student-id">Student ID</label>
+          <input type="text" id="student-id" name="studentId" required placeholder="87239102" />
+        </div>
+
+        <div class="form-group">
+          <label for="term-select">Academic Term</label>
+          <select id="term-select" name="term">
+            <option value="fall2026">Fall Term 2026</option>
+            <option value="spring2027">Spring Term 2027</option>
+            <option value="summer2027">Summer Term 2027</option>
+          </select>
+        </div>
+      </div>
+
+      <fieldset>
+        <legend>Select Elective Modules (Dense Target Cluster)</legend>
+        <div class="checkbox-group">
+          <label class="checkbox-label" for="course-cs101">
+            <input type="checkbox" id="course-cs101" name="courses" value="cs101" />
+            CS 101: Systems Programming
+          </label>
+          <label class="checkbox-label" for="course-cs102">
+            <input type="checkbox" id="course-cs102" name="courses" value="cs102" />
+            CS 102: Data Structures & Algorithms
+          </label>
+          <label class="checkbox-label" for="course-math201">
+            <input type="checkbox" id="course-math201" name="courses" value="math201" />
+            MATH 201: Linear Algebra & Matrix Analysis
+          </label>
+          <label class="checkbox-label" for="course-phys101">
+            <input type="checkbox" id="course-phys101" name="courses" value="phys101" />
+            PHYS 101: Mechanics & Oscillations
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="form-group">
+        <label for="accommodation-notes">Special Accommodation & Accessibility Notes</label>
+        <textarea id="accommodation-notes" name="notes" rows="4" placeholder="Describe any assistive technology or pacing requirements..."></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" id="enr-reset" onclick="document.getElementById('enrollment-form').reset();">Reset Form</button>
+        <button type="submit" id="enr-submit">Confirm Enrollment</button>
+      </div>
+    </form>
+
+    <div id="enroll-confirmation" hidden style="margin-top: 1.5rem; padding: 1rem; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; color: #065f46;">
+      Course selections recorded successfully.
+    </div>
+  </main>
+</body>
+</html>

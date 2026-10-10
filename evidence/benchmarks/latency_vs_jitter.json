@@ -1,0 +1,182 @@
+{
+  "benchmark_id": "pareto_jitter_vs_lag",
+  "timestamp_utc": "2026-10-10T17:21:51.094Z",
+  "provenance": {
+    "generator": "evidence/scripts/run_engine_benchmarks.ts",
+    "seed": 42,
+    "input_traces": [
+      "stationary_jitter_seed42.json",
+      "straight_line_noisy_seed42.json",
+      "ballistic_overshoot_seed42.json"
+    ],
+    "description": "Offline filter Pareto evaluation: stationary jitter reduction vs movement phase lag"
+  },
+  "metrics": [
+    {
+      "algorithm": "Passthrough (Raw Virtual)",
+      "config": {},
+      "stationary_jitter_attenuation_pct": 0,
+      "stationary_rmse_px": 8.98,
+      "ballistic_rmse_px": 7.87,
+      "sweep_phase_lag_ms": 0,
+      "sweep_tracking_error_px": 7.62
+    },
+    {
+      "algorithm": "ExponentialFilter",
+      "config": {
+        "cutoff_hz": 0.5
+      },
+      "stationary_jitter_attenuation_pct": 85.7,
+      "stationary_rmse_px": 1.07,
+      "ballistic_rmse_px": 117.61,
+      "sweep_phase_lag_ms": 301.5,
+      "sweep_tracking_error_px": 59.97
+    },
+    {
+      "algorithm": "ExponentialFilter",
+      "config": {
+        "cutoff_hz": 1
+      },
+      "stationary_jitter_attenuation_pct": 79.1,
+      "stationary_rmse_px": 1.79,
+      "ballistic_rmse_px": 64.53,
+      "sweep_phase_lag_ms": 151.1,
+      "sweep_tracking_error_px": 29.91
+    },
+    {
+      "algorithm": "ExponentialFilter",
+      "config": {
+        "cutoff_hz": 1.5
+      },
+      "stationary_jitter_attenuation_pct": 71.7,
+      "stationary_rmse_px": 2.52,
+      "ballistic_rmse_px": 43.54,
+      "sweep_phase_lag_ms": 98.4,
+      "sweep_tracking_error_px": 19.39
+    },
+    {
+      "algorithm": "ExponentialFilter",
+      "config": {
+        "cutoff_hz": 2
+      },
+      "stationary_jitter_attenuation_pct": 65,
+      "stationary_rmse_px": 3.19,
+      "ballistic_rmse_px": 32.39,
+      "sweep_phase_lag_ms": 71.8,
+      "sweep_tracking_error_px": 14.15
+    },
+    {
+      "algorithm": "ExponentialFilter",
+      "config": {
+        "cutoff_hz": 3
+      },
+      "stationary_jitter_attenuation_pct": 53.7,
+      "stationary_rmse_px": 4.34,
+      "ballistic_rmse_px": 20.98,
+      "sweep_phase_lag_ms": 45.3,
+      "sweep_tracking_error_px": 9.09
+    },
+    {
+      "algorithm": "ExponentialFilter",
+      "config": {
+        "cutoff_hz": 5
+      },
+      "stationary_jitter_attenuation_pct": 37.6,
+      "stationary_rmse_px": 5.95,
+      "ballistic_rmse_px": 12.14,
+      "sweep_phase_lag_ms": 24.3,
+      "sweep_tracking_error_px": 6.03
+    },
+    {
+      "algorithm": "OneEuroFilter",
+      "config": {
+        "min_cutoff_hz": 1,
+        "beta": 0.0005,
+        "d_cutoff_hz": 1
+      },
+      "stationary_jitter_attenuation_pct": 78.9,
+      "stationary_rmse_px": 1.79,
+      "ballistic_rmse_px": 26.57,
+      "sweep_phase_lag_ms": 95.5,
+      "sweep_tracking_error_px": 18.82
+    },
+    {
+      "algorithm": "OneEuroFilter",
+      "config": {
+        "min_cutoff_hz": 1,
+        "beta": 0.001,
+        "d_cutoff_hz": 1
+      },
+      "stationary_jitter_attenuation_pct": 77.9,
+      "stationary_rmse_px": 1.86,
+      "ballistic_rmse_px": 19.75,
+      "sweep_phase_lag_ms": 75.6,
+      "sweep_tracking_error_px": 14.88
+    },
+    {
+      "algorithm": "OneEuroFilter",
+      "config": {
+        "min_cutoff_hz": 1,
+        "beta": 0.002,
+        "d_cutoff_hz": 1
+      },
+      "stationary_jitter_attenuation_pct": 76,
+      "stationary_rmse_px": 2,
+      "ballistic_rmse_px": 14.41,
+      "sweep_phase_lag_ms": 57.1,
+      "sweep_tracking_error_px": 11.3
+    },
+    {
+      "algorithm": "OneEuroFilter",
+      "config": {
+        "min_cutoff_hz": 1,
+        "beta": 0.005,
+        "d_cutoff_hz": 1
+      },
+      "stationary_jitter_attenuation_pct": 70.8,
+      "stationary_rmse_px": 2.4,
+      "ballistic_rmse_px": 9.64,
+      "sweep_phase_lag_ms": 37.1,
+      "sweep_tracking_error_px": 7.7
+    },
+    {
+      "algorithm": "OneEuroFilter",
+      "config": {
+        "min_cutoff_hz": 1,
+        "beta": 0.01,
+        "d_cutoff_hz": 1
+      },
+      "stationary_jitter_attenuation_pct": 64,
+      "stationary_rmse_px": 2.97,
+      "ballistic_rmse_px": 7.5,
+      "sweep_phase_lag_ms": 25.5,
+      "sweep_tracking_error_px": 6.22
+    },
+    {
+      "algorithm": "OneEuroFilter",
+      "config": {
+        "min_cutoff_hz": 0.5,
+        "beta": 0.005,
+        "d_cutoff_hz": 1
+      },
+      "stationary_jitter_attenuation_pct": 76.1,
+      "stationary_rmse_px": 1.84,
+      "ballistic_rmse_px": 9.99,
+      "sweep_phase_lag_ms": 40.1,
+      "sweep_tracking_error_px": 8.19
+    },
+    {
+      "algorithm": "OneEuroFilter",
+      "config": {
+        "min_cutoff_hz": 2,
+        "beta": 0.005,
+        "d_cutoff_hz": 1
+      },
+      "stationary_jitter_attenuation_pct": 61.3,
+      "stationary_rmse_px": 3.45,
+      "ballistic_rmse_px": 9.06,
+      "sweep_phase_lag_ms": 31.9,
+      "sweep_tracking_error_px": 6.92
+    }
+  ]
+}

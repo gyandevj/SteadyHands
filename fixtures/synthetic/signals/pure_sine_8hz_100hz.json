@@ -1,0 +1,3634 @@
+{
+  "signal_id": "pure_sine_8hz_100hz",
+  "seed": 42,
+  "odr_hz": 100.0,
+  "duration_s": 3.0,
+  "components": [
+    {
+      "type": "gravity",
+      "vector_g": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "type": "sine",
+      "axis": "x",
+      "freq_hz": 8.0,
+      "amplitude_g": 0.035
+    },
+    {
+      "type": "sine",
+      "axis": "y",
+      "freq_hz": 8.0,
+      "amplitude_g": 0.035
+    },
+    {
+      "type": "noise",
+      "sigma_g": 0.003
+    }
+  ],
+  "samples": [
+    {
+      "seq": 0,
+      "t_us": 0,
+      "a_g": [
+        -0.00043,
+        0.03448,
+        0.99967
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 1,
+      "t_us": 10000,
+      "a_g": [
+        0.01897,
+        0.03029,
+        0.99551
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 2,
+      "t_us": 20000,
+      "a_g": [
+        0.03055,
+        0.01795,
+        0.99935
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 3,
+      "t_us": 30000,
+      "a_g": [
+        0.03528,
+        0.00289,
+        1.00349
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 4,
+      "t_us": 40000,
+      "a_g": [
+        0.03364,
+        -0.01457,
+        0.99779
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 5,
+      "t_us": 50000,
+      "a_g": [
+        0.01753,
+        -0.02758,
+        1.00393
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 6,
+      "t_us": 60000,
+      "a_g": [
+        0.00451,
+        -0.03504,
+        1.0016
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 7,
+      "t_us": 70000,
+      "a_g": [
+        -0.01724,
+        -0.03348,
+        1.00147
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 8,
+      "t_us": 80000,
+      "a_g": [
+        -0.02435,
+        -0.02303,
+        1.00113
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 9,
+      "t_us": 90000,
+      "a_g": [
+        -0.03364,
+        -0.00421,
+        0.99666
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 10,
+      "t_us": 100000,
+      "a_g": [
+        -0.03158,
+        0.00627,
+        0.99214
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 11,
+      "t_us": 110000,
+      "a_g": [
+        -0.02578,
+        0.02277,
+        1.00263
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 12,
+      "t_us": 120000,
+      "a_g": [
+        -0.00671,
+        0.03024,
+        1.00254
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 13,
+      "t_us": 130000,
+      "a_g": [
+        0.0057,
+        0.03364,
+        0.99912
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 14,
+      "t_us": 140000,
+      "a_g": [
+        0.0243,
+        0.02797,
+        1.00192
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 15,
+      "t_us": 150000,
+      "a_g": [
+        0.03434,
+        0.01277,
+        1.00144
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 16,
+      "t_us": 160000,
+      "a_g": [
+        0.0325,
+        -0.00871,
+        0.99859
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 17,
+      "t_us": 170000,
+      "a_g": [
+        0.02847,
+        -0.02306,
+        1.00701
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 18,
+      "t_us": 180000,
+      "a_g": [
+        0.01043,
+        -0.03584,
+        1.00231
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 19,
+      "t_us": 190000,
+      "a_g": [
+        -0.00012,
+        -0.03321,
+        1.00251
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 20,
+      "t_us": 200000,
+      "a_g": [
+        -0.01629,
+        -0.0286,
+        0.99573
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 21,
+      "t_us": 210000,
+      "a_g": [
+        -0.03327,
+        -0.01204,
+        0.99567
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 22,
+      "t_us": 220000,
+      "a_g": [
+        -0.03483,
+        0.00296,
+        0.99905
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 23,
+      "t_us": 230000,
+      "a_g": [
+        -0.02738,
+        0.0205,
+        1.00696
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 24,
+      "t_us": 240000,
+      "a_g": [
+        -0.015,
+        0.02884,
+        0.99831
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 25,
+      "t_us": 250000,
+      "a_g": [
+        -0.00249,
+        0.03786,
+        0.9983
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 26,
+      "t_us": 260000,
+      "a_g": [
+        0.01665,
+        0.03292,
+        0.99783
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 27,
+      "t_us": 270000,
+      "a_g": [
+        0.02867,
+        0.01323,
+        0.99675
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 28,
+      "t_us": 280000,
+      "a_g": [
+        0.03323,
+        0.00344,
+        1.00358
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 29,
+      "t_us": 290000,
+      "a_g": [
+        0.03161,
+        -0.01412,
+        1.0005
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 30,
+      "t_us": 300000,
+      "a_g": [
+        0.02383,
+        -0.02564,
+        1.00082
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 31,
+      "t_us": 310000,
+      "a_g": [
+        0.00135,
+        -0.03201,
+        1.00114
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 32,
+      "t_us": 320000,
+      "a_g": [
+        -0.0092,
+        -0.03263,
+        1.00586
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 33,
+      "t_us": 330000,
+      "a_g": [
+        -0.02804,
+        -0.01753,
+        1.00035
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 34,
+      "t_us": 340000,
+      "a_g": [
+        -0.03593,
+        -0.00994,
+        0.99955
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 35,
+      "t_us": 350000,
+      "a_g": [
+        -0.02902,
+        0.01326,
+        1.00207
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 36,
+      "t_us": 360000,
+      "a_g": [
+        -0.03109,
+        0.02765,
+        1.00167
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 37,
+      "t_us": 370000,
+      "a_g": [
+        -0.01035,
+        0.03202,
+        0.99999
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 38,
+      "t_us": 380000,
+      "a_g": [
+        0.01388,
+        0.03074,
+        0.99872
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 39,
+      "t_us": 390000,
+      "a_g": [
+        0.02804,
+        0.02418,
+        0.99891
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 40,
+      "t_us": 400000,
+      "a_g": [
+        0.03358,
+        0.00709,
+        1.00066
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 41,
+      "t_us": 410000,
+      "a_g": [
+        0.03075,
+        -0.0039,
+        1.00001
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 42,
+      "t_us": 420000,
+      "a_g": [
+        0.03382,
+        -0.02147,
+        1.0041
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 43,
+      "t_us": 430000,
+      "a_g": [
+        0.00897,
+        -0.03291,
+        1.00097
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 44,
+      "t_us": 440000,
+      "a_g": [
+        0.00085,
+        -0.03977,
+        1.00297
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 45,
+      "t_us": 450000,
+      "a_g": [
+        -0.0188,
+        -0.02371,
+        1.00214
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 46,
+      "t_us": 460000,
+      "a_g": [
+        -0.03151,
+        -0.01647,
+        0.99626
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 47,
+      "t_us": 470000,
+      "a_g": [
+        -0.03434,
+        0.00162,
+        1.00606
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 48,
+      "t_us": 480000,
+      "a_g": [
+        -0.03138,
+        0.01972,
+        0.99529
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 49,
+      "t_us": 490000,
+      "a_g": [
+        -0.01805,
+        0.03145,
+        1.00247
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 50,
+      "t_us": 500000,
+      "a_g": [
+        0.00434,
+        0.03487,
+        0.99665
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 51,
+      "t_us": 510000,
+      "a_g": [
+        0.01823,
+        0.03222,
+        1.00147
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 52,
+      "t_us": 520000,
+      "a_g": [
+        0.02745,
+        0.02215,
+        1.00026
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 53,
+      "t_us": 530000,
+      "a_g": [
+        0.03703,
+        0.00602,
+        1.00183
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 54,
+      "t_us": 540000,
+      "a_g": [
+        0.03253,
+        -0.00844,
+        1.00073
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 55,
+      "t_us": 550000,
+      "a_g": [
+        0.01968,
+        -0.02798,
+        1.00445
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 56,
+      "t_us": 560000,
+      "a_g": [
+        0.00474,
+        -0.03317,
+        1.00359
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 57,
+      "t_us": 570000,
+      "a_g": [
+        -0.01442,
+        -0.03772,
+        1.0009
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 58,
+      "t_us": 580000,
+      "a_g": [
+        -0.02628,
+        -0.02413,
+        1.00261
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 59,
+      "t_us": 590000,
+      "a_g": [
+        -0.03256,
+        -0.00954,
+        1.00155
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 60,
+      "t_us": 600000,
+      "a_g": [
+        -0.03388,
+        0.00637,
+        1.00136
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 61,
+      "t_us": 610000,
+      "a_g": [
+        -0.02409,
+        0.02328,
+        1.00157
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 62,
+      "t_us": 620000,
+      "a_g": [
+        -0.00724,
+        0.03217,
+        1.0012
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 63,
+      "t_us": 630000,
+      "a_g": [
+        0.01175,
+        0.03176,
+        1.00114
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 64,
+      "t_us": 640000,
+      "a_g": [
+        0.02397,
+        0.03231,
+        0.99441
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 65,
+      "t_us": 650000,
+      "a_g": [
+        0.03537,
+        0.0099,
+        0.9997
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 66,
+      "t_us": 660000,
+      "a_g": [
+        0.04008,
+        -0.00658,
+        1.00672
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 67,
+      "t_us": 670000,
+      "a_g": [
+        0.02564,
+        -0.02126,
+        0.99853
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 68,
+      "t_us": 680000,
+      "a_g": [
+        0.01081,
+        -0.03235,
+        0.99915
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 69,
+      "t_us": 690000,
+      "a_g": [
+        -0.00378,
+        -0.04104,
+        1.00601
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 70,
+      "t_us": 700000,
+      "a_g": [
+        -0.02107,
+        -0.02309,
+        0.99698
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 71,
+      "t_us": 710000,
+      "a_g": [
+        -0.03079,
+        -0.00541,
+        0.99739
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 72,
+      "t_us": 720000,
+      "a_g": [
+        -0.03942,
+        0.00056,
+        1.00142
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 73,
+      "t_us": 730000,
+      "a_g": [
+        -0.02747,
+        0.02263,
+        0.99923
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 74,
+      "t_us": 740000,
+      "a_g": [
+        -0.02167,
+        0.02937,
+        1.00372
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 75,
+      "t_us": 750000,
+      "a_g": [
+        0.0014,
+        0.02913,
+        0.99989
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 76,
+      "t_us": 760000,
+      "a_g": [
+        0.02106,
+        0.03705,
+        1.00169
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 77,
+      "t_us": 770000,
+      "a_g": [
+        0.03048,
+        0.01503,
+        0.99747
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 78,
+      "t_us": 780000,
+      "a_g": [
+        0.03507,
+        0.00371,
+        1.00174
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 79,
+      "t_us": 790000,
+      "a_g": [
+        0.03023,
+        -0.01836,
+        0.99767
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 80,
+      "t_us": 800000,
+      "a_g": [
+        0.0171,
+        -0.02639,
+        0.99306
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 81,
+      "t_us": 810000,
+      "a_g": [
+        0.00339,
+        -0.03337,
+        1.00457
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 82,
+      "t_us": 820000,
+      "a_g": [
+        -0.01267,
+        -0.02954,
+        0.9988
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 83,
+      "t_us": 830000,
+      "a_g": [
+        -0.0292,
+        -0.02433,
+        1.00458
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 84,
+      "t_us": 840000,
+      "a_g": [
+        -0.0314,
+        -0.0051,
+        1.00999
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 85,
+      "t_us": 850000,
+      "a_g": [
+        -0.03338,
+        0.01268,
+        1.00092
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 86,
+      "t_us": 860000,
+      "a_g": [
+        -0.02462,
+        0.03246,
+        1.00452
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 87,
+      "t_us": 870000,
+      "a_g": [
+        -0.0129,
+        0.0327,
+        1.00129
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 88,
+      "t_us": 880000,
+      "a_g": [
+        0.01105,
+        0.02986,
+        0.99323
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 89,
+      "t_us": 890000,
+      "a_g": [
+        0.01824,
+        0.0253,
+        0.99969
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 90,
+      "t_us": 900000,
+      "a_g": [
+        0.03432,
+        0.00851,
+        0.99633
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 91,
+      "t_us": 910000,
+      "a_g": [
+        0.02831,
+        -0.00557,
+        1.00111
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 92,
+      "t_us": 920000,
+      "a_g": [
+        0.02995,
+        -0.01994,
+        0.99943
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 93,
+      "t_us": 930000,
+      "a_g": [
+        0.01693,
+        -0.03295,
+        0.99802
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 94,
+      "t_us": 940000,
+      "a_g": [
+        -0.00595,
+        -0.03648,
+        0.9935
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 95,
+      "t_us": 950000,
+      "a_g": [
+        -0.0201,
+        -0.02757,
+        0.99891
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 96,
+      "t_us": 960000,
+      "a_g": [
+        -0.03381,
+        -0.01379,
+        1.00515
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 97,
+      "t_us": 970000,
+      "a_g": [
+        -0.03482,
+        0.00067,
+        0.99823
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 98,
+      "t_us": 980000,
+      "a_g": [
+        -0.02976,
+        0.01496,
+        0.99962
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 99,
+      "t_us": 990000,
+      "a_g": [
+        -0.01668,
+        0.0362,
+        1.00283
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 100,
+      "t_us": 1000000,
+      "a_g": [
+        0.0031,
+        0.03286,
+        1.00201
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 101,
+      "t_us": 1010000,
+      "a_g": [
+        0.01344,
+        0.03161,
+        1.00126
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 102,
+      "t_us": 1020000,
+      "a_g": [
+        0.02725,
+        0.02475,
+        1.0017
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 103,
+      "t_us": 1030000,
+      "a_g": [
+        0.02922,
+        0.00386,
+        0.99878
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 104,
+      "t_us": 1040000,
+      "a_g": [
+        0.03167,
+        -0.0135,
+        1.00117
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 105,
+      "t_us": 1050000,
+      "a_g": [
+        0.01446,
+        -0.03179,
+        1.00232
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 106,
+      "t_us": 1060000,
+      "a_g": [
+        0.00829,
+        -0.02901,
+        1.00541
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 107,
+      "t_us": 1070000,
+      "a_g": [
+        -0.01905,
+        -0.03023,
+        0.99425
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 108,
+      "t_us": 1080000,
+      "a_g": [
+        -0.02213,
+        -0.02155,
+        0.99658
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 109,
+      "t_us": 1090000,
+      "a_g": [
+        -0.02835,
+        -0.00463,
+        0.99433
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 110,
+      "t_us": 1100000,
+      "a_g": [
+        -0.03241,
+        0.00862,
+        1.00033
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 111,
+      "t_us": 1110000,
+      "a_g": [
+        -0.02535,
+        0.02963,
+        0.99573
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 112,
+      "t_us": 1120000,
+      "a_g": [
+        -0.00775,
+        0.03934,
+        0.99752
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 113,
+      "t_us": 1130000,
+      "a_g": [
+        0.00934,
+        0.03451,
+        0.99793
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 114,
+      "t_us": 1140000,
+      "a_g": [
+        0.0259,
+        0.02581,
+        0.99717
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 115,
+      "t_us": 1150000,
+      "a_g": [
+        0.03857,
+        0.01319,
+        0.9995
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 116,
+      "t_us": 1160000,
+      "a_g": [
+        0.03247,
+        -0.00891,
+        1.00369
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 117,
+      "t_us": 1170000,
+      "a_g": [
+        0.02653,
+        -0.02093,
+        0.99945
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 118,
+      "t_us": 1180000,
+      "a_g": [
+        0.01473,
+        -0.03289,
+        1.00229
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 119,
+      "t_us": 1190000,
+      "a_g": [
+        -0.00494,
+        -0.03224,
+        1.00202
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 120,
+      "t_us": 1200000,
+      "a_g": [
+        -0.02092,
+        -0.03089,
+        0.99718
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 121,
+      "t_us": 1210000,
+      "a_g": [
+        -0.03389,
+        -0.01786,
+        1.0026
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 122,
+      "t_us": 1220000,
+      "a_g": [
+        -0.03507,
+        0.00691,
+        1.00684
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 123,
+      "t_us": 1230000,
+      "a_g": [
+        -0.02948,
+        0.01411,
+        0.99886
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 124,
+      "t_us": 1240000,
+      "a_g": [
+        -0.01709,
+        0.02621,
+        0.99925
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 125,
+      "t_us": 1250000,
+      "a_g": [
+        0.00086,
+        0.03362,
+        0.99769
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 126,
+      "t_us": 1260000,
+      "a_g": [
+        0.01459,
+        0.03603,
+        0.99952
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 127,
+      "t_us": 1270000,
+      "a_g": [
+        0.02706,
+        0.01764,
+        1.00286
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 128,
+      "t_us": 1280000,
+      "a_g": [
+        0.03288,
+        0.00364,
+        1.00218
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 129,
+      "t_us": 1290000,
+      "a_g": [
+        0.03392,
+        -0.0107,
+        0.99835
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 130,
+      "t_us": 1300000,
+      "a_g": [
+        0.02397,
+        -0.03069,
+        0.99881
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 131,
+      "t_us": 1310000,
+      "a_g": [
+        0.00797,
+        -0.03226,
+        1.00001
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 132,
+      "t_us": 1320000,
+      "a_g": [
+        -0.01646,
+        -0.03086,
+        0.99811
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 133,
+      "t_us": 1330000,
+      "a_g": [
+        -0.02974,
+        -0.02425,
+        1.00074
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 134,
+      "t_us": 1340000,
+      "a_g": [
+        -0.04074,
+        -0.00548,
+        1.00052
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 135,
+      "t_us": 1350000,
+      "a_g": [
+        -0.03504,
+        0.01393,
+        1.00183
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 136,
+      "t_us": 1360000,
+      "a_g": [
+        -0.02578,
+        0.0235,
+        1.00209
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 137,
+      "t_us": 1370000,
+      "a_g": [
+        -0.01325,
+        0.0329,
+        0.99811
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 138,
+      "t_us": 1380000,
+      "a_g": [
+        0.00891,
+        0.03453,
+        1.00011
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 139,
+      "t_us": 1390000,
+      "a_g": [
+        0.02736,
+        0.0262,
+        0.99906
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 140,
+      "t_us": 1400000,
+      "a_g": [
+        0.02965,
+        0.01298,
+        1.00158
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 141,
+      "t_us": 1410000,
+      "a_g": [
+        0.03873,
+        -0.0088,
+        1.00008
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 142,
+      "t_us": 1420000,
+      "a_g": [
+        0.02679,
+        -0.02257,
+        1.00003
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 143,
+      "t_us": 1430000,
+      "a_g": [
+        0.00774,
+        -0.03007,
+        1.00196
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 144,
+      "t_us": 1440000,
+      "a_g": [
+        -0.001,
+        -0.02798,
+        0.99904
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 145,
+      "t_us": 1450000,
+      "a_g": [
+        -0.02068,
+        -0.02829,
+        1.00583
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 146,
+      "t_us": 1460000,
+      "a_g": [
+        -0.03686,
+        -0.01344,
+        0.99559
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 147,
+      "t_us": 1470000,
+      "a_g": [
+        -0.04268,
+        -0.00386,
+        0.99585
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 148,
+      "t_us": 1480000,
+      "a_g": [
+        -0.02634,
+        0.01615,
+        0.99932
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 149,
+      "t_us": 1490000,
+      "a_g": [
+        -0.02035,
+        0.0325,
+        0.99669
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 150,
+      "t_us": 1500000,
+      "a_g": [
+        0.00395,
+        0.03202,
+        0.99771
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 151,
+      "t_us": 1510000,
+      "a_g": [
+        0.01723,
+        0.03074,
+        1.00427
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 152,
+      "t_us": 1520000,
+      "a_g": [
+        0.02991,
+        0.01513,
+        0.99832
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 153,
+      "t_us": 1530000,
+      "a_g": [
+        0.03321,
+        0.00437,
+        1.00115
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 154,
+      "t_us": 1540000,
+      "a_g": [
+        0.03131,
+        -0.01229,
+        0.99841
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 155,
+      "t_us": 1550000,
+      "a_g": [
+        0.02016,
+        -0.02777,
+        1.00458
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 156,
+      "t_us": 1560000,
+      "a_g": [
+        0.00409,
+        -0.03578,
+        0.99686
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 157,
+      "t_us": 1570000,
+      "a_g": [
+        -0.01083,
+        -0.03431,
+        1.00103
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 158,
+      "t_us": 1580000,
+      "a_g": [
+        -0.03267,
+        -0.01918,
+        0.996
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 159,
+      "t_us": 1590000,
+      "a_g": [
+        -0.03671,
+        -0.00338,
+        0.996
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 160,
+      "t_us": 1600000,
+      "a_g": [
+        -0.03353,
+        0.01104,
+        0.997
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 161,
+      "t_us": 1610000,
+      "a_g": [
+        -0.01993,
+        0.03001,
+        0.99409
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 162,
+      "t_us": 1620000,
+      "a_g": [
+        -0.01305,
+        0.03633,
+        0.99609
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 163,
+      "t_us": 1630000,
+      "a_g": [
+        0.00754,
+        0.03429,
+        1.00208
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 164,
+      "t_us": 1640000,
+      "a_g": [
+        0.02329,
+        0.0258,
+        0.99767
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 165,
+      "t_us": 1650000,
+      "a_g": [
+        0.03716,
+        0.00933,
+        1.00102
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 166,
+      "t_us": 1660000,
+      "a_g": [
+        0.03285,
+        -0.00624,
+        0.9995
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 167,
+      "t_us": 1670000,
+      "a_g": [
+        0.02648,
+        -0.02535,
+        1.00239
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 168,
+      "t_us": 1680000,
+      "a_g": [
+        0.01713,
+        -0.03181,
+        1.0022
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 169,
+      "t_us": 1690000,
+      "a_g": [
+        -0.00187,
+        -0.03194,
+        1.00091
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 170,
+      "t_us": 1700000,
+      "a_g": [
+        -0.01994,
+        -0.02572,
+        1.00021
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 171,
+      "t_us": 1710000,
+      "a_g": [
+        -0.03459,
+        -0.01483,
+        0.99433
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 172,
+      "t_us": 1720000,
+      "a_g": [
+        -0.03495,
+        0.00344,
+        1.00371
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 173,
+      "t_us": 1730000,
+      "a_g": [
+        -0.0291,
+        0.02154,
+        1.0
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 174,
+      "t_us": 1740000,
+      "a_g": [
+        -0.01993,
+        0.02644,
+        0.99709
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 175,
+      "t_us": 1750000,
+      "a_g": [
+        -0.0041,
+        0.0369,
+        0.99938
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 176,
+      "t_us": 1760000,
+      "a_g": [
+        0.01857,
+        0.03089,
+        1.00313
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 177,
+      "t_us": 1770000,
+      "a_g": [
+        0.03273,
+        0.01682,
+        0.99918
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 178,
+      "t_us": 1780000,
+      "a_g": [
+        0.03333,
+        -0.00267,
+        1.00203
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 179,
+      "t_us": 1790000,
+      "a_g": [
+        0.03524,
+        -0.01492,
+        0.99852
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 180,
+      "t_us": 1800000,
+      "a_g": [
+        0.02385,
+        -0.03535,
+        1.00053
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 181,
+      "t_us": 1810000,
+      "a_g": [
+        0.00482,
+        -0.03644,
+        1.00417
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 182,
+      "t_us": 1820000,
+      "a_g": [
+        -0.00997,
+        -0.03333,
+        0.99974
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 183,
+      "t_us": 1830000,
+      "a_g": [
+        -0.02813,
+        -0.02385,
+        0.99608
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 184,
+      "t_us": 1840000,
+      "a_g": [
+        -0.03024,
+        -0.00347,
+        1.00239
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 185,
+      "t_us": 1850000,
+      "a_g": [
+        -0.03657,
+        0.01706,
+        1.00594
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 186,
+      "t_us": 1860000,
+      "a_g": [
+        -0.02339,
+        0.0228,
+        0.9974
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 187,
+      "t_us": 1870000,
+      "a_g": [
+        -0.00745,
+        0.03116,
+        0.9999
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 188,
+      "t_us": 1880000,
+      "a_g": [
+        0.01197,
+        0.02938,
+        1.00602
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 189,
+      "t_us": 1890000,
+      "a_g": [
+        0.02866,
+        0.0218,
+        0.99576
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 190,
+      "t_us": 1900000,
+      "a_g": [
+        0.03244,
+        0.00772,
+        0.99921
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 191,
+      "t_us": 1910000,
+      "a_g": [
+        0.02664,
+        -0.00724,
+        1.00541
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 192,
+      "t_us": 1920000,
+      "a_g": [
+        0.02362,
+        -0.02313,
+        0.99553
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 193,
+      "t_us": 1930000,
+      "a_g": [
+        0.0148,
+        -0.03322,
+        1.00582
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 194,
+      "t_us": 1940000,
+      "a_g": [
+        -0.00377,
+        -0.03584,
+        1.00165
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 195,
+      "t_us": 1950000,
+      "a_g": [
+        -0.02209,
+        -0.03233,
+        1.00091
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 196,
+      "t_us": 1960000,
+      "a_g": [
+        -0.03219,
+        -0.0144,
+        1.00113
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 197,
+      "t_us": 1970000,
+      "a_g": [
+        -0.03646,
+        0.00346,
+        1.00521
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 198,
+      "t_us": 1980000,
+      "a_g": [
+        -0.03287,
+        0.02397,
+        0.99927
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 199,
+      "t_us": 1990000,
+      "a_g": [
+        -0.01916,
+        0.03795,
+        1.00047
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 200,
+      "t_us": 2000000,
+      "a_g": [
+        0.00411,
+        0.03745,
+        0.99496
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 201,
+      "t_us": 2010000,
+      "a_g": [
+        0.01722,
+        0.02909,
+        0.99597
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 202,
+      "t_us": 2020000,
+      "a_g": [
+        0.02424,
+        0.01906,
+        1.00177
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 203,
+      "t_us": 2030000,
+      "a_g": [
+        0.0361,
+        0.00128,
+        0.9976
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 204,
+      "t_us": 2040000,
+      "a_g": [
+        0.02871,
+        -0.01657,
+        0.9969
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 205,
+      "t_us": 2050000,
+      "a_g": [
+        0.01996,
+        -0.02838,
+        0.99731
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 206,
+      "t_us": 2060000,
+      "a_g": [
+        0.00369,
+        -0.037,
+        0.99999
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 207,
+      "t_us": 2070000,
+      "a_g": [
+        -0.01136,
+        -0.03201,
+        1.00142
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 208,
+      "t_us": 2080000,
+      "a_g": [
+        -0.03192,
+        -0.02345,
+        1.00083
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 209,
+      "t_us": 2090000,
+      "a_g": [
+        -0.03246,
+        -0.01135,
+        1.00048
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 210,
+      "t_us": 2100000,
+      "a_g": [
+        -0.02967,
+        0.01028,
+        0.99972
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 211,
+      "t_us": 2110000,
+      "a_g": [
+        -0.02261,
+        0.02626,
+        1.00202
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 212,
+      "t_us": 2120000,
+      "a_g": [
+        -0.00849,
+        0.03436,
+        0.99765
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 213,
+      "t_us": 2130000,
+      "a_g": [
+        0.00819,
+        0.03766,
+        0.99939
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 214,
+      "t_us": 2140000,
+      "a_g": [
+        0.02345,
+        0.02404,
+        1.00236
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 215,
+      "t_us": 2150000,
+      "a_g": [
+        0.03072,
+        0.01355,
+        0.99719
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 216,
+      "t_us": 2160000,
+      "a_g": [
+        0.03121,
+        -0.00594,
+        1.00039
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 217,
+      "t_us": 2170000,
+      "a_g": [
+        0.02786,
+        -0.01912,
+        0.99876
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 218,
+      "t_us": 2180000,
+      "a_g": [
+        0.01421,
+        -0.03527,
+        1.00378
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 219,
+      "t_us": 2190000,
+      "a_g": [
+        -0.00249,
+        -0.03311,
+        1.00056
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 220,
+      "t_us": 2200000,
+      "a_g": [
+        -0.02293,
+        -0.0293,
+        1.00151
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 221,
+      "t_us": 2210000,
+      "a_g": [
+        -0.03173,
+        -0.01453,
+        0.99592
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 222,
+      "t_us": 2220000,
+      "a_g": [
+        -0.03439,
+        0.00012,
+        0.99675
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 223,
+      "t_us": 2230000,
+      "a_g": [
+        -0.03002,
+        0.01318,
+        1.0021
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 224,
+      "t_us": 2240000,
+      "a_g": [
+        -0.01431,
+        0.03051,
+        0.99702
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 225,
+      "t_us": 2250000,
+      "a_g": [
+        -0.00284,
+        0.03455,
+        0.99273
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 226,
+      "t_us": 2260000,
+      "a_g": [
+        0.0174,
+        0.03266,
+        0.99906
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 227,
+      "t_us": 2270000,
+      "a_g": [
+        0.02807,
+        0.0193,
+        1.00105
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 228,
+      "t_us": 2280000,
+      "a_g": [
+        0.03821,
+        0.00225,
+        0.99793
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 229,
+      "t_us": 2290000,
+      "a_g": [
+        0.03029,
+        -0.01436,
+        1.00467
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 230,
+      "t_us": 2300000,
+      "a_g": [
+        0.01961,
+        -0.03147,
+        0.99739
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 231,
+      "t_us": 2310000,
+      "a_g": [
+        -0.0019,
+        -0.03373,
+        0.99592
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 232,
+      "t_us": 2320000,
+      "a_g": [
+        -0.01658,
+        -0.03847,
+        0.99665
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 233,
+      "t_us": 2330000,
+      "a_g": [
+        -0.02526,
+        -0.02624,
+        0.99475
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 234,
+      "t_us": 2340000,
+      "a_g": [
+        -0.03385,
+        -0.00758,
+        1.0013
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 235,
+      "t_us": 2350000,
+      "a_g": [
+        -0.03107,
+        0.01079,
+        0.99611
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 236,
+      "t_us": 2360000,
+      "a_g": [
+        -0.02433,
+        0.02701,
+        0.99825
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 237,
+      "t_us": 2370000,
+      "a_g": [
+        -0.01302,
+        0.03721,
+        0.99875
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 238,
+      "t_us": 2380000,
+      "a_g": [
+        0.00748,
+        0.03395,
+        1.00309
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 239,
+      "t_us": 2390000,
+      "a_g": [
+        0.02475,
+        0.02451,
+        1.00205
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 240,
+      "t_us": 2400000,
+      "a_g": [
+        0.03973,
+        0.01498,
+        1.00202
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 241,
+      "t_us": 2410000,
+      "a_g": [
+        0.03101,
+        0.0047,
+        0.9964
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 242,
+      "t_us": 2420000,
+      "a_g": [
+        0.02585,
+        -0.02441,
+        1.00488
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 243,
+      "t_us": 2430000,
+      "a_g": [
+        0.01415,
+        -0.03682,
+        1.0008
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 244,
+      "t_us": 2440000,
+      "a_g": [
+        -0.00275,
+        -0.03568,
+        0.99634
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 245,
+      "t_us": 2450000,
+      "a_g": [
+        -0.02275,
+        -0.02963,
+        1.00007
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 246,
+      "t_us": 2460000,
+      "a_g": [
+        -0.03323,
+        -0.0127,
+        0.99715
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 247,
+      "t_us": 2470000,
+      "a_g": [
+        -0.04013,
+        -2e-05,
+        1.00405
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 248,
+      "t_us": 2480000,
+      "a_g": [
+        -0.03127,
+        0.02578,
+        1.00147
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 249,
+      "t_us": 2490000,
+      "a_g": [
+        -0.02035,
+        0.02817,
+        1.00073
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 250,
+      "t_us": 2500000,
+      "a_g": [
+        -0.00353,
+        0.04212,
+        0.99703
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 251,
+      "t_us": 2510000,
+      "a_g": [
+        0.0189,
+        0.03505,
+        0.99967
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 252,
+      "t_us": 2520000,
+      "a_g": [
+        0.02656,
+        0.01793,
+        1.00109
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 253,
+      "t_us": 2530000,
+      "a_g": [
+        0.03756,
+        0.00237,
+        0.9958
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 254,
+      "t_us": 2540000,
+      "a_g": [
+        0.0318,
+        -0.01692,
+        0.99345
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 255,
+      "t_us": 2550000,
+      "a_g": [
+        0.01848,
+        -0.03261,
+        1.00176
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 256,
+      "t_us": 2560000,
+      "a_g": [
+        0.01022,
+        -0.02915,
+        0.99828
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 257,
+      "t_us": 2570000,
+      "a_g": [
+        -0.01429,
+        -0.03048,
+        1.00318
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 258,
+      "t_us": 2580000,
+      "a_g": [
+        -0.02822,
+        -0.02274,
+        1.00662
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 259,
+      "t_us": 2590000,
+      "a_g": [
+        -0.0347,
+        -0.00801,
+        1.00036
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 260,
+      "t_us": 2600000,
+      "a_g": [
+        -0.03155,
+        0.00775,
+        0.99925
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 261,
+      "t_us": 2610000,
+      "a_g": [
+        -0.02746,
+        0.02468,
+        1.00563
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 262,
+      "t_us": 2620000,
+      "a_g": [
+        -0.00648,
+        0.03362,
+        0.9972
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 263,
+      "t_us": 2630000,
+      "a_g": [
+        0.00777,
+        0.03705,
+        0.99831
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 264,
+      "t_us": 2640000,
+      "a_g": [
+        0.02831,
+        0.02139,
+        0.99913
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 265,
+      "t_us": 2650000,
+      "a_g": [
+        0.03852,
+        0.00479,
+        1.00357
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 266,
+      "t_us": 2660000,
+      "a_g": [
+        0.02883,
+        -0.00683,
+        0.99948
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 267,
+      "t_us": 2670000,
+      "a_g": [
+        0.02944,
+        -0.03177,
+        0.99425
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 268,
+      "t_us": 2680000,
+      "a_g": [
+        0.01119,
+        -0.03243,
+        0.99732
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 269,
+      "t_us": 2690000,
+      "a_g": [
+        -0.00505,
+        -0.03828,
+        0.9988
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 270,
+      "t_us": 2700000,
+      "a_g": [
+        -0.02311,
+        -0.02758,
+        1.00174
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 271,
+      "t_us": 2710000,
+      "a_g": [
+        -0.02737,
+        -0.01687,
+        0.99905
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 272,
+      "t_us": 2720000,
+      "a_g": [
+        -0.03479,
+        0.00131,
+        0.99984
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 273,
+      "t_us": 2730000,
+      "a_g": [
+        -0.03424,
+        0.01987,
+        0.99725
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 274,
+      "t_us": 2740000,
+      "a_g": [
+        -0.01973,
+        0.02591,
+        1.00348
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 275,
+      "t_us": 2750000,
+      "a_g": [
+        -0.00042,
+        0.03845,
+        1.00082
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 276,
+      "t_us": 2760000,
+      "a_g": [
+        0.01175,
+        0.02742,
+        1.00227
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 277,
+      "t_us": 2770000,
+      "a_g": [
+        0.02725,
+        0.01548,
+        0.99946
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 278,
+      "t_us": 2780000,
+      "a_g": [
+        0.0344,
+        -0.00084,
+        0.99902
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 279,
+      "t_us": 2790000,
+      "a_g": [
+        0.03023,
+        -0.02267,
+        1.00151
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 280,
+      "t_us": 2800000,
+      "a_g": [
+        0.01814,
+        -0.0244,
+        0.99655
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 281,
+      "t_us": 2810000,
+      "a_g": [
+        -0.00035,
+        -0.03116,
+        0.99524
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 282,
+      "t_us": 2820000,
+      "a_g": [
+        -0.01479,
+        -0.03075,
+        0.99901
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 283,
+      "t_us": 2830000,
+      "a_g": [
+        -0.03193,
+        -0.02175,
+        0.99942
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 284,
+      "t_us": 2840000,
+      "a_g": [
+        -0.03053,
+        -0.00479,
+        1.00911
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 285,
+      "t_us": 2850000,
+      "a_g": [
+        -0.03822,
+        0.01075,
+        0.9968
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 286,
+      "t_us": 2860000,
+      "a_g": [
+        -0.02049,
+        0.02798,
+        1.00226
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 287,
+      "t_us": 2870000,
+      "a_g": [
+        -0.01104,
+        0.03166,
+        0.99391
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 288,
+      "t_us": 2880000,
+      "a_g": [
+        0.01383,
+        0.03543,
+        0.99922
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 289,
+      "t_us": 2890000,
+      "a_g": [
+        0.02676,
+        0.02777,
+        1.00293
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 290,
+      "t_us": 2900000,
+      "a_g": [
+        0.02842,
+        0.00867,
+        1.00059
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 291,
+      "t_us": 2910000,
+      "a_g": [
+        0.03545,
+        -0.00369,
+        0.99697
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 292,
+      "t_us": 2920000,
+      "a_g": [
+        0.02735,
+        -0.01569,
+        1.00208
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 293,
+      "t_us": 2930000,
+      "a_g": [
+        0.0155,
+        -0.0326,
+        1.0023
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 294,
+      "t_us": 2940000,
+      "a_g": [
+        0.00103,
+        -0.0344,
+        1.00367
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 295,
+      "t_us": 2950000,
+      "a_g": [
+        -0.0232,
+        -0.02655,
+        1.00271
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 296,
+      "t_us": 2960000,
+      "a_g": [
+        -0.03392,
+        -0.01161,
+        0.99797
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 297,
+      "t_us": 2970000,
+      "a_g": [
+        -0.03735,
+        0.00219,
+        1.0058
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 298,
+      "t_us": 2980000,
+      "a_g": [
+        -0.02862,
+        0.02156,
+        0.9978
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 299,
+      "t_us": 2990000,
+      "a_g": [
+        -0.01663,
+        0.02714,
+        0.99829
+      ],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    }
+  ]
+}
