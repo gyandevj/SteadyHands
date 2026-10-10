@@ -108,7 +108,6 @@ const OVERLAY_CSS = `
   stroke-linecap: round;
   stroke-dasharray: 113.1;
   stroke-dashoffset: 113.1;
-  transition: stroke-dashoffset 0.05s linear;
 }
 .steadyhand-status-badge {
   position: fixed;
@@ -303,7 +302,12 @@ export class SteadyHandRuntime {
     if (!this.running) return;
 
     const raw = pointerInput.getLastPoint();
-    const perturbed = syntheticPointer.perturb(raw);
+    const livePoint: Point = {
+      x: raw.x,
+      y: raw.y,
+      tMs: performance.now()
+    };
+    const perturbed = syntheticPointer.perturb(livePoint);
     const targets = targetRegistry.getAllTargets();
     const geomRev = geometryTracker.getRevision();
 
