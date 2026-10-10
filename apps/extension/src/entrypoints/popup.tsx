@@ -34,10 +34,18 @@ async function renderFallbackPopup(container: HTMLElement) {
       ? 'Arduino UNO R4 (Live COM5)' 
       : (isMock ? 'Mock Stream (Bridge)' : 'Standalone (Local Filter)');
 
-    const tremorText = state.deviceMotion === 'tremor' 
-      ? 'Tremor Detected: Active Compensation'
-      : (state.deviceMotion === 'intentional' ? 'Active Movement' : 'Resting / Calibrated');
-    const tremorColor = state.deviceMotion === 'tremor' ? '#f59e0b' : '#34d399';
+    let tremorText = 'Resting / Calibrated';
+    let tremorColor = '#34d399';
+    if (state.deviceMotion === 'periodic_motion') {
+      tremorText = 'Tremor Detected: Active Compensation';
+      tremorColor = '#f59e0b';
+    } else if (state.deviceMotion === 'other_motion') {
+      tremorText = 'Active Motion (Tapping/Banging)';
+      tremorColor = '#38bdf8';
+    } else if (state.deviceMotion === 'unknown') {
+      tremorText = 'Calibrating Sensor...';
+      tremorColor = '#94a3b8';
+    }
 
     container.innerHTML = `
       <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:10px;">
@@ -169,10 +177,19 @@ async function renderFallbackPopup(container: HTMLElement) {
 
     const trem = document.getElementById('sh-tremor-label');
     if (trem) {
-      trem.style.color = fresh.deviceMotion === 'tremor' ? '#f59e0b' : '#34d399';
-      trem.textContent = fresh.deviceMotion === 'tremor'
-        ? 'Tremor Detected: Active Compensation'
-        : (fresh.deviceMotion === 'intentional' ? 'Active Movement' : 'Resting / Calibrated');
+      if (fresh.deviceMotion === 'periodic_motion') {
+        trem.style.color = '#f59e0b';
+        trem.textContent = 'Tremor Detected: Active Compensation';
+      } else if (fresh.deviceMotion === 'other_motion') {
+        trem.style.color = '#38bdf8';
+        trem.textContent = 'Active Motion (Tapping/Banging)';
+      } else if (fresh.deviceMotion === 'unknown') {
+        trem.style.color = '#94a3b8';
+        trem.textContent = 'Calibrating Sensor...';
+      } else {
+        trem.style.color = '#34d399';
+        trem.textContent = 'Resting / Calibrated';
+      }
     }
 
     const hz = document.getElementById('sh-hz-label');

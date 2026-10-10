@@ -66,9 +66,10 @@ if ($HardwarePort -ne "") {
     $LaunchMode = "mock"
 }
 
-# 4. Open Test Form in Browser
-Write-Host "[4/4] Launching test form in browser..." -ForegroundColor Yellow
+# 4. Open Test Form & Diagnostics Monitor in Browser
+Write-Host "[4/4] Launching test form and tremor oscilloscope in browser..." -ForegroundColor Yellow
 $FormPath = "$RepoRoot\apps\fixtures\registration.html"
+$MonitorPath = "$RepoRoot\apps\fixtures\monitor.html"
 $DistPath = "$RepoRoot\apps\extension\dist"
 
 Write-Host ""
@@ -78,12 +79,14 @@ Write-Host "1. In Google Chrome, navigate to: chrome://extensions/" -ForegroundC
 Write-Host "2. Enable 'Developer mode' (toggle in top right)." -ForegroundColor Cyan
 Write-Host "3. Click 'Load unpacked' and select this folder:" -ForegroundColor Cyan
 Write-Host "   $DistPath" -ForegroundColor Yellow
-Write-Host "4. Open the test form below and click 'Enable on this page'!" -ForegroundColor Green
+Write-Host "4. Open the form, click SteadyHand icon -> 'Enable on this page'!" -ForegroundColor Green
 Write-Host "------------------------------------------------------------" -ForegroundColor DarkGray
 Write-Host ""
 
 $FormUri = "file:///" + ($FormPath -replace '\\', '/')
+$MonitorUri = "file:///" + ($MonitorPath -replace '\\', '/')
 Start-Process $FormUri
+Start-Process $MonitorUri
 
 Write-Host "Starting SteadyHand WebSocket Bridge on ${ListenHost}:${Port}..." -ForegroundColor Cyan
 Write-Host "(Press CTRL+C anytime to stop the server)" -ForegroundColor Gray

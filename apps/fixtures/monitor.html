@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SteadyHand — Live Sensor & Tremor Diagnostics</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card: #131d2e;
+      --border: #23354e;
+      --accent: #38bdf8;
+      --green: #10b981;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      padding: 24px;
+      line-height: 1.5;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .title-group h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .title-group p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #1e293b;
+      border: 1px solid var(--border);
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--muted);
+    }
+    .status-dot.connected { background: var(--green); box-shadow: 0 0 8px var(--green); }
+    .status-dot.error { background: var(--red); box-shadow: 0 0 8px var(--red); }
+
+    /* Grid Layout */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .metric-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .metric-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .metric-value {
+      font-size: 28px;
+      font-weight: 700;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    .metric-sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Motion Badge styles */
+    .motion-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 700;
+      width: fit-content;
+    }
+    .motion-badge.quiet { background: rgba(16, 185, 129, 0.2); color: var(--green); border: 1px solid var(--green); }
+    .motion-badge.periodic { background: rgba(245, 158, 11, 0.2); color: var(--amber); border: 1px solid var(--amber); }
+    .motion-badge.other { background: rgba(56, 189, 248, 0.2); color: var(--accent); border: 1px solid var(--accent); }
+    .motion-badge.unknown { background: rgba(148, 163, 184, 0.2); color: var(--muted); border: 1px solid var(--border); }
+
+    /* Graph Section */
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .panel-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .legend {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-color {
+      width: 12px;
+      height: 3px;
+      border-radius: 2px;
+    }
+
+    canvas {
+      width: 100%;
+      height: 240px;
+      background: #0b111c;
+      border-radius: 6px;
+      border: 1px solid #1c2a3e;
+      display: block;
+    }
+
+    /* Spectrum Bar Chart */
+    .spectrum-canvas {
+      height: 120px;
+    }
+
+    /* Controls */
+    .controls-bar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 12px;
+    }
+    button {
+      background: #1e293b;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    button:hover {
+      background: #334155;
+      border-color: var(--accent);
+    }
+    button.primary {
+      background: var(--accent);
+      color: #090d16;
+      border: none;
+    }
+    button.primary:hover {
+      background: #0284c7;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="title-group">
+      <h1>SteadyHand Diagnostics & Tremor Waveform</h1>
+      <p>Real-time physical accelerometer metrics & FFT signal pipeline monitoring</p>
+    </div>
+    <div class="status-pill">
+      <span class="status-dot" id="ws-dot"></span>
+      <span id="ws-label">Connecting to Bridge...</span>
+    </div>
+  </header>
+
+  <!-- Metric Tiles -->
+  <div class="dashboard-grid">
+    <div class="metric-card">
+      <span class="metric-label">Motion State</span>
+      <div id="motion-badge" class="motion-badge unknown">INITIALIZING</div>
+      <span class="metric-sub" id="motion-detail">Waiting for sensor frame...</span>
+    </div>
+
+    <div class="metric-card">
+      <span class="metric-label">Dominant Tremor Peak</span>
+      <span class="metric-value" id="val-hz">-- Hz</span>
+      <span class="metric-sub">Target band: 3.0 Hz – 12.0 Hz</span>
+    </div>
+
+    <div class="metric-card">
+      <span class="metric-label">Tremor Band RMS</span>
+      <span class="metric-value" id="val-rms">-- mg</span>
+      <span class="metric-sub" id="val-ratio">Power concentration: --%</span>
+    </div>
+
+    <div class="metric-card">
+      <span class="metric-label">Hardware Sensor</span>
+      <span class="metric-value" style="font-size: 20px; line-height: 34px;" id="val-sensor">MMA7660FC</span>
+      <span class="metric-sub" id="val-samples">Total samples: 0</span>
+    </div>
+  </div>
+
+  <!-- Real-Time Waveform Graph -->
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">Real-Time Acceleration Oscilloscope (g-force)</span>
+      <div class="legend">
+        <div class="legend-item"><span class="legend-color" style="background:#ef4444;"></span>X-Axis</div>
+        <div class="legend-item"><span class="legend-color" style="background:#10b981;"></span>Y-Axis</div>
+        <div class="legend-item"><span class="legend-color" style="background:#38bdf8;"></span>Z-Axis (Gravity)</div>
+        <div class="legend-item"><span class="legend-color" style="background:#f59e0b;"></span>Magnitude Vector |G|</div>
+      </div>
+    </div>
+    <canvas id="scopeCanvas" width="1000" height="240"></canvas>
+    <div class="controls-bar">
+      <button id="btn-pause">Pause Stream</button>
+      <button id="btn-clear">Clear Waveform</button>
+      <span style="font-size:12px; color:var(--muted); margin-left:auto;">
+        💡 Tip: Tap or shake the sensor to observe the waveform spike and state shift.
+      </span>
+    </div>
+  </div>
+
+  <script>
+    const WS_URL = 'ws://127.0.0.1:8765/v1/stream';
+    const TOKEN = 'steadyhand-dev-token-secret';
+
+    let ws = null;
+    let isPaused = false;
+    let sampleCounter = 0;
+
+    // Rolling waveform buffer (up to 300 points)
+    const MAX_POINTS = 300;
+    const historyX = [];
+    const historyY = [];
+    const historyZ = [];
+    const historyMag = [];
+
+    const canvas = document.getElementById('scopeCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Resize canvas resolution to display width
+    function resizeCanvas() {
+      canvas.width = canvas.clientWidth * window.devicePixelRatio;
+      canvas.height = canvas.clientHeight * window.devicePixelRatio;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function connectWebSocket() {
+      const dot = document.getElementById('ws-dot');
+      const label = document.getElementById('ws-label');
+
+      dot.className = 'status-dot';
+      label.textContent = 'Connecting to ws://127.0.0.1:8765...';
+
+      try {
+        ws = new WebSocket(WS_URL);
+
+        ws.onopen = () => {
+          dot.className = 'status-dot connected';
+          label.textContent = 'Bridge Connected (Live Stream)';
+          // Send handshake
+          ws.send(JSON.stringify({
+            v: 1,
+            type: 'client.auth',
+            request_id: `dash-${Date.now()}`,
+            token: TOKEN,
+            role: 'dashboard'
+          }));
+        };
+
+        ws.onmessage = (event) => {
+          if (isPaused) return;
+          try {
+            const data = JSON.parse(event.data);
+            handleMessage(data);
+          } catch (e) {}
+        };
+
+        ws.onclose = () => {
+          dot.className = 'status-dot error';
+          label.textContent = 'Disconnected (Reconnecting...)';
+          setTimeout(connectWebSocket, 1500);
+        };
+
+        ws.onerror = () => {
+          dot.className = 'status-dot error';
+          label.textContent = 'Connection Error';
+        };
+      } catch (err) {
+        dot.className = 'status-dot error';
+        label.textContent = 'Bridge Unavailable';
+        setTimeout(connectWebSocket, 2000);
+      }
+    }
+
+    function handleMessage(msg) {
+      // 1. Motion frame updates
+      if (msg.type === 'motion.frame') {
+        const motion = msg.motion || {};
+        const quality = msg.quality || {};
+
+        // Update Motion Status Badge
+        const badge = document.getElementById('motion-badge');
+        const detail = document.getElementById('motion-detail');
+
+        if (motion.status === 'periodic_motion') {
+          badge.className = 'motion-badge periodic';
+          badge.textContent = 'PERIODIC TREMOR';
+          detail.textContent = 'Active Tremor Compensation Active';
+        } else if (motion.status === 'other_motion') {
+          badge.className = 'motion-badge other';
+          badge.textContent = 'ACTIVE MOTION';
+          detail.textContent = 'Tapping, Banging or Voluntary Movement';
+        } else if (motion.status === 'quiet') {
+          badge.className = 'motion-badge quiet';
+          badge.textContent = 'QUIET / RESTING';
+          detail.textContent = 'Sensor is calm within baseline floor';
+        } else {
+          badge.className = 'motion-badge unknown';
+          badge.textContent = quality.state ? quality.state.toUpperCase() : 'CALIBRATING';
+          detail.textContent = quality.reasons ? quality.reasons.join(', ') : 'Building analysis window';
+        }
+
+        // Dominant frequency
+        const hzVal = document.getElementById('val-hz');
+        if (motion.dominant_hz) {
+          hzVal.textContent = motion.dominant_hz.toFixed(1) + ' Hz';
+          hzVal.style.color = (motion.dominant_hz >= 3.0 && motion.dominant_hz <= 12.0) ? '#f59e0b' : '#38bdf8';
+        } else {
+          hzVal.textContent = '-- Hz';
+          hzVal.style.color = '#f8fafc';
+        }
+
+        // Tremor RMS
+        const rmsVal = document.getElementById('val-rms');
+        const ratioVal = document.getElementById('val-ratio');
+        if (motion.band_rms_g !== null && motion.band_rms_g !== undefined) {
+          rmsVal.textContent = (motion.band_rms_g * 1000).toFixed(0) + ' mg';
+          ratioVal.textContent = motion.band_power_ratio ? `Band power ratio: ${(motion.band_power_ratio * 100).toFixed(0)}%` : '--%';
+        } else {
+          rmsVal.textContent = '< 10 mg';
+        }
+      }
+
+      // 2. Health heartbeat updates
+      if (msg.type === 'device.health') {
+        sampleCounter = msg.total_samples || sampleCounter;
+        document.getElementById('val-samples').textContent = `Total samples: ${sampleCounter.toLocaleString()}`;
+        if (msg.source) {
+          document.getElementById('val-sensor').textContent = `MMA7660FC (${msg.source.toUpperCase()})`;
+        }
+      }
+
+      // 3. Sensor Batch updates (live points)
+      if (msg.type === 'sensor.batch' && Array.isArray(msg.samples)) {
+        sampleCounter += msg.samples.length;
+        document.getElementById('val-samples').textContent = `Total samples: ${sampleCounter.toLocaleString()}`;
+        for (const s of msg.samples) {
+          if (s.a_g) {
+            pushSample(s.a_g[0], s.a_g[1], s.a_g[2]);
+          }
+        }
+      }
+
+      // 4. State snapshot
+      if (msg.type === 'state.snapshot') {
+        if (msg.latest_frame) {
+          handleMessage(msg.latest_frame);
+        }
+      }
+    }
+
+    function pushSample(x, y, z) {
+      const mag = Math.sqrt(x * x + y * y + z * z);
+      historyX.push(x);
+      historyY.push(y);
+      historyZ.push(z);
+      historyMag.push(mag);
+
+      if (historyX.length > MAX_POINTS) {
+        historyX.shift();
+        historyY.shift();
+        historyZ.shift();
+        historyMag.shift();
+      }
+    }
+
+    // Render 60fps waveform
+    function renderWaveform() {
+      requestAnimationFrame(renderWaveform);
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Draw grid lines
+      ctx.strokeStyle = '#162234';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let y = 0; y < h; y += h / 6) {
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+      }
+      ctx.stroke();
+
+      // Zero and 1G reference lines
+      const midY = h / 2;
+      const scaleY = h / 4.0; // +/- 2g range fits nicely
+
+      ctx.strokeStyle = '#22354e';
+      ctx.beginPath();
+      ctx.moveTo(0, midY); // 0 g
+      ctx.lineTo(w, midY);
+      ctx.stroke();
+
+      if (historyX.length < 2) return;
+
+      const step = w / (MAX_POINTS - 1);
+
+      function drawSeries(series, color) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2 * window.devicePixelRatio;
+        ctx.beginPath();
+        for (let i = 0; i < series.length; i++) {
+          const px = i * step;
+          const py = midY - (series[i] * scaleY);
+          if (i === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+      }
+
+      drawSeries(historyX, '#ef4444');
+      drawSeries(historyY, '#10b981');
+      drawSeries(historyZ, '#38bdf8');
+      drawSeries(historyMag, 'rgba(245, 158, 11, 0.7)');
+    }
+
+    renderWaveform();
+    connectWebSocket();
+
+    // Button controls
+    document.getElementById('btn-clear').addEventListener('click', () => {
+      historyX.length = 0;
+      historyY.length = 0;
+      historyZ.length = 0;
+      historyMag.length = 0;
+    });
+
+    const pauseBtn = document.getElementById('btn-pause');
+    pauseBtn.addEventListener('click', () => {
+      isPaused = !isPaused;
+      pauseBtn.textContent = isPaused ? 'Resume Stream' : 'Pause Stream';
+      pauseBtn.className = isPaused ? 'primary' : '';
+    });
+  </script>
+</body>
+</html>

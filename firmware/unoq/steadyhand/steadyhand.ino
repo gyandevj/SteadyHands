@@ -49,16 +49,20 @@ void setup() {
         // Short pause for serial CDC
     }
 
-    // 1. Initialize LCD RGB Backlight
+    // 1. Initialize Wire before LCD
+    Wire.begin();
+    delay(100);
+
+    // 2. Initialize LCD RGB Backlight
     lcdDisplay.begin(16, 2);
     // Solid white backlight (255, 255, 255) as specified
     lcdDisplay.setRGB(255, 255, 255);
     lcdDisplay.setCursor(0, 0);
-    lcdDisplay.print("SteadyHand Track");
+    lcdDisplay.print("SteadyHand LIVE");
     lcdDisplay.setCursor(0, 1);
-    lcdDisplay.print("Starting...");
+    lcdDisplay.print("Init sensor...");
 
-    // 2. Initialize sensor driver & safety subsystems
+    // 3. Initialize sensor driver & safety subsystems
     hapticController.init();
     sampleQueue.reset();
     bool sensorOk = sensorDriver.init();
@@ -66,13 +70,8 @@ void setup() {
     bridgeRpc.init(NULL);
     bridgeRpc.send_hello(sensorDriver, hapticController);
 
+    delay(200);
     lcdDisplay.clear();
-    lcdDisplay.setCursor(0, 0);
-    if (sensorOk) {
-        lcdDisplay.print("SteadyHand: LIVE");
-    } else {
-        lcdDisplay.print("SteadyHand: INIT");
-    }
 
     lastSampleTimeUs = micros();
     lastFlushTimeMs = millis();
@@ -111,13 +110,28 @@ void loop() {
         bridgeRpc.flush_batch(sampleQueue, sensorDriver);
     }
 
-    // 3. LCD screen real-time readout update (solid white backlight maintained)
+    // 3. LCD screen real-time readout update (X, Y, Z coordinates + shake detection)
     if ((nowMs - lastLcdUpdateMs) >= lcdUpdateIntervalMs) {
         lastLcdUpdateMs = nowMs;
+
+        char line0[17];
+        snprintf(line0, sizeof(line0), "X:%+.2f Y:%+.2f", latestAx, latestAy);
+        lcdDisplay.setCursor(0, 0);
+        lcdDisplay.print(line0);
+
+        char line1[17];
+        float totalG = sqrtf(latestAx * latestAx + latestAy * latestAy + latestAz * latestAz);
+        bool isShake = fabsf(totalG - 1.0f) > 0.15f;
+
+        if (isShake) {
+            snprintf(line1, sizeof(line1), "Z:%+.2f [SHAKE] ", latestAz);
+            lcdDisplay.setRGB(255, 120, 0); // Amber alert
+        } else {
+            snprintf(line1, sizeof(line1), "Z:%+.2f [STEADY]", latestAz);
+            lcdDisplay.setRGB(255, 255, 255); // Solid white
+        }
         lcdDisplay.setCursor(0, 1);
-        char buf[17];
-        snprintf(buf, sizeof(buf), "X:%+.2f Y:%+.2f", latestAx, latestAy);
-        lcdDisplay.print(buf);
+        lcdDisplay.print(line1);
     }
 
     // 4. Actuator supervision update (hardware shutoff timer)

@@ -157,6 +157,8 @@ export class SteadyHandRuntime {
   // Device & Transport state
   private deviceSource: SourceState = 'unavailable';
   private deviceConnected = false;
+  private deviceMotion = 'quiet';
+  private dominantHz: number | null = null;
 
   // Assisted physical click state
   private armedCandidateTarget: Target | null = null;
@@ -327,7 +329,9 @@ export class SteadyHandRuntime {
         this.overlay,
         this.config.mode,
         this.deviceSource,
-        this.deviceConnected
+        this.deviceConnected,
+        this.deviceMotion,
+        this.dominantHz
       );
     }
 
@@ -388,6 +392,28 @@ export class SteadyHandRuntime {
       }
     } else if (msg.type === 'device.state') {
       this.deviceSource = msg.source || 'unavailable';
+      if (msg.motion) {
+        this.deviceMotion = msg.motion.status || 'quiet';
+        this.dominantHz = msg.motion.dominant_hz ?? null;
+
+        // Dynamic 1-Euro adaptive filter synchronization:
+        if (this.config.mode === 'stabilized') {
+          if (this.deviceMotion === 'periodic_motion') {
+            // Tremor active: dynamically strengthen low-frequency smoothing
+            this.engine.applyConfig({
+              ...this.config,
+              filter: {
+                ...this.config.filter,
+                min_cutoff_hz: 0.5,
+                beta: 0.005
+              }
+            });
+          } else {
+            // Restore configured parameters
+            this.engine.applyConfig(this.config);
+          }
+        }
+      }
     } else if (msg.type === 'transport.state') {
       this.deviceConnected = msg.status === 'connected';
     }

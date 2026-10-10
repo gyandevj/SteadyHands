@@ -38,6 +38,8 @@ async def run_ingestion_loop(app: FastAPI) -> None:
                 if reboot:
                     logger.info("MCU Reboot detected. Resetting pipeline state.")
                     state.analysis.set_calibration(None)
+                if has_samples and ws_manager.active_connections:
+                    await ws_manager.broadcast(batch.model_dump())
             else:
                 await asyncio.sleep(0.01)
         except asyncio.CancelledError:
