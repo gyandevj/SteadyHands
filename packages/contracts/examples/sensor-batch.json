@@ -1,0 +1,31 @@
+{
+  "v": 1,
+  "type": "sensor.batch",
+  "source": "synthetic",
+  "boot_id": "fixture-boot-1",
+  "stream_id": "fixture-stream-1",
+  "batch_seq": 12,
+  "samples": [
+    {
+      "seq": 120,
+      "t_us": 1200000,
+      "a_g": [0.01, 0.005, 0.998],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    },
+    {
+      "seq": 121,
+      "t_us": 1210000,
+      "a_g": [0.012, 0.004, 0.997],
+      "valid": true,
+      "saturated": false,
+      "haptic_active": false
+    }
+  ],
+  "counters": {
+    "i2c_errors": 0,
+    "dropped_samples": 0,
+    "queue_overflows": 0
+  }
+}

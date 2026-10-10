@@ -1,11 +1,29 @@
-# UNO Q firmware
+# Arduino UNO Q Firmware (steadyhand)
 
-**Owner: Dev.** Read [hardware](../../docs/hardware.md), [contracts](../../docs/contracts.md), and [build record](build-record.md).
+**Owner: Dev.** Conforms to [hardware](../../docs/hardware.md) and [contracts](../../docs/contracts.md).
 
-Identify the actual sensor before writing its driver. Select the correct 3.3 V-compatible supply and bus, prove scanner/identity/rate, then timestamp coherent samples and queue bounded batches. Acquisition cannot block on bridge/network.
+## Firmware Architecture
 
-Use the installed official MCU/Linux bridge API verified by a tiny round trip. An old UNO R3 serial sketch is not assumed compatible.
+- `steadyhand.ino`: Main sketch with 100 Hz coherent sampling cadence, 100 ms / 10-sample batched transport, and boot identity generation.
+- `sensor_driver.h`, `sensor_driver.cpp`: Sensor driver interface with:
+  - `UnconfiguredHardwareSensorDriver`: Bounded I2C scanner probing selected bus and identity registers (`WHO_AM_I`). Keeps acquisition explicitly unavailable until physical chip die marking is confirmed.
+  - `SyntheticDevelopmentSensorDriver`: Clearly labeled synthetic acquisition mode for firmware timing, queueing, and bridge round-trip verification.
+- `sample_queue.h`, `sample_queue.cpp`: Fixed 64-sample static ring buffer in SRAM (zero heap allocation during sampling). Wraparound-safe 64-bit microsecond extension (`extend_micros`). Drop-oldest overflow policy to preserve fresh state, with drop and overflow counters.
+- `bridge_rpc.h`, `bridge_rpc.cpp`: RPC transport formatting canonical `sensor.batch` JSON messages, `device.hello`, and parsing `haptic.request` commands.
+- `haptic_control.h`, `haptic_control.cpp`: Actuator controller disabled by default, enforcing bounds [1, 80] ms, 1-second cooldown, duplicate command ID deduplication (64-slot ring buffer), and automatic hardware shutoff. (WARNING: Do not drive a bare motor directly from GPIO; requires a dedicated driver circuit).
+- `linux/bridge_reader.py`: Host/Linux bridge receiver script.
 
-Optional motor requires verified actuator/driver hardware, off-at-boot, duration limit, deduplication, cooldown, and independent stop deadline. Report pulses so analysis can blank contaminated windows.
+## Building and Flashing
 
-Document actual flash/build/run steps after testing. This package does not include compiled firmware or a verified circuit.
+With the Arduino IDE or `arduino-cli`:
+```bash
+# Verify sketch
+arduino-cli compile --fqbn arduino:renesas_uno:unor4_wifi firmware/unoq/steadyhand
+
+# Upload sketch
+arduino-cli upload -p COM3 --fqbn arduino:renesas_uno:unor4_wifi firmware/unoq/steadyhand
+```
+
+## Hardware Identification Status
+
+See [build-record.md](build-record.md) for the identification checklist. Physical sensor driver will be configured upon laser-etched chip marking confirmation.

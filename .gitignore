@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing and coverage
+coverage/
+.nyc_output/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+*$py.class
+.coverage
+htmlcov/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+*.egg
+*.tsbuildinfo
+out/
+
+# Environment and secrets
+.env
+.env.local
+*.local
+*.pem
+*.key
+
+# IDE and OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Arduino / MCU builds
+*.hex
+*.elf
+*.bin
+*.o
+.arduino/
+build/

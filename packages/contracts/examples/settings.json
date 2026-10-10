@@ -1,0 +1,22 @@
+{
+  "v": 1,
+  "revision": 1,
+  "mode": "stabilized",
+  "filter": {
+    "kind": "one_euro",
+    "min_cutoff_hz": 1.0,
+    "beta": 0.002,
+    "derivative_cutoff_hz": 1.0
+  },
+  "target": {
+    "capture_radius_px": 16,
+    "ambiguity_margin_px": 8
+  },
+  "dwell": {
+    "enabled": true,
+    "duration_ms": 800,
+    "rearm_ms": 300
+  },
+  "haptics_enabled": false,
+  "show_raw_pointer": false
+}

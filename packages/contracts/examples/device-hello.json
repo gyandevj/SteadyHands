@@ -1,0 +1,20 @@
+{
+  "v": 1,
+  "type": "device.hello",
+  "source": "synthetic",
+  "boot_id": "fixture-boot-1",
+  "stream_id": "fixture-stream-1",
+  "sensor": {
+    "model": "LIS3DHTR",
+    "bus": "Wire",
+    "address_hex": "0x19",
+    "odr_hz": 100.0,
+    "range_g": 2.0,
+    "units": "g",
+    "resolution_bits": 12,
+    "haptics": false
+  },
+  "capabilities": {
+    "haptics": false
+  }
+}

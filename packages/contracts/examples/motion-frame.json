@@ -1,0 +1,33 @@
+{
+  "v": 1,
+  "type": "motion.frame",
+  "source": "synthetic",
+  "boot_id": "fixture-boot-1",
+  "stream_id": "fixture-stream-1",
+  "frame_seq": 8,
+  "window": {
+    "start_us": 2000000,
+    "end_us": 4000000,
+    "fresh_samples": 200
+  },
+  "quality": {
+    "state": "good",
+    "reasons": [],
+    "measured_hz": 100.0,
+    "missing_fraction": 0.0,
+    "max_gap_ms": 10.0
+  },
+  "motion": {
+    "status": "periodic_motion",
+    "dominant_hz": 5.0,
+    "band_rms_g": 0.03,
+    "band_power_ratio": 0.72,
+    "peak_concentration": 0.65
+  },
+  "recommendation": {
+    "id": "rec-2",
+    "preset": "steady",
+    "requires_user_acceptance": true,
+    "reason_code": "persistent_motion_during_task"
+  }
+}
