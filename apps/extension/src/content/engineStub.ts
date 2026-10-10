@@ -77,7 +77,7 @@ export class LocalInteractionEngine implements InteractionEngine {
       tMs: nowMs
     };
 
-    // 2. Candidate target arbitration
+    // 2. Candidate target arbitration with hysteresis
     let candidateId: string | null = null;
     let shortestDistance = Infinity;
     let secondShortestDistance = Infinity;
@@ -88,7 +88,9 @@ export class LocalInteractionEngine implements InteractionEngine {
       if (!target.enabled) continue;
 
       const dist = this.distanceToRect(currentPointer, target.rect);
-      if (dist <= captureRadius) {
+      // Allow 12px hysteresis buffer for the currently active dwell target to resist tremor jitter
+      const effectiveRadius = target.id === this.dwellTargetId ? captureRadius + 12 : captureRadius;
+      if (dist <= effectiveRadius) {
         if (dist < shortestDistance) {
           secondShortestDistance = shortestDistance;
           shortestDistance = dist;
@@ -109,6 +111,7 @@ export class LocalInteractionEngine implements InteractionEngine {
     let selection = null;
 
     if (!this.config.dwell.enabled || !candidateId || isAmbiguous) {
+      // Dwell cancelled or target lost
       this.dwellTargetId = null;
       this.dwellStartTimeMs = 0;
       this.dwellActivated = false;
@@ -133,11 +136,12 @@ export class LocalInteractionEngine implements InteractionEngine {
         dwellProgress = 1.0;
       } else if (this.dwellRearmed) {
         const elapsed = nowMs - this.dwellStartTimeMs;
-        dwellProgress = Math.min(elapsed / this.config.dwell.duration_ms, 1.0);
+        dwellProgress = Math.min(Math.max(elapsed / this.config.dwell.duration_ms, 0), 1.0);
 
         if (elapsed >= this.config.dwell.duration_ms) {
           this.dwellActivated = true;
           this.dwellRearmed = false;
+          dwellProgress = 1.0;
           this.lastSelectionId = `sel-${nowMs}-${Math.random().toString(36).substring(2, 7)}`;
           selection = {
             id: this.lastSelectionId,

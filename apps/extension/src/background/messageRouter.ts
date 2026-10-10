@@ -14,6 +14,11 @@ export async function handleMessage(
   const v = message.v || 1;
   const requestId = message.request_id || `req-${Date.now()}`;
 
+  // Ensure transport is active whenever user/tab interacts
+  if (deviceTransport.getStatus() === 'unavailable') {
+    deviceTransport.connect().catch(() => {});
+  }
+
   switch (message.type) {
     case 'page.enable': {
       const activeTab = await tabSessionManager.getActiveTab();

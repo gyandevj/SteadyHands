@@ -130,6 +130,13 @@ export class DeviceTransport {
         } : null
       };
       this.notify();
+    } else if (msg.type === 'device.health') {
+      this.currentSnapshot = {
+        ...this.currentSnapshot,
+        source: msg.source || this.currentSnapshot.source,
+        health: msg.is_stale ? 'stale' : 'good'
+      };
+      this.notify();
     }
   }
 
