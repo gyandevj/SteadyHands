@@ -136,7 +136,7 @@ export function parseDeviceHello(data: unknown): DeviceHello {
     odr_hz: assertNumber(sensorObj.odr_hz, 'device.hello.sensor.odr_hz', 1.0, 1000.0),
     range_g: assertNumber(sensorObj.range_g, 'device.hello.sensor.range_g', 0.5, 32.0),
     units: assertString(sensorObj.units, 'device.hello.sensor.units'),
-    resolution_bits: sensorObj.resolution_bits !== undefined ? assertInteger(sensorObj.resolution_bits, 'device.hello.sensor.resolution_bits', 8, 24) : undefined,
+    resolution_bits: sensorObj.resolution_bits !== undefined ? assertInteger(sensorObj.resolution_bits, 'device.hello.sensor.resolution_bits', 6, 24) : undefined,
     haptics: sensorObj.haptics !== undefined ? assertBoolean(sensorObj.haptics, 'device.hello.sensor.haptics') : undefined,
   };
 

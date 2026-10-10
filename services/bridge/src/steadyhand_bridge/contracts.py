@@ -60,7 +60,7 @@ class SensorCapability(BaseModel):
     odr_hz: float = Field(ge=1.0, le=1000.0)
     range_g: float = Field(ge=0.5, le=32.0)
     units: str = "g"
-    resolution_bits: Optional[int] = Field(default=None, ge=8, le=24)
+    resolution_bits: Optional[int] = Field(default=None, ge=6, le=24)
     haptics: Optional[bool] = None
 
 

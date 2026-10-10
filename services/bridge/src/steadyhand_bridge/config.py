@@ -20,7 +20,7 @@ class BridgeConfig(BaseModel):
         ]
     )
     replay_fixture_path: Optional[str] = None
-    device_port: str = "COM3"
+    device_port: str = "COM5"
     device_baud: int = 115200
     haptics_enabled: bool = False
     window_size_samples: int = 200

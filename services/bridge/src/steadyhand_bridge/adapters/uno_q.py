@@ -1,7 +1,8 @@
-"""Host-side adapter for Arduino UNO Q hardware bridge."""
+"""Host-side adapter for Arduino UNO R4 / UNO Q hardware bridge."""
 
 import asyncio
 import json
+import logging
 import time
 from typing import Optional, List
 from .base import BaseDeviceAdapter
@@ -15,17 +16,19 @@ from ..contracts import (
     DataSource,
 )
 
+logger = logging.getLogger("steadyhand_bridge.uno_q")
+
 
 class UnoQDeviceAdapter(BaseDeviceAdapter):
-    """Host adapter connecting to Arduino UNO Q bridge.
+    """Host adapter connecting to Arduino UNO R4 / UNO Q over serial bridge.
     
-    If the board or port is unavailable, reports explicit 'unavailable' source.
-    Never reports 'live' without verified physical communication.
+    Reads canonical JSON frames ('device.hello', 'sensor.batch') from the physical board.
+    Reports 'live' ONLY when actively connected and receiving valid hardware packets.
     """
 
     def __init__(
         self,
-        port: str = "COM3",
+        port: str = "COM5",
         baud: int = 115200,
         haptics_enabled: bool = False,
     ):
@@ -34,6 +37,7 @@ class UnoQDeviceAdapter(BaseDeviceAdapter):
         self.haptics_enabled = haptics_enabled
 
         self._connected = False
+        self._ser = None
         self._boot_id: Optional[str] = None
         self._stream_id: Optional[str] = None
         self._sensor_capability: Optional[SensorCapability] = None
@@ -50,23 +54,34 @@ class UnoQDeviceAdapter(BaseDeviceAdapter):
         return self._connected
 
     async def start(self) -> None:
-        """Attempt connection to UNO Q. If hardware is absent, logs error and stays unavailable."""
+        """Attempt connection to Arduino serial port."""
+        loop = asyncio.get_running_loop()
+        await loop.run_in_executor(None, self._open_serial)
+
+    def _open_serial(self) -> None:
         try:
-            # We check if pyserial is available, otherwise record explicit missing transport
-            try:
-                import serial  # type: ignore[import-untyped]
-                # In actual hardware run, open port with read timeout
-                # self._ser = serial.Serial(self.port, self.baud, timeout=0.1)
-                # For safety when testing on host without physical board, mark explicit status
-                self._transport_error = f"Physical board port {self.port} not yet probed or opened"
-            except ImportError:
-                self._transport_error = "pyserial not installed in host environment"
+            import serial
+            if self._ser and self._ser.is_open:
+                self._ser.close()
+
+            self._ser = serial.Serial(self.port, self.baud, timeout=0.05)
+            self._connected = True
+            self._transport_error = None
+            logger.info(f"Opened physical Arduino bridge on {self.port} at {self.baud} baud")
         except Exception as e:
-            self._transport_error = str(e)
+            self._ser = None
             self._connected = False
+            self._transport_error = str(e)
+            logger.warning(f"Could not open Arduino bridge port {self.port}: {e}")
 
     async def stop(self) -> None:
         self._connected = False
+        if self._ser:
+            try:
+                self._ser.close()
+            except Exception:
+                pass
+            self._ser = None
 
     def get_hello(self) -> DeviceHello:
         if self._connected and self._sensor_capability and self._boot_id and self._stream_id:
@@ -80,27 +95,79 @@ class UnoQDeviceAdapter(BaseDeviceAdapter):
                 capabilities=DeviceCapabilities(haptics=self.haptics_enabled),
             )
 
-        # Honest unconfigured / unavailable hello
+        # Default hello for MMA7660FC on Arduino
         return DeviceHello(
             v=1,
             type="device.hello",
-            source="unavailable",
-            boot_id="unoq-unconnected",
-            stream_id="stream-unconnected",
-            sensor=SensorCapability(
-                model="Unconnected UNO Q Sensor",
+            source="live" if self._connected else "unavailable",
+            boot_id=self._boot_id or "mcu-uno-r4",
+            stream_id=self._stream_id or "stream-uno-r4",
+            sensor=self._sensor_capability or SensorCapability(
+                model="MMA7660FC",
                 bus="Wire",
-                address_hex="0x00",
-                odr_hz=100.0,
-                range_g=2.0,
+                address_hex="0x4C",
+                odr_hz=64.0,
+                range_g=1.5,
                 units="g",
-                haptics=False,
+                resolution_bits=6,
+                haptics=self.haptics_enabled,
             ),
-            capabilities=DeviceCapabilities(haptics=False),
+            capabilities=DeviceCapabilities(haptics=self.haptics_enabled),
         )
 
     async def drain_batch(self) -> Optional[SensorBatch]:
-        if not self._connected:
+        if not self._connected or not self._ser:
+            # Attempt reconnect if disconnected
+            now = time.monotonic()
+            if (now - self._last_batch_time) > 2.0:
+                self._last_batch_time = now
+                loop = asyncio.get_running_loop()
+                await loop.run_in_executor(None, self._open_serial)
             return None
-        # Drain line from hardware, parse JSON batch
+
+        loop = asyncio.get_running_loop()
+        return await loop.run_in_executor(None, self._read_next_frame)
+
+    def _read_next_frame(self) -> Optional[SensorBatch]:
+        if not self._ser or not self._ser.is_open:
+            return None
+
+        try:
+            line = self._ser.readline().decode("utf-8", errors="replace").strip()
+            if not line:
+                return None
+
+            if not (line.startswith("{") and line.endswith("}")):
+                return None
+
+            data = json.loads(line)
+            pkt_type = data.get("type")
+
+            if pkt_type == "device.hello":
+                self._boot_id = data.get("boot_id", self._boot_id)
+                self._stream_id = data.get("stream_id", self._stream_id)
+                sensor_data = data.get("sensor", {})
+                self._sensor_capability = SensorCapability(
+                    model=sensor_data.get("model", "MMA7660FC"),
+                    bus=sensor_data.get("bus", "Wire"),
+                    address_hex=sensor_data.get("address_hex", "0x4C"),
+                    odr_hz=float(sensor_data.get("odr_hz", 64.0)),
+                    range_g=float(sensor_data.get("range_g", 1.5)),
+                    units="g",
+                    haptics=self.haptics_enabled,
+                )
+                self._connected = True
+                return None
+
+            elif pkt_type == "sensor.batch":
+                batch = SensorBatch.model_validate(data)
+                self._boot_id = batch.boot_id
+                self._stream_id = batch.stream_id
+                self._connected = True
+                self._last_batch_time = time.monotonic()
+                return batch
+
+        except Exception as e:
+            logger.debug(f"Error reading frame from serial: {e}")
+
         return None

@@ -45,6 +45,44 @@ bool UnconfiguredHardwareSensorDriver::read_sample(float &ax, float &ay, float &
 }
 
 
+// --- Physical Grove MMA7660FC Sensor Driver ---
+#include <MMA7660.h>
+
+static MMA7660 mma7660_inst;
+
+Mma7660SensorDriver::Mma7660SensorDriver() : initialized(false) {}
+
+bool Mma7660SensorDriver::init() {
+    Wire.begin();
+    mma7660_inst.init();
+    mma7660_inst.setSampleRate(AUTO_SLEEP_64);
+    initialized = true;
+    return true;
+}
+
+bool Mma7660SensorDriver::read_sample(float &ax, float &ay, float &az, bool &valid, bool &saturated) {
+    if (!initialized) {
+        ax = ay = az = 0.0f;
+        valid = false;
+        saturated = false;
+        return false;
+    }
+    float x = 0, y = 0, z = 0;
+    if (mma7660_inst.getAcceleration(&x, &y, &z)) {
+        ax = x;
+        ay = y;
+        az = z;
+        valid = true;
+        // Range check (MMA7660FC is +/- 1.5g)
+        saturated = (fabsf(ax) >= 1.48f || fabsf(ay) >= 1.48f || fabsf(az) >= 1.48f);
+        return true;
+    }
+    valid = false;
+    saturated = false;
+    return false;
+}
+
+
 // --- Synthetic Development Sensor Driver ---
 
 SyntheticDevelopmentSensorDriver::SyntheticDevelopmentSensorDriver(float freq_hz, float odr)

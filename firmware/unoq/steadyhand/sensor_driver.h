@@ -58,6 +58,26 @@ public:
 };
 
 /**
+ * Physical Grove MMA7660FC 3-axis accelerometer driver (I2C 0x4C).
+ * Placed beside the trackpad to detect tremors.
+ */
+class Mma7660SensorDriver : public ISensorDriver {
+private:
+    bool initialized;
+
+public:
+    Mma7660SensorDriver();
+    virtual bool init() override;
+    virtual bool read_sample(float &ax, float &ay, float &az, bool &valid, bool &saturated) override;
+    virtual const char* get_model() const override { return "MMA7660FC"; }
+    virtual const char* get_bus() const override { return "Wire"; }
+    virtual const char* get_address_hex() const override { return "0x4C"; }
+    virtual float get_odr_hz() const override { return 64.0f; }
+    virtual float get_range_g() const override { return 1.5f; }
+    virtual bool is_synthetic() const override { return false; }
+};
+
+/**
  * Clearly labeled synthetic development driver.
  * Used for firmware queue, timing, and bridge verification before physical sensor soldering.
  */

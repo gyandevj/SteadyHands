@@ -81,7 +81,7 @@ export class DeviceTransport {
           v: 1,
           type: 'client.auth',
           request_id: `auth-${Date.now()}`,
-          token: token || 'steadyhand-local-token'
+          token: token || 'steadyhand-dev-token-secret'
         });
         this.ws?.send(authPayload);
 

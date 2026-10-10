@@ -1,7 +1,7 @@
 # Run SteadyHand Bridge in Hardware Mode connecting to Arduino UNO Q
 
 param(
-    [string]$DevicePort = "COM3",
+    [string]$DevicePort = "COM5",
     [string]$Port = "8765",
     [string]$Host = "127.0.0.1",
     [string]$Token = "steadyhand-dev-token-secret"
