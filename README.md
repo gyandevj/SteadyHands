@@ -21,8 +21,7 @@ If you just cloned or pulled this repository and want to run and test immediatel
 * **Auto-detects physical Arduino hardware**: If plugged in, automatically detects the COM port and starts in Hardware mode.
 * **Zero-hardware fallback**: If no Arduino is connected, automatically launches in Mock mode with realistic simulated tremor data.
 * **Builds & Prepares Extension**: Ensures the Chrome extension bundle is compiled in `apps/extension/dist/`.
-* **Launches Test Form & Live Oscilloscope**: Automatically opens both the test registration form and the real-time sensor diagnostic monitor (`apps/fixtures/monitor.html`) in your browser!
-* **Sensor Mounting**: Fasten the accelerometer module to the back of your hand, wrist, or index finger while using the trackpad (or tape to your mouse) so your hand's physical tremor directly accelerates the sensor.
+* **Launches Test Form**: Automatically opens the test registration form in your browser so you can test stabilized cursor and dwell clicks right away!
 
 ---
 

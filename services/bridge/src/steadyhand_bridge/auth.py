@@ -10,12 +10,12 @@ def is_origin_allowed(origin: Optional[str], allowed_origins: List[str]) -> bool
     
     Permits loopback dev origins, configured domains, and chrome-extension schemes.
     """
-    if not origin or origin == "null":
-        # Direct non-browser clients (curl, backend tests) or local HTML file:// pages
+    if not origin:
+        # Direct non-browser clients (curl, backend tests) omit Origin
         return True
 
-    # Permit all Chrome Extension origins and file schemes
-    if origin.startswith("chrome-extension://") or origin.startswith("file://"):
+    # Permit all Chrome Extension origins
+    if origin.startswith("chrome-extension://"):
         return True
 
     for pattern in allowed_origins:

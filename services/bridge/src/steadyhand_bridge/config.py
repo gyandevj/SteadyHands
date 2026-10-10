@@ -18,8 +18,6 @@ class BridgeConfig(BaseModel):
             "http://localhost:8765",
             "http://127.0.0.1:8765",
             "chrome-extension://*",
-            "null",
-            "file://*",
         ]
     )
     replay_fixture_path: Optional[str] = None
