@@ -137,6 +137,18 @@ export async function handleMessage(
       return { v, request_id: requestId, ok: true };
     }
 
+    case 'device.status': {
+      return {
+        v,
+        request_id: requestId,
+        ok: true,
+        data: {
+          transportStatus: deviceTransport.getStatus(),
+          deviceState: deviceTransport.getSnapshot()
+        }
+      };
+    }
+
     default:
       return { v, request_id: requestId, ok: false, error: `Unknown message type: ${message.type}` };
   }

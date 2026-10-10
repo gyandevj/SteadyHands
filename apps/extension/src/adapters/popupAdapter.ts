@@ -46,6 +46,26 @@ export class ChromePopupAdapter implements PopupAdapter {
         this.currentState.config = resp.data;
       }
 
+      // 3. Fetch device status from worker
+      try {
+        const devResp = await chrome.runtime.sendMessage({
+          v: 1,
+          type: 'device.status',
+          request_id: `dev-${Date.now()}`
+        });
+        if (devResp?.ok && devResp.data) {
+          this.currentState.transportStatus = devResp.data.transportStatus;
+          if (devResp.data.deviceState) {
+            this.currentState.deviceSource = devResp.data.deviceState.source;
+            this.currentState.deviceQuality = devResp.data.deviceState.quality;
+            this.currentState.deviceMotion = devResp.data.deviceState.motion?.status || 'quiet';
+            this.currentState.recommendation = devResp.data.deviceState.recommendation;
+          }
+        }
+      } catch {
+        // Fallback state
+      }
+
       // Check if page enabled via script ping or state
       if (tab?.id !== undefined && this.currentState.isPageSupported) {
         try {

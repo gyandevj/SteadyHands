@@ -188,6 +188,10 @@ export interface TransportStateMessage extends BaseMessage {
   status: TransportStatus;
 }
 
+export interface DeviceStatusQueryMessage extends BaseMessage {
+  type: 'device.status';
+}
+
 export type ExtensionMessage =
   | PageEnableMessage
   | PageDisableMessage
@@ -198,7 +202,8 @@ export type ExtensionMessage =
   | SettingsAppliedMessage
   | DeviceStateMessage
   | SelectionConfirmedMessage
-  | TransportStateMessage;
+  | TransportStateMessage
+  | DeviceStatusQueryMessage;
 
 // UI Adapter interfaces for Kripa
 export interface ExtensionUIState {

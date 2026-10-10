@@ -1,56 +1,117 @@
-# SteadyHand: extension-first project blueprint
+# SteadyHand
 
-**Product:** a Chrome extension that makes supported webpage controls easier to select using a stabilized virtual pointer and cancellable dwell. An optional UNO Q peripheral measures motion. A dashboard handles setup, calibration, and evidence.
+> **Assistive Web Interaction with Real-Time Tremor Stabilization & Hardware Motion Sensing**
 
-**Team:** Dev, Kripa, Person 3, Person 4. **Status:** detailed build instructions and a documentation scaffold. Application source files listed in the tree are planned files, not implemented code. **Working name:** SteadyHand; rename branding later without changing the architecture.
+SteadyHand is an accessibility system designed for individuals with hand tremors. It combines:
+1. **A Chrome Extension** providing client-side pointer stabilization (1-Euro adaptive filter), intelligent clickable target discovery, and cancellable dwell activation.
+2. **An Arduino UNO R4 Peripheral** with a Seeed Studio Grove MMA7660FC 3-axis accelerometer (placed beside the trackpad) and a Grove RGB LCD display providing real-time tremor feature extraction.
+3. **A Python FastAPI Bridge Service** streaming validated motion metrics over WebSockets to the browser extension.
 
-## Start here
+---
 
-1. Everyone reads [plan.md](plan.md), [AGENTS.md](AGENTS.md), and [docs/contracts.md](docs/contracts.md).
-2. Each person reads their file in `teams/` and the README in each folder they own.
-3. Create the planned source files from [docs/repository_tree.md](docs/repository_tree.md), in small increments.
-4. Prove software-only extension selection first. Integrate live hardware as a separate vertical slice.
-5. Run the checks in [docs/testing.md](docs/testing.md) and rehearse [docs/demo.md](docs/demo.md).
+## 🚀 Quick Start: How to Run
 
-## Named ownership
+### 1. Prerequisites
+- **Node.js** v18+ and `npm`
+- **Python** 3.10+ with `pip`
+- (Optional for hardware) **Arduino UNO R4 WiFi** plugged in via USB (e.g. `COM5`)
 
-| Person | Sector | Exclusive primary folders |
-| --- | --- | --- |
-| **1: Dev** | Backend, hardware, system integration | `services/bridge/`, `firmware/unoq/`, `packages/contracts/`, `scripts/`, root build configuration |
-| **2: Kripa** | Frontend and UI/UX | `apps/dashboard/`, `packages/ui/`, `apps/extension/src/popup/`, `apps/extension/src/options/`, `design/` |
-| **3** | Chrome extension and webpage integration | `apps/extension/` except Kripa's two UI folders; `tests/extension/` |
-| **4** | Algorithms, signal processing, evidence | `packages/engine/`, `analysis/`, `apps/fixtures/`, `fixtures/`, `tests/engine/`, `tests/analysis/`, `evidence/` |
+### 2. Initial Setup
+Run the setup script from the root repository directory to install Node and Python dependencies:
 
-This gives Dev most backend and all hardware implementation while keeping three useful software streams independent. Person 3 is the extension specialist. Person 4 supplies reusable numerical logic to both Dev and Person 3.
+```powershell
+# From the repository root:
+.\scripts\setup.ps1
+```
 
-## Main documents
+Or install manually:
+```powershell
+npm install
+pip install -e services/bridge
+pip install pyserial
+npm run build --prefix apps/extension
+```
 
-| Document | Use |
+---
+
+### 3. Running the Bridge Service
+
+Choose one of three modes depending on available hardware:
+
+#### Option A: Hardware Mode (Connected Arduino)
+With your Arduino UNO R4 connected via USB to `COM5`:
+```powershell
+.\scripts\run-hardware.ps1 -DevicePort "COM5"
+```
+The bridge connects to the Arduino at 115200 baud, reads live accelerometer data, processes tremor analysis windows, and streams metrics on `ws://127.0.0.1:8765/v1/stream`.
+
+#### Option B: Mock Mode (Zero Hardware Required)
+Simulate realistic tremor and intentional movement completely in software:
+```powershell
+.\scripts\run-mock.ps1
+```
+
+#### Option C: Replay Mode (Pre-recorded Tremor Data)
+Replay canonical recorded accelerometer datasets:
+```powershell
+.\scripts\run-replay.ps1 -Fixture "packages/contracts/examples/sensor-batch.json"
+```
+
+---
+
+### 4. Running the Chrome Extension
+
+1. **Build the extension bundle** (if not already built):
+   ```powershell
+   npm run build --prefix apps/extension
+   ```
+2. **Load into Google Chrome**:
+   - Navigate to `chrome://extensions/` in your browser.
+   - Toggle **Developer mode** (top right corner) to **ON**.
+   - Click **Load unpacked** (top left corner).
+   - Select the `apps/extension/dist` folder in this repository.
+3. **Use the Extension**:
+   - Open any webpage (e.g. form, documentation, or search page).
+   - Click the **SteadyHand** extension icon in your Chrome toolbar.
+   - Click **"Enable on this page"**.
+   - The virtual stabilized cursor and target snap rings are now active! The popup will display live sensor status and tremor metrics when the bridge is running.
+
+---
+
+## 🧪 Running Verification & Tests
+
+To execute the entire test suite across contracts, analysis, backend bridge, and extension:
+
+```powershell
+.\scripts\test-all.ps1
+```
+
+Or run individual test suites:
+- **Contracts Schemas**: `npm test --prefix packages/contracts`
+- **Signal Analysis Pipeline**: `pytest tests/analysis`
+- **Bridge Backend Service**: `pytest services/bridge/tests`
+- **Chrome Extension Runtime**: `npm test --prefix apps/extension`
+
+---
+
+## 🛠️ Hardware Setup
+
+- **Microcontroller**: Arduino UNO R4 WiFi
+- **Shield**: Seeed Studio Grove Base Shield (set to 5V logic)
+- **Sensor**: Grove MMA7660FC 3-axis accelerometer (I2C address `0x4C`), placed beside the laptop trackpad to capture hand tremors.
+- **Display**: Grove LCD RGB Backlight v4 (I2C address `0x3E` controller, `0x62` backlight), displays live X/Y coordinates and status with solid white backlight.
+- **Firmware Location**: `firmware/unoq/steadyhand/` (flashable via Arduino CLI or Arduino IDE with the `arduino:renesas_uno:unor4wifi` core).
+
+---
+
+## 📁 Repository Structure
+
+| Directory | Description |
 | --- | --- |
-| [plan.md](plan.md) | Scope, dependencies, schedule, milestones, folder boundaries |
-| [docs/repository_tree.md](docs/repository_tree.md) | Complete proposed project tree and owner markers |
-| [docs/architecture.md](docs/architecture.md) | Extension, dashboard, backend, sensor, runtime lifecycle |
-| [docs/contracts.md](docs/contracts.md) | Canonical messages, APIs, module signatures, fixtures |
-| [docs/hardware.md](docs/hardware.md) | Conditional sensor identification, UNO Q wiring, optional haptics |
-| [docs/ux.md](docs/ux.md) | User flows, visual direction, accessibility states |
-| [docs/testing.md](docs/testing.md) | Meaningful checks, compatibility matrix, benchmark |
-| [docs/demo.md](docs/demo.md) | Judging sequence, evidence, fallbacks, honest claims |
-| [docs/workflow.md](docs/workflow.md) | Parallel vibe-coding workflow and prompt conventions |
-| [docs/sources.md](docs/sources.md) | Current official references and unresolved facts |
-
-## Copy-ready prompts
-
-- [Global project prompt](prompts/global.md)
-- [Dev's implementation prompts](teams/01_dev.md)
-- [Kripa's implementation prompts](teams/02_kripa.md)
-- [Person 3's implementation prompts](teams/03_extension.md)
-- [Person 4's implementation prompts](teams/04_algorithms.md)
-- [Final integration prompt](prompts/integration.md)
-
-Each team file includes a long kickoff prompt, staged follow-up prompts, folder permissions, handoffs, and acceptance criteria. Paste the global prompt once, then the appropriate stage prompt. Do not ask a coding model to implement the whole repository at once.
-
-## Product promise
-
-Enable the extension on a supported page, choose assistance, and interact with ordinary controls more comfortably. The stabilized pointer remains inside webpages. Hardware is optional and does not provide screen coordinates. The sensor measures motion features rather than diagnosing a condition. Haptics, if built, confirm selection rather than canceling tremor.
-
-We aim to demonstrate reusable assistance on two independently built form pages, reliable behavior during faults, and measured technical results. Actual benefit for intended users remains an evaluation question. Winning a hackathon cannot be guaranteed.
+| `apps/extension/` | Manifest V3 Chrome Extension (background worker, content script, popup UI, overlay) |
+| `services/bridge/` | FastAPI WebSocket bridge connecting hardware/mock streams to the extension |
+| `packages/contracts/` | Shared TypeScript and Python contract schemas and validation fixtures |
+| `packages/engine/` | Pointer filtering (1-Euro adaptive filter) and target candidate selection |
+| `analysis/` | Signal processing, FFT analysis, band RMS, and stationary calibration |
+| `firmware/unoq/` | Arduino UNO R4 firmware for Grove MMA7660FC and LCD display |
+| `scripts/` | One-click PowerShell scripts for setup, launch, and automated testing |

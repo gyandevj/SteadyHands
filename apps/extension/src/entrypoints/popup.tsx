@@ -25,59 +25,89 @@ async function initPopup() {
 async function renderFallbackPopup(container: HTMLElement) {
   const state = await popupAdapter.getState();
 
-  container.innerHTML = `
-    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:10px;">
-      <h2 style="font-size:16px; font-weight:600; color:#f8fafc; margin:0;">SteadyHand</h2>
-      <span id="sh-status-pill" style="font-size:11px; font-weight:600; padding:2px 8px; border-radius:12px; background:${state.isPageEnabled ? '#059669' : '#475569'}; color:#fff;">
-        ${state.isPageEnabled ? 'Active' : 'Disabled'}
-      </span>
-    </div>
+    const isConnected = state.transportStatus === 'connected';
+    const isLive = isConnected && state.deviceSource === 'live';
+    const isMock = isConnected && state.deviceSource === 'synthetic';
 
-    <div style="font-size:12px; color:#94a3b8; line-height:1.4;">
-      ${state.isPageSupported 
-        ? 'Assistance is available on this webpage.' 
-        : '<span style="color:#f87171;">Unsupported page (Chrome internal or Web Store URL).</span>'}
-    </div>
+    const deviceBadgeColor = isLive ? '#10b981' : (isMock ? '#38bdf8' : '#94a3b8');
+    const deviceLabel = isLive 
+      ? 'Arduino UNO R4 (Live COM5)' 
+      : (isMock ? 'Mock Stream (Bridge)' : 'Standalone (Local Filter)');
 
-    <div style="display:flex; gap:8px;">
-      <button id="sh-btn-enable" style="flex:1; padding:8px 12px; background:#38bdf8; border:none; border-radius:6px; font-weight:600; font-size:12px; color:#0f172a; cursor:pointer;" ${!state.isPageSupported ? 'disabled' : ''}>
-        Enable on this page
-      </button>
-      <button id="sh-btn-disable" style="flex:1; padding:8px 12px; background:#334155; border:none; border-radius:6px; font-weight:600; font-size:12px; color:#f8fafc; cursor:pointer;">
-        Disable
-      </button>
-    </div>
+    const tremorText = state.deviceMotion === 'tremor' 
+      ? 'Tremor Detected: Active Compensation'
+      : (state.deviceMotion === 'intentional' ? 'Active Movement' : 'Resting / Calibrated');
+    const tremorColor = state.deviceMotion === 'tremor' ? '#f59e0b' : '#34d399';
 
-    <div style="background:#1e293b; padding:10px; border-radius:6px; display:flex; flex-direction:column; gap:8px; border:1px solid #334155;">
-      <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px;">
-        <span>Pointer Mode:</span>
-        <select id="sh-select-mode" style="background:#0f172a; color:#f8fafc; border:1px solid #475569; border-radius:4px; padding:2px 6px; font-size:11px;">
-          <option value="stabilized" ${state.config.mode === 'stabilized' ? 'selected' : ''}>Stabilized</option>
-          <option value="native" ${state.config.mode === 'native' ? 'selected' : ''}>Native</option>
-          <option value="raw_virtual" ${state.config.mode === 'raw_virtual' ? 'selected' : ''}>Raw Virtual (Test)</option>
-        </select>
+    container.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:10px;">
+        <h2 style="font-size:16px; font-weight:600; color:#f8fafc; margin:0;">SteadyHand</h2>
+        <span id="sh-status-pill" style="font-size:11px; font-weight:600; padding:2px 8px; border-radius:12px; background:${state.isPageEnabled ? '#059669' : '#475569'}; color:#fff;">
+          ${state.isPageEnabled ? 'Active' : 'Disabled'}
+        </span>
       </div>
 
-      <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px;">
-        <span>Dwell Action:</span>
-        <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
-          <input type="checkbox" id="sh-chk-dwell" ${state.config.dwell.enabled ? 'checked' : ''} />
-          <span>Enabled</span>
-        </label>
+      <div style="font-size:12px; color:#94a3b8; line-height:1.4;">
+        ${state.isPageSupported 
+          ? 'Assistance is available on this webpage.' 
+          : '<span style="color:#f87171;">Unsupported page (Chrome internal or Web Store URL).</span>'}
       </div>
 
-      <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px;">
-        <span>Dwell Time:</span>
-        <span id="sh-dwell-time-label" style="font-weight:600; color:#38bdf8;">${state.config.dwell.duration_ms} ms</span>
+      <div style="display:flex; gap:8px;">
+        <button id="sh-btn-enable" style="flex:1; padding:8px 12px; background:#38bdf8; border:none; border-radius:6px; font-weight:600; font-size:12px; color:#0f172a; cursor:pointer;" ${!state.isPageSupported ? 'disabled' : ''}>
+          Enable on this page
+        </button>
+        <button id="sh-btn-disable" style="flex:1; padding:8px 12px; background:#334155; border:none; border-radius:6px; font-weight:600; font-size:12px; color:#f8fafc; cursor:pointer;">
+          Disable
+        </button>
       </div>
-      <input type="range" id="sh-range-dwell" min="400" max="1500" step="50" value="${state.config.dwell.duration_ms}" style="width:100%; cursor:pointer;" />
-    </div>
 
-    <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:#64748b; padding-top:4px;">
-      <span>Device: <strong style="color:#94a3b8;">Standalone (Mock)</strong></span>
-      <a href="#" id="sh-link-options" style="color:#38bdf8; text-decoration:none;">Settings &rarr;</a>
-    </div>
-  `;
+      <div style="background:#0f172a; border:1px solid #334155; border-radius:6px; padding:8px 10px; font-size:11px; display:flex; flex-direction:column; gap:4px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="color:#94a3b8;">Sensor Feed:</span>
+          <span style="color:${deviceBadgeColor}; font-weight:600;">● ${deviceLabel}</span>
+        </div>
+        ${isConnected ? `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="color:#94a3b8;">Trackpad Tremor:</span>
+          <span style="color:${tremorColor}; font-weight:600;">${tremorText}</span>
+        </div>` : `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="color:#94a3b8;">Stabilizer:</span>
+          <span style="color:#38bdf8; font-weight:600;">1-Euro Local Filter</span>
+        </div>`}
+      </div>
+
+      <div style="background:#1e293b; padding:10px; border-radius:6px; display:flex; flex-direction:column; gap:8px; border:1px solid #334155;">
+        <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px;">
+          <span>Pointer Mode:</span>
+          <select id="sh-select-mode" style="background:#0f172a; color:#f8fafc; border:1px solid #475569; border-radius:4px; padding:2px 6px; font-size:11px;">
+            <option value="stabilized" ${state.config.mode === 'stabilized' ? 'selected' : ''}>Stabilized</option>
+            <option value="native" ${state.config.mode === 'native' ? 'selected' : ''}>Native</option>
+            <option value="raw_virtual" ${state.config.mode === 'raw_virtual' ? 'selected' : ''}>Raw Virtual (Test)</option>
+          </select>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px;">
+          <span>Dwell Action:</span>
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+            <input type="checkbox" id="sh-chk-dwell" ${state.config.dwell.enabled ? 'checked' : ''} />
+            <span>Enabled</span>
+          </label>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px;">
+          <span>Dwell Time:</span>
+          <span id="sh-dwell-time-label" style="font-weight:600; color:#38bdf8;">${state.config.dwell.duration_ms} ms</span>
+        </div>
+        <input type="range" id="sh-range-dwell" min="400" max="1500" step="50" value="${state.config.dwell.duration_ms}" style="width:100%; cursor:pointer;" />
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:#64748b; padding-top:4px;">
+        <span>Assistance: <strong style="color:#38bdf8;">1-Euro Adaptive</strong></span>
+        <a href="#" id="sh-link-options" style="color:#38bdf8; text-decoration:none;">Settings &rarr;</a>
+      </div>
+    `;
 
   // Wire event handlers
   document.getElementById('sh-btn-enable')?.addEventListener('click', async () => {
