@@ -8,6 +8,7 @@ import type {
 import type { IPointerFilter } from './filters/types.ts';
 import { PassthroughFilter } from './filters/passthrough.ts';
 import { ExponentialFilter } from './filters/exponential.ts';
+import { OneEuroFilter } from './filters/one_euro.ts';
 import { TargetArbitrator } from './targeting/arbitrator.ts';
 import { DwellStateMachine } from './dwell/state_machine.ts';
 import { resolveConfig } from './presets.ts';
@@ -35,7 +36,13 @@ export class InteractionEngineImpl implements InteractionEngine {
     if (config.mode === 'raw_virtual' || config.mode === 'native') {
       return new PassthroughFilter();
     }
-    // Exponential filter implementation for Stage 1
+    if (config.filter.kind === 'one_euro') {
+      return new OneEuroFilter(
+        config.filter.min_cutoff_hz,
+        config.filter.beta ?? 0.005,
+        config.filter.derivative_cutoff_hz ?? 1.0
+      );
+    }
     return new ExponentialFilter(config.filter.min_cutoff_hz);
   }
 

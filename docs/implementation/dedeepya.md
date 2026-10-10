@@ -353,6 +353,13 @@ Recorded for Dev's review (does not modify `packages/contracts/` directly):
 2. **Pointer Mode Union:** Clarify `mode` enum in `AssistanceConfig` as `'native' | 'stabilized' | 'raw_virtual'`.
 3. **Target Kind Union:** Ensure `kind` in `Target` supports `'focus' | 'toggle' | 'button'`.
 
+### 7.2 Stage 2 Implementation & Benchmark Verification Status
+Implemented and verified on `planning/dedeepya`:
+1. **OneEuroFilter (`packages/engine/src/filters/one_euro.ts`):** Casiez et al. (2012) speed-adaptive low-pass filter with velocity derivative filtering ($f_{c,d} = 1.0\text{ Hz}$), variable $\Delta t$ invariance, duplicate timestamp skipping ($\Delta t \le 0$), long pause snapping ($\Delta t > 1\text{ s}$), velocity clamping ($\le 10,000\text{ px/s}$), and non-finite coordinate rejection.
+2. **Synthetic Pointer Trace Suite (`fixtures/generators/generate_pointer_traces.ts`):** Deterministic Mulberry32 seeded PRNG generator outputting 5 standard ground-truth benchmark traces in `fixtures/synthetic/traces/` (`stationary_jitter_seed42.json`, `straight_line_clean.json`, `straight_line_noisy_seed42.json`, `ballistic_overshoot_seed42.json`, `variable_rate_30_to_144hz.json`).
+3. **Offline Pareto Engine Benchmarks (`evidence/scripts/run_engine_benchmarks.ts`):** 14 filter configurations evaluated across stationary jitter, constant velocity sweep phase lag, and ballistic tracking RMSE. Output recorded in `evidence/benchmarks/latency_vs_jitter.json`.
+   - **Key Empirical Finding:** One Euro filter ($f_{c,min} = 1.0\text{ Hz}, \beta = 0.005$) achieves **70.8% stationary jitter reduction** with only **37.1 ms sweep phase lag** and **9.64 px ballistic RMSE**, compared to **151.1 ms lag and 64.53 px RMSE** for a static 1.0 Hz exponential filter.
+
 ---
 
 ## 8. Interfaces Needed from Person 3 (Extension & Browser)
