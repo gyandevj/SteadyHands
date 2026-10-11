@@ -7,8 +7,8 @@ export interface EligibilityResult {
 }
 
 export function classifyElement(el: Element): EligibilityResult {
-  // Ignore elements inside extension host or detached nodes
-  if (!el.isConnected || el.closest('steadyhand-overlay-host')) {
+  // Ignore elements inside extension host, preview modal, or detached nodes
+  if (!el.isConnected || el.closest('steadyhand-overlay-host, #steadyhand-adaptive-preview-host, [data-steadyhand-ui]')) {
     return { eligible: false };
   }
 
@@ -59,8 +59,8 @@ export function classifyElement(el: Element): EligibilityResult {
     return { eligible: false };
   }
 
-  // 2. Textarea
-  if (tagName === 'textarea') {
+  // 2. Textarea & Select
+  if (tagName === 'textarea' || tagName === 'select') {
     return { eligible: true, kind: 'focus', dwellAllowed: true };
   }
 

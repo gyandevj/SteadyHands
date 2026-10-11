@@ -40,6 +40,14 @@ export class GeometryTracker {
     this.revision++;
     return { revision: this.revision, targets };
   }
+
+  forceGeometryRefresh(): { revision: number; targets: Target[] } {
+    const res = this.updateAllGeometries();
+    for (const cb of this.onInvalidateCallbacks) {
+      cb(this.revision);
+    }
+    return res;
+  }
 }
 
 export const geometryTracker = new GeometryTracker();

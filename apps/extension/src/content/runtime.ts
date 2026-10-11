@@ -16,6 +16,7 @@ import { syntheticPointer } from './syntheticInput.js';
 import { actionDispatcher } from './activation.js';
 import { LocalInteractionEngine } from './engineStub.js';
 import { teardownSteadyHand } from './cleanup.js';
+import { AdaptiveFormsController } from './adaptiveForms/controller.js';
 
 // CSS string embedded for bundling into isolated world
 const OVERLAY_CSS = `
@@ -165,6 +166,9 @@ export class SteadyHandRuntime {
   // Assisted physical click state
   private armedCandidateTarget: Target | null = null;
 
+  // Adaptive Forms controller
+  public adaptiveController = new AdaptiveFormsController();
+
   constructor() {
     this.engine = new LocalInteractionEngine(this.config);
     this.loop = this.loop.bind(this);
@@ -172,6 +176,19 @@ export class SteadyHandRuntime {
     this.handleScroll = this.handleScroll.bind(this);
     this.handleResize = this.handleResize.bind(this);
     this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
+
+    this.adaptiveController.setGuardCallbacks({
+      cancelActiveDwell: (reason: string) => {
+        this.armedCandidateTarget = null;
+        this.engine.cancel(reason);
+      },
+      rescanTargets: () => {
+        targetRegistry.scan();
+      },
+      invalidateGeometry: () => {
+        geometryTracker.forceGeometryRefresh();
+      },
+    });
   }
 
   async init(): Promise<void> {
@@ -292,8 +309,9 @@ export class SteadyHandRuntime {
     document.addEventListener('visibilitychange', this.handleVisibilityChange);
 
     // 10. Message listener for worker updates
-    chrome.runtime.onMessage.addListener((msg) => {
-      this.handleWorkerMessage(msg);
+    chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
+      this.handleWorkerMessage(msg, sendResponse);
+      return true; // Keep channel open for async response
     });
 
     // 11. Start animation frame loop
@@ -379,11 +397,19 @@ export class SteadyHandRuntime {
     }
   }
 
-  private handleWorkerMessage(msg: any): void {
+  private handleWorkerMessage(msg: any, sendResponse?: (response?: any) => void): void {
     if (!msg || typeof msg !== 'object') return;
 
-    if (msg.type === 'page.disable') {
+    if (msg.type === 'page.enable') {
+      this.running = true;
+      if (sendResponse) {
+        sendResponse({ enabled: true, instanceId: this.instanceId });
+      }
+    } else if (msg.type === 'page.disable') {
       this.destroy();
+      if (sendResponse) {
+        sendResponse({ enabled: false });
+      }
     } else if (msg.type === 'settings.applied') {
       this.config = msg.config;
       this.engine.applyConfig(this.config);
@@ -392,6 +418,7 @@ export class SteadyHandRuntime {
       } else {
         pointerInput.restoreNativeCursor();
       }
+      if (sendResponse) sendResponse({ ok: true });
     } else if (msg.type === 'device.state') {
       this.deviceSource = msg.source || 'unavailable';
       if (msg.motion) {
@@ -401,7 +428,7 @@ export class SteadyHandRuntime {
 
         // Dynamic 1-Euro adaptive filter synchronization:
         // When tremors occur, tighten cutoff and speed coefficient proportionally (more tremors = more stabilization)
-        if (this.config.mode === 'stabilized') {
+        if (this.config.mode === 'stabilized' && this.config.filter.kind === 'one_euro') {
           let targetCutoff = this.config.filter.min_cutoff_hz;
           let targetBeta = this.config.filter.beta ?? 0.015;
 
@@ -424,13 +451,132 @@ export class SteadyHandRuntime {
           }
         }
       }
+      if (sendResponse) sendResponse({ ok: true });
     } else if (msg.type === 'transport.state') {
       this.deviceConnected = msg.status === 'connected';
+      if (sendResponse) sendResponse({ ok: true });
+    } else if (msg.type === 'page.status') {
+      const responseData = {
+        v: 1,
+        type: 'page.status.response',
+        request_id: msg.request_id,
+        enabled: this.running,
+        instanceId: this.instanceId,
+      };
+      if (sendResponse) {
+        sendResponse(responseData);
+      }
+      chrome.runtime.sendMessage(responseData).catch(() => {});
+    } else if (msg.type === 'adaptive.detect.request') {
+      const status = this.adaptiveController.detect();
+      const form = this.adaptiveController.getExtractedForm();
+      const payload = {
+        v: 1,
+        type: 'adaptive.detect.response',
+        request_id: msg.request_id,
+        status,
+        form: form || undefined,
+      };
+      if (sendResponse) {
+        sendResponse(payload);
+      }
+      chrome.runtime.sendMessage(payload).catch(() => {});
+    } else if (msg.type === 'adaptive.preview.request') {
+      try {
+        this.adaptiveController.showPreview(
+          msg.proposal,
+          () => {
+            chrome.runtime.sendMessage({
+              v: 1,
+              type: 'adaptive.preview.action',
+              request_id: msg.request_id,
+              action: 'apply',
+            }).catch(() => {});
+          },
+          () => {
+            chrome.runtime.sendMessage({
+              v: 1,
+              type: 'adaptive.preview.action',
+              request_id: msg.request_id,
+              action: 'cancel',
+            }).catch(() => {});
+          }
+        );
+        if (sendResponse) {
+          sendResponse({ ok: true });
+        }
+        chrome.runtime.sendMessage({
+          v: 1,
+          type: 'adaptive.preview.response',
+          request_id: msg.request_id,
+          ok: true,
+        }).catch(() => {});
+      } catch (err: any) {
+        if (sendResponse) {
+          sendResponse({ ok: false, error: err.message });
+        }
+        chrome.runtime.sendMessage({
+          v: 1,
+          type: 'adaptive.preview.response',
+          request_id: msg.request_id,
+          ok: false,
+          error: err.message,
+        }).catch(() => {});
+      }
+    } else if (msg.type === 'adaptive.apply.request') {
+      try {
+        this.adaptiveController.applyProposal(msg.proposal);
+        if (sendResponse) {
+          sendResponse({ ok: true });
+        }
+        chrome.runtime.sendMessage({
+          v: 1,
+          type: 'adaptive.apply.response',
+          request_id: msg.request_id,
+          ok: true,
+        }).catch(() => {});
+      } catch (err: any) {
+        if (sendResponse) {
+          sendResponse({ ok: false, error: err.message });
+        }
+        chrome.runtime.sendMessage({
+          v: 1,
+          type: 'adaptive.apply.response',
+          request_id: msg.request_id,
+          ok: false,
+          error: err.message,
+        }).catch(() => {});
+      }
+    } else if (msg.type === 'adaptive.restore.request') {
+      try {
+        this.adaptiveController.restoreOriginal();
+        if (sendResponse) {
+          sendResponse({ ok: true });
+        }
+        chrome.runtime.sendMessage({
+          v: 1,
+          type: 'adaptive.restore.response',
+          request_id: msg.request_id,
+          ok: true,
+        }).catch(() => {});
+      } catch (err: any) {
+        if (sendResponse) {
+          sendResponse({ ok: false, error: err.message });
+        }
+        chrome.runtime.sendMessage({
+          v: 1,
+          type: 'adaptive.restore.response',
+          request_id: msg.request_id,
+          ok: false,
+          error: err.message,
+        }).catch(() => {});
+      }
     }
   }
 
   destroy(): void {
     this.running = false;
+    this.adaptiveController.teardown();
     if (this.animFrameId !== null) {
       cancelAnimationFrame(this.animFrameId);
       this.animFrameId = null;

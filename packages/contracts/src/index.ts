@@ -7,3 +7,4 @@ export * from './device.ts';
 export * from './messages.ts';
 export * from './uiAdapter.ts';
 export * from './schemas.ts';
+export * from './adaptiveForms.ts';

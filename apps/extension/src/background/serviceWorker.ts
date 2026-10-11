@@ -1,6 +1,7 @@
 import { handleMessage } from './messageRouter.js';
 import { tabSessionManager } from './tabSessions.js';
 import { deviceTransport } from './deviceTransport.js';
+import { adaptiveFormsClient } from './adaptiveFormsClient.js';
 
 console.log('[SteadyHand] Background Service Worker initialized.');
 
@@ -23,11 +24,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 // Clean up tab tracking when tab closes
 chrome.tabs.onRemoved.addListener((tabId) => {
   tabSessionManager.removeTab(tabId);
+  adaptiveFormsClient.abortAll();
 });
 
 // Re-evaluate on navigation
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === 'loading') {
+    adaptiveFormsClient.abortAll();
     tabSessionManager.setTabState(tabId, {
       url: tab.url || '',
       injected: false,

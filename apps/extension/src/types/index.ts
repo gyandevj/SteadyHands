@@ -192,6 +192,33 @@ export interface DeviceStatusQueryMessage extends BaseMessage {
   type: 'device.status';
 }
 
+export interface AdaptiveDetectMessage extends BaseMessage {
+  type: 'adaptive.detect.request';
+}
+
+export interface AdaptivePlanMessage extends BaseMessage {
+  type: 'adaptive.plan.request';
+  form?: any;
+}
+
+export interface AdaptiveApplyMessage extends BaseMessage {
+  type: 'adaptive.apply.request';
+  proposal?: any;
+}
+
+export interface AdaptiveRestoreMessage extends BaseMessage {
+  type: 'adaptive.restore.request';
+}
+
+export interface AdaptiveConfigGetMsg extends BaseMessage {
+  type: 'adaptive.config.get';
+}
+
+export interface AdaptiveConfigUpdateMsg extends BaseMessage {
+  type: 'adaptive.config.update';
+  patch?: any;
+}
+
 export type ExtensionMessage =
   | PageEnableMessage
   | PageDisableMessage
@@ -203,7 +230,13 @@ export type ExtensionMessage =
   | DeviceStateMessage
   | SelectionConfirmedMessage
   | TransportStateMessage
-  | DeviceStatusQueryMessage;
+  | DeviceStatusQueryMessage
+  | AdaptiveDetectMessage
+  | AdaptivePlanMessage
+  | AdaptiveApplyMessage
+  | AdaptiveRestoreMessage
+  | AdaptiveConfigGetMsg
+  | AdaptiveConfigUpdateMsg;
 
 // UI Adapter interfaces for Kripa
 export interface ExtensionUIState {
@@ -237,3 +270,28 @@ export interface OptionsAdapter {
   setConnection(endpoint: string, token: string): Promise<void>;
   subscribe(listener: (config: AssistanceConfig) => void): () => void;
 }
+
+// Adaptive Forms with Gemini contracts
+export type {
+  AdaptiveFieldType,
+  AdaptiveFieldOption,
+  AdaptiveField,
+  AdaptiveBlock,
+  AdaptiveFormData,
+  AdaptiveFormPlanRequest,
+  AdaptiveSection,
+  AdaptivePresentation,
+  AdaptiveLayoutProposal,
+  AdaptiveFormState,
+  AdaptiveFormStatus,
+  AdaptiveFormsAdapter,
+  AdaptiveDetectRequestMessage,
+  AdaptiveDetectResponseMessage,
+  AdaptivePlanRequestMessage,
+  AdaptivePlanResponseMessage,
+  AdaptiveApplyRequestMessage,
+  AdaptiveApplyResponseMessage,
+  AdaptiveRestoreRequestMessage,
+  AdaptiveRestoreResponseMessage,
+  AdaptiveStatusBroadcastMessage,
+} from '../../../../packages/contracts/src/index.ts';

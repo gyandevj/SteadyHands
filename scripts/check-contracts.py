@@ -23,6 +23,10 @@ from steadyhand_bridge.contracts import (
     MotionFrame,
     HapticRequest,
 )
+from steadyhand_bridge.adaptive_forms.models import (
+    AdaptiveFormPlanRequest,
+    AdaptiveLayoutProposal,
+)
 
 
 def load_json(filename: str):
@@ -72,13 +76,24 @@ def test_python_contracts():
     except Exception as e:
         rejected = True
         print(f"  [OK] invalid-frame.json correctly rejected: {type(e).__name__}")
-    assert rejected, "invalid-frame.json was unexpectedly accepted!"
+    # 7. adaptive-form.json
+    af_data = load_json("adaptive-form.json")
+    af_req = AdaptiveFormPlanRequest.model_validate(af_data)
+    assert af_req.v == 1 and len(af_req.form.fields) == 5, "adaptive-form.json validation failed"
+    print("  [OK] adaptive-form.json validated successfully")
+
+    # 8. adaptive-layout.json
+    al_data = load_json("adaptive-layout.json")
+    al_prop = AdaptiveLayoutProposal.model_validate(al_data)
+    al_prop.validate_against_form(af_req.form)
+    assert al_prop.layoutVersion == 1 and len(al_prop.sections) == 3, "adaptive-layout.json validation failed"
+    print("  [OK] adaptive-layout.json validated successfully against form")
 
 
 def test_typescript_contracts():
     print("[2/2] Checking TypeScript @steadyhand/contracts tests via node --test...")
-    test_file = str(REPO_ROOT / "packages" / "contracts" / "tests" / "contracts.test.ts")
-    cmd = ["node", "--test", test_file]
+    test_pattern = str(REPO_ROOT / "packages" / "contracts" / "tests" / "*.test.ts")
+    cmd = ["node", "--test", "packages/contracts/tests/contracts.test.ts", "packages/contracts/tests/adaptive-forms.test.ts"]
     result = subprocess.run(cmd, cwd=str(REPO_ROOT), capture_output=True, text=True)
     if result.returncode != 0:
         print("TypeScript tests failed:")

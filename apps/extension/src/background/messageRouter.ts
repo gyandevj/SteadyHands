@@ -6,6 +6,8 @@ import { settingsStore } from './settingsStore.js';
 import { tabSessionManager } from './tabSessions.js';
 import { injectContentScript } from './injection.js';
 import { deviceTransport } from './deviceTransport.js';
+import { adaptiveFormsClient } from './adaptiveFormsClient.js';
+import { adaptiveSettingsStore } from './adaptiveSettings.js';
 
 export async function handleMessage(
   message: ExtensionMessage,
@@ -147,6 +149,118 @@ export async function handleMessage(
           deviceState: deviceTransport.getSnapshot()
         }
       };
+    }
+
+    case 'adaptive.detect.request': {
+      const activeTab = await tabSessionManager.getActiveTab();
+      if (!activeTab || activeTab.id === undefined) {
+        return { v, request_id: requestId, ok: false, error: 'No active webpage found.' };
+      }
+      const tabId = activeTab.id;
+      const { supported, reason } = tabSessionManager.isUrlSupported(activeTab.url);
+      if (!supported) {
+        return { v, request_id: requestId, ok: false, error: reason };
+      }
+
+      try {
+        let response = await chrome.tabs.sendMessage(tabId, {
+          v: 1,
+          type: 'adaptive.detect.request',
+          request_id: requestId,
+        });
+        if (!response) {
+          await injectContentScript(tabId);
+          response = await chrome.tabs.sendMessage(tabId, {
+            v: 1,
+            type: 'adaptive.detect.request',
+            request_id: requestId,
+          });
+        }
+        tabSessionManager.setTabState(tabId, { enabled: true, injected: true });
+        return { v, request_id: requestId, ok: true, data: response };
+      } catch {
+        try {
+          await injectContentScript(tabId);
+          const response = await chrome.tabs.sendMessage(tabId, {
+            v: 1,
+            type: 'adaptive.detect.request',
+            request_id: requestId,
+          });
+          tabSessionManager.setTabState(tabId, { enabled: true, injected: true });
+          return { v, request_id: requestId, ok: true, data: response };
+        } catch (retryErr: any) {
+          return { v, request_id: requestId, ok: false, error: retryErr?.message || 'Failed to detect forms in active tab' };
+        }
+      }
+    }
+
+    case 'adaptive.plan.request': {
+      const form = (message as any).form;
+      if (!form) {
+        return { v, request_id: requestId, ok: false, error: 'Missing form data for planning' };
+      }
+      try {
+        const proposal = await adaptiveFormsClient.requestPlan({
+          v: 1,
+          requestId,
+          form,
+        });
+        return { v, request_id: requestId, ok: true, data: proposal };
+      } catch (e: any) {
+        return { v, request_id: requestId, ok: false, error: e?.message || 'Gemini planning request failed' };
+      }
+    }
+
+    case 'adaptive.apply.request': {
+      const activeTab = await tabSessionManager.getActiveTab();
+      if (!activeTab || activeTab.id === undefined) {
+        return { v, request_id: requestId, ok: false, error: 'No active webpage found.' };
+      }
+      try {
+        const response = await chrome.tabs.sendMessage(activeTab.id, {
+          v: 1,
+          type: 'adaptive.apply.request',
+          request_id: requestId,
+          proposal: (message as any).proposal,
+        });
+        return { v, request_id: requestId, ok: true, data: response };
+      } catch (e: any) {
+        return { v, request_id: requestId, ok: false, error: e?.message || 'Failed to apply adaptive layout' };
+      }
+    }
+
+    case 'adaptive.restore.request': {
+      const activeTab = await tabSessionManager.getActiveTab();
+      if (!activeTab || activeTab.id === undefined) {
+        return { v, request_id: requestId, ok: false, error: 'No active webpage found.' };
+      }
+      try {
+        const response = await chrome.tabs.sendMessage(activeTab.id, {
+          v: 1,
+          type: 'adaptive.restore.request',
+          request_id: requestId,
+        });
+        return { v, request_id: requestId, ok: true, data: response };
+      } catch (e: any) {
+        return { v, request_id: requestId, ok: false, error: e?.message || 'Failed to restore original form' };
+      }
+    }
+
+    case 'adaptive.config.get': {
+      const cfg = await adaptiveSettingsStore.getConfig();
+      return { v, request_id: requestId, ok: true, data: cfg };
+    }
+
+    case 'adaptive.config.update': {
+      const patch = (message as any).patch || {};
+      const updated = await adaptiveSettingsStore.updateConfig(patch);
+      if (updated.pairingToken) {
+        adaptiveFormsClient.setToken(updated.pairingToken);
+      }
+      if (updated.endpoint) {
+        adaptiveFormsClient.setEndpoint(updated.endpoint);
+      }
+      return { v, request_id: requestId, ok: true, data: updated };
     }
 
     default:

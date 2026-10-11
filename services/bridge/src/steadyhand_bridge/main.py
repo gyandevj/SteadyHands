@@ -18,8 +18,10 @@ from .pipeline.analysis_runner import AnalysisRunner
 from .pipeline.calibration import CalibrationCoordinator
 from .pipeline.haptic_supervisor import HapticSupervisor
 from .sessions.store import SessionStore
-from .api import health, device, calibration, haptics, sessions, stream
+from .api import health, device, calibration, haptics, sessions, stream, adaptive_forms
 from .api.stream import ws_manager
+from .adaptive_forms.security import SecurityManager
+from .adaptive_forms.planner import AdaptiveFormPlanner
 
 logger = logging.getLogger("steadyhand_bridge")
 
@@ -183,6 +185,19 @@ def create_app(config: Optional[BridgeConfig] = None) -> FastAPI:
     app.state.sessions = sessions_mgr
     app.state.latest_frame = None
 
+    # Adaptive forms components
+    app.state.adaptive_forms_security = SecurityManager(
+        pairing_token=cfg.adaptive_forms_pairing_token,
+        max_concurrent=2,
+        rate_limit_per_minute=5,
+        allowed_extension_origins=set(cfg.allowed_origins),
+    )
+    app.state.adaptive_forms_planner = AdaptiveFormPlanner(
+        api_key=cfg.gemini_api_key,
+        model_name=cfg.gemini_model,
+        mock_mode=(cfg.gemini_api_key is None),
+    )
+
     # Include API routes
     app.include_router(health.router)
     app.include_router(device.router)
@@ -190,5 +205,6 @@ def create_app(config: Optional[BridgeConfig] = None) -> FastAPI:
     app.include_router(haptics.router)
     app.include_router(sessions.router)
     app.include_router(stream.router)
+    app.include_router(adaptive_forms.router)
 
     return app

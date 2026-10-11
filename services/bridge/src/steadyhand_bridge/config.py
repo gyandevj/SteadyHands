@@ -31,6 +31,12 @@ class BridgeConfig(BaseModel):
     stale_timeout_ms: int = 500
     max_frame_bytes: int = 65536  # 64 KiB limit per docs/contracts.md
 
+    # Adaptive Forms with Gemini configuration
+    gemini_api_key: Optional[str] = None
+    gemini_model: str = "gemini-3.8-flash"
+    adaptive_forms_pairing_token: Optional[str] = None
+    adaptive_forms_enabled: bool = True
+
     @classmethod
     def from_env(cls) -> "BridgeConfig":
         """Load configuration from environment variables with safe defaults."""
@@ -50,6 +56,11 @@ class BridgeConfig(BaseModel):
         replay_path = os.environ.get("STEADYHAND_REPLAY_FIXTURE")
         haptics = os.environ.get("STEADYHAND_HAPTICS_ENABLED", "false").lower() in ("true", "1", "yes")
 
+        gemini_key = os.environ.get("GEMINI_API_KEY")
+        gemini_model = os.environ.get("GEMINI_MODEL", "gemini-3.8-flash")
+        af_token = os.environ.get("STEADYHAND_ADAPTIVE_FORMS_TOKEN")
+        af_enabled = os.environ.get("STEADYHAND_ADAPTIVE_FORMS_ENABLED", "true").lower() in ("true", "1", "yes")
+
         return cls(
             host=host,
             port=port,
@@ -60,4 +71,8 @@ class BridgeConfig(BaseModel):
             device_port=os.environ.get("STEADYHAND_DEVICE_PORT", "COM3"),
             device_baud=int(os.environ.get("STEADYHAND_DEVICE_BAUD", "115200")),
             haptics_enabled=haptics,
+            gemini_api_key=gemini_key,
+            gemini_model=gemini_model,
+            adaptive_forms_pairing_token=af_token,
+            adaptive_forms_enabled=af_enabled,
         )

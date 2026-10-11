@@ -1,0 +1,30 @@
+{
+  "layoutVersion": 1,
+  "sections": [
+    {
+      "title": "Your Profile",
+      "fieldIds": [
+        "field-1",
+        "field-2"
+      ]
+    },
+    {
+      "title": "Workshop Selection",
+      "fieldIds": [
+        "field-3"
+      ]
+    },
+    {
+      "title": "Session Details & Accommodations",
+      "fieldIds": [
+        "field-4",
+        "field-5"
+      ]
+    }
+  ],
+  "presentation": {
+    "layout": "single-column",
+    "spacing": "large",
+    "controls": "large"
+  }
+}

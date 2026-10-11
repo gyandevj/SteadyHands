@@ -1,5 +1,6 @@
 import { popupAdapter } from '../adapters/popupAdapter.js';
 import { PointerMode } from '../types/index.js';
+import { createAdaptiveControls } from '../popup/adaptiveControls.js';
 
 // Entry point for popup.html
 async function initPopup() {
@@ -161,6 +162,10 @@ async function renderFallbackPopup(container: HTMLElement) {
     e.preventDefault();
     popupAdapter.openOptions();
   });
+
+  // Mount Adaptive Forms with Gemini card
+  const adaptiveControls = createAdaptiveControls();
+  container.appendChild(adaptiveControls);
 
   // Polling update loop (400ms) for real-time sensor & tremor data display
   const pollTimer = setInterval(async () => {

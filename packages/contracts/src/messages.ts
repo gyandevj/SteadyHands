@@ -5,6 +5,11 @@
 
 import type { AssistanceConfig } from './settings.ts';
 import type { DataSource, QualityState, MotionStatus, AdvisoryRecommendation, MotionFrame, DeviceHello, DeviceHealth } from './device.ts';
+import type {
+  AdaptiveFormData,
+  AdaptiveLayoutProposal,
+  AdaptiveFormStatus,
+} from './adaptiveForms.ts';
 
 export interface Envelope<T = unknown> {
   readonly v: 1;
@@ -108,6 +113,73 @@ export interface TransportStateMessage {
   readonly request_id: string;
   readonly status: 'connected' | 'connecting' | 'unavailable';
   readonly source: DataSource;
+}
+
+// Adaptive Forms browser messages
+export interface AdaptiveDetectRequestMessage {
+  readonly v: 1;
+  readonly type: 'adaptive.detect.request';
+  readonly request_id: string;
+}
+
+export interface AdaptiveDetectResponseMessage {
+  readonly v: 1;
+  readonly type: 'adaptive.detect.response';
+  readonly request_id: string;
+  readonly status: AdaptiveFormStatus;
+  readonly form?: AdaptiveFormData;
+}
+
+export interface AdaptivePlanRequestMessage {
+  readonly v: 1;
+  readonly type: 'adaptive.plan.request';
+  readonly request_id: string;
+  readonly form: AdaptiveFormData;
+}
+
+export interface AdaptivePlanResponseMessage {
+  readonly v: 1;
+  readonly type: 'adaptive.plan.response';
+  readonly request_id: string;
+  readonly ok: boolean;
+  readonly proposal?: AdaptiveLayoutProposal;
+  readonly error?: string;
+}
+
+export interface AdaptiveApplyRequestMessage {
+  readonly v: 1;
+  readonly type: 'adaptive.apply.request';
+  readonly request_id: string;
+  readonly proposal: AdaptiveLayoutProposal;
+}
+
+export interface AdaptiveApplyResponseMessage {
+  readonly v: 1;
+  readonly type: 'adaptive.apply.response';
+  readonly request_id: string;
+  readonly ok: boolean;
+  readonly error?: string;
+}
+
+export interface AdaptiveRestoreRequestMessage {
+  readonly v: 1;
+  readonly type: 'adaptive.restore.request';
+  readonly request_id: string;
+}
+
+export interface AdaptiveRestoreResponseMessage {
+  readonly v: 1;
+  readonly type: 'adaptive.restore.response';
+  readonly request_id: string;
+  readonly ok: boolean;
+  readonly error?: string;
+}
+
+export interface AdaptiveStatusBroadcastMessage {
+  readonly v: 1;
+  readonly type: 'adaptive.status';
+  readonly request_id: string;
+  readonly status: AdaptiveFormStatus;
 }
 
 // WebSocket wire protocol messages

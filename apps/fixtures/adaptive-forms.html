@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SteadyHand V2 — Community Workshop Registration</title>
+  <link rel="stylesheet" href="./styles/adaptive-forms.css" />
+</head>
+<body>
+  <header>
+    <h1>Community Workshop Preferences</h1>
+    <p class="subtitle">SteadyHand V2 Practice Fixture: dense multi-control form for tremor stabilization and adaptive layout demonstration.</p>
+  </header>
+
+  <main class="fixture-container">
+    <div id="demo-banner" style="background:#e0f2fe; border:1px solid #7dd3fc; border-radius:8px; padding:12px 16px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+      <div>
+        <strong style="color:#0369a1; font-size:14px; display:block;">⚡ SteadyHand V2 Demo (No API Key Required)</strong>
+        <span style="color:#0284c7; font-size:12px;">Test the adaptive layout transformation directly using these buttons OR via the Chrome Extension popup!</span>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button type="button" id="demo-btn-adapt" style="background:#0284c7; color:#ffffff; border:none; padding:8px 14px; border-radius:6px; font-weight:600; cursor:pointer; font-size:13px; box-shadow:0 1px 3px rgba(0,0,0,0.1);">✨ Adapt Form (Demo)</button>
+        <button type="button" id="demo-btn-restore" style="background:#94a3b8; color:#ffffff; border:none; padding:8px 14px; border-radius:6px; font-weight:600; cursor:pointer; font-size:13px; display:none;">↺ Restore Original</button>
+      </div>
+    </div>
+
+    <form id="workshop-preferences-form" class="dense-form" novalidate>
+      <div class="form-row" id="block-profile">
+        <div class="form-group" id="group-nickname">
+          <label for="input-nickname">Participant Nickname *</label>
+          <input type="text" id="input-nickname" name="nickname" required placeholder="e.g. Sam" />
+        </div>
+      </div>
+
+      <div class="form-row" id="block-interests">
+        <div class="form-group" id="group-interests">
+          <label for="input-interests">Special Interests & Hobbies</label>
+          <textarea id="input-interests" name="interests" placeholder="e.g. Watercolor painting, landscape photography..."></textarea>
+        </div>
+      </div>
+
+      <div class="form-row" id="block-track">
+        <fieldset class="form-group" id="group-track">
+          <legend>Workshop Track *</legend>
+          <div class="radio-group">
+            <label class="radio-item" for="track-drawing">
+              <input type="radio" id="track-drawing" name="track" value="drawing" checked />
+              Drawing & Painting
+            </label>
+            <label class="radio-item" for="track-gardening">
+              <input type="radio" id="track-gardening" name="track" value="gardening" />
+              Gardening & Flora
+            </label>
+            <label class="radio-item" for="track-woodworking">
+              <input type="radio" id="track-woodworking" name="track" value="woodworking" />
+              Woodworking Basics
+            </label>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="form-row" id="block-accommodations">
+        <div class="form-group" id="group-accommodations">
+          <div class="checkbox-group">
+            <label class="checkbox-item" for="check-large-print">
+              <input type="checkbox" id="check-large-print" name="largePrint" />
+              Request Large Print Materials
+            </label>
+            <label class="checkbox-item" for="check-recording">
+              <input type="checkbox" id="check-recording" name="recording" />
+              Permission to Record Audio Notes
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row" id="block-timeslot">
+        <div class="form-group" id="group-timeslot">
+          <label for="select-timeslot">Preferred Time Slot *</label>
+          <select id="select-timeslot" name="timeslot">
+            <option value="morning">Morning (9:00 AM - 12:00 PM)</option>
+            <option value="afternoon">Afternoon (1:00 PM - 4:00 PM)</option>
+            <option value="evening">Evening (5:30 PM - 8:30 PM)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="secondary" id="btn-reset">Reset</button>
+        <button type="submit" class="primary" id="btn-submit">Submit Registration</button>
+      </div>
+    </form>
+
+    <div class="metrics-panel">
+      <div class="metrics-row">
+        <span><strong>Native Submissions Dispatched:</strong></span>
+        <span id="submit-counter">0</span>
+      </div>
+      <div class="metrics-row">
+        <span><strong>Last Selected Option:</strong></span>
+        <span id="last-selection-display">None</span>
+      </div>
+      <div class="metrics-row">
+        <span><strong>Validation Status:</strong></span>
+        <span id="validation-display" style="color: green;">Ready</span>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('workshop-preferences-form');
+    const counterEl = document.getElementById('submit-counter');
+    const lastSelEl = document.getElementById('last-selection-display');
+    const validationEl = document.getElementById('validation-display');
+    const resetBtn = document.getElementById('btn-reset');
+    let submitCount = 0;
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nickname = document.getElementById('input-nickname').value.trim();
+      if (!nickname) {
+        validationEl.textContent = 'Nickname is required!';
+        validationEl.style.color = 'red';
+        return;
+      }
+      submitCount++;
+      counterEl.textContent = submitCount;
+      validationEl.textContent = `Submitted successfully (#${submitCount})`;
+      validationEl.style.color = 'green';
+    });
+
+    form.addEventListener('change', (e) => {
+      if (e.target.name === 'track') {
+        lastSelEl.textContent = `Track: ${e.target.value}`;
+      } else if (e.target.name === 'timeslot') {
+        lastSelEl.textContent = `Time: ${e.target.value}`;
+      } else if (e.target.type === 'checkbox') {
+        lastSelEl.textContent = `${e.target.name}: ${e.target.checked}`;
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      form.reset();
+      validationEl.textContent = 'Form reset';
+      validationEl.style.color = 'gray';
+    });
+
+    // In-page Instant Demo Adaptation
+    const demoBtnAdapt = document.getElementById('demo-btn-adapt');
+    const demoBtnRestore = document.getElementById('demo-btn-restore');
+    let isAdapted = false;
+    let savedOriginalHTML = null;
+
+    demoBtnAdapt.addEventListener('click', () => {
+      if (isAdapted) return;
+      isAdapted = true;
+
+      // Group into accessible sections preserving DOM inputs and values
+      const b1 = document.getElementById('block-profile');
+      const b2 = document.getElementById('block-interests');
+      const b3 = document.getElementById('block-track');
+      const b4 = document.getElementById('block-accommodations');
+      const b5 = document.getElementById('block-timeslot');
+
+      // Create Section 1
+      const sec1 = document.createElement('div');
+      sec1.className = 'demo-section-card';
+      sec1.style.cssText = 'background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:16px; margin-bottom:16px;';
+      sec1.innerHTML = '<h3 style="margin:0 0 12px; font-size:15px; color:#1e293b; border-bottom:1px solid #e2e8f0; padding-bottom:6px;">1. Participant Details</h3>';
+
+      // Create Section 2
+      const sec2 = document.createElement('div');
+      sec2.className = 'demo-section-card';
+      sec2.style.cssText = 'background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:16px; margin-bottom:16px;';
+      sec2.innerHTML = '<h3 style="margin:0 0 12px; font-size:15px; color:#1e293b; border-bottom:1px solid #e2e8f0; padding-bottom:6px;">2. Workshop Track</h3>';
+
+      // Create Section 3
+      const sec3 = document.createElement('div');
+      sec3.className = 'demo-section-card';
+      sec3.style.cssText = 'background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:16px; margin-bottom:16px;';
+      sec3.innerHTML = '<h3 style="margin:0 0 12px; font-size:15px; color:#1e293b; border-bottom:1px solid #e2e8f0; padding-bottom:6px;">3. Accommodations & Schedule</h3>';
+
+      // Move blocks into sections
+      form.insertBefore(sec1, b1);
+      sec1.appendChild(b1);
+      sec1.appendChild(b2);
+
+      form.insertBefore(sec2, b3);
+      sec2.appendChild(b3);
+
+      form.insertBefore(sec3, b4);
+      sec3.appendChild(b4);
+      sec3.appendChild(b5);
+
+      // Apply single-column and generous sizing styles
+      form.style.display = 'flex';
+      form.style.flexDirection = 'column';
+      form.style.maxWidth = '640px';
+
+      document.querySelectorAll('#workshop-preferences-form input[type="text"], #workshop-preferences-form textarea, #workshop-preferences-form select').forEach(el => {
+        el.style.minHeight = '46px';
+        el.style.fontSize = '16px';
+        el.style.padding = '10px 14px';
+        el.style.boxSizing = 'border-box';
+        el.style.width = '100%';
+      });
+
+      document.querySelectorAll('#workshop-preferences-form .radio-item, #workshop-preferences-form .checkbox-item').forEach(el => {
+        el.style.minHeight = '44px';
+        el.style.display = 'flex';
+        el.style.alignItems = 'center';
+        el.style.padding = '8px 12px';
+        el.style.background = '#ffffff';
+        el.style.borderRadius = '6px';
+        el.style.border = '1px solid #e2e8f0';
+        el.style.margin = '6px 0';
+        el.style.cursor = 'pointer';
+      });
+
+      demoBtnAdapt.style.display = 'none';
+      demoBtnRestore.style.display = 'inline-block';
+      validationEl.textContent = 'Adapted to accessible single-column layout (values preserved)';
+      validationEl.style.color = '#0284c7';
+    });
+
+    demoBtnRestore.addEventListener('click', () => {
+      if (!isAdapted) return;
+      isAdapted = false;
+
+      const actions = form.querySelector('.actions');
+      const secCards = form.querySelectorAll('.demo-section-card');
+
+      // Unwrap blocks back to form root
+      const b1 = document.getElementById('block-profile');
+      const b2 = document.getElementById('block-interests');
+      const b3 = document.getElementById('block-track');
+      const b4 = document.getElementById('block-accommodations');
+      const b5 = document.getElementById('block-timeslot');
+
+      form.insertBefore(b1, actions);
+      form.insertBefore(b2, actions);
+      form.insertBefore(b3, actions);
+      form.insertBefore(b4, actions);
+      form.insertBefore(b5, actions);
+
+      secCards.forEach(s => s.remove());
+
+      // Reset inline styles
+      form.style.display = '';
+      form.style.flexDirection = '';
+      form.style.maxWidth = '';
+
+      document.querySelectorAll('#workshop-preferences-form input, #workshop-preferences-form textarea, #workshop-preferences-form select, #workshop-preferences-form .radio-item, #workshop-preferences-form .checkbox-item').forEach(el => {
+        el.style.minHeight = '';
+        el.style.fontSize = '';
+        el.style.padding = '';
+        el.style.boxSizing = '';
+        el.style.width = '';
+        el.style.display = '';
+        el.style.alignItems = '';
+        el.style.background = '';
+        el.style.borderRadius = '';
+        el.style.border = '';
+        el.style.margin = '';
+        el.style.cursor = '';
+      });
+
+      demoBtnAdapt.style.display = 'inline-block';
+      demoBtnRestore.style.display = 'none';
+      validationEl.textContent = 'Restored to original compact layout';
+      validationEl.style.color = 'green';
+    });
+  </script>
+</body>
+</html>

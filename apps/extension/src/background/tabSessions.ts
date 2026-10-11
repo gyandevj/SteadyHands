@@ -32,8 +32,15 @@ export class TabSessionManager {
   }
 
   async getActiveTab(): Promise<chrome.tabs.Tab | null> {
-    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-    return tabs[0] || null;
+    let tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    if (!tabs || tabs.length === 0) {
+      tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    }
+    if (!tabs || tabs.length === 0) {
+      tabs = await chrome.tabs.query({ active: true });
+    }
+    const valid = tabs.filter((t) => t.url && !t.url.startsWith('chrome-extension://'));
+    return valid[0] || tabs[0] || null;
   }
 
   getTabState(tabId: number): TabState | undefined {

@@ -1,4 +1,5 @@
 import { optionsAdapter } from '../adapters/optionsAdapter.js';
+import { createAdaptiveSettingsSection } from '../options/adaptiveSettings.js';
 
 // Entry point for options.html
 async function initOptions() {
@@ -137,6 +138,10 @@ async function renderFallbackOptions(container: HTMLElement) {
       renderFallbackOptions(container);
     }
   });
+
+  // Mount Adaptive Forms with Gemini configuration section
+  const afSection = createAdaptiveSettingsSection();
+  container.appendChild(afSection);
 }
 
 document.addEventListener('DOMContentLoaded', initOptions);

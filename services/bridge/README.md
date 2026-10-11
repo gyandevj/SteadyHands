@@ -59,6 +59,13 @@ Run unit & integration tests:
 python -m pytest services/bridge/tests -v
 ```
 
+## Adaptive Forms with Gemini (V2 Additive Feature)
+
+The bridge provides an authenticated endpoint at `POST /v1/adaptive-forms/plan` for AI-assisted layout restructuring.
+- **Privacy Guaranteed**: Only document-local field aliases (`field-1`, `field-2`) and labels are processed. No entered values or PII are accepted or forwarded.
+- **Upstream Gemini API**: Uses `google-genai` SDK (`gemini-3.8-flash`) with structured outputs.
+- **Offline / Mock Fallback**: When `GEMINI_API_KEY` is not set, the bridge automatically uses a deterministic heuristic grouping algorithm, keeping testing functional offline.
+
 Run end-to-end smoke check:
 ```bash
 .\scripts\demo-smoke.ps1

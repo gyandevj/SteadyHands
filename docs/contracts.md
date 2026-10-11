@@ -208,3 +208,24 @@ Block new recommendations immediately when a cue is forwarded. Pulse events incl
 Kripa exports `mountPopup(container, adapter)` and `mountOptions(container, adapter)` from their UI folders. Adapter capabilities are `getState`, `enablePage`, `disablePage`, `updateSettings`, `setConnection`, and `subscribe`, with cleanup functions. Person 3 provides real adapters; Kripa uses fake ones initially. UI components import no worker implementation files.
 
 The dashboard has its own `DeviceClient` interface with `connect`, `subscribe`, `startCalibration`, `finishCalibration`, and `exportSession`. Dev supplies endpoint semantics; Kripa implements browser transport against them. Never make a disabled or mock action appear as a successful live action.
+
+## 12. Adaptive Forms with Gemini
+
+Additive V2 contract for AI-assisted presentation adaptation of dense forms for users with hand tremors.
+
+### Endpoint
+
+`POST /v1/adaptive-forms/plan`
+
+### Data Invariants
+
+1. **Document-Local Aliases Only**: Request extracts only synthetic field IDs (`field-1`, `field-2`) and generic labels. No user-entered values, passwords, credit card inputs, hidden fields, URLs, page HTML, or form actions.
+2. **Strict structured layout proposal**:
+   - `layoutVersion: 1`
+   - Up to 6 nonempty sections with titles (<= 80 chars).
+   - Every input field from the original request appears in sections **exactly once**.
+   - Flattened field order in sections **identically matches original DOM order**.
+   - Atomic blocks (e.g., radio groups, composite fieldsets) **cannot be split** across sections.
+   - Presentation hints: `single-column`, `spacing` (`large` | `normal` | `compact`), `controls` (`large` | `normal`).
+3. **Payload Bounds**: Max 32 KiB request, 16 KiB response, 40 fields, 200 total options.
+4. **Reversible Presentation**: Applied modifications are tracked in a mutation journal. Native element identity, DOM hierarchy, listeners, and native submit pathway are strictly preserved.

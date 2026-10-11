@@ -78,8 +78,17 @@ export class ChromePopupAdapter implements PopupAdapter {
           });
           this.currentState.isPageEnabled = !!statusResp?.enabled;
         } catch {
-          // If message fails, content script is not yet running
-          this.currentState.isPageEnabled = false;
+          // If content script was not injected yet on a supported page, auto-enable
+          try {
+            const enableResp = await chrome.runtime.sendMessage({
+              v: 1,
+              type: 'page.enable',
+              request_id: `auto-enable-${Date.now()}`
+            });
+            this.currentState.isPageEnabled = !!enableResp?.ok;
+          } catch {
+            this.currentState.isPageEnabled = false;
+          }
         }
       }
     } catch {

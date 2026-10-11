@@ -43,3 +43,14 @@ export interface DeviceClient {
   finishCalibration(sessionId: string, requestId?: string): Promise<CalibrationResult>;
   exportSession(sessionId: string): Promise<Record<string, unknown>>;
 }
+
+export type AdaptiveStatusSubscriber = (status: import('./adaptiveForms.ts').AdaptiveFormStatus) => void;
+
+export interface AdaptiveFormsAdapter {
+  getStatus(): Promise<import('./adaptiveForms.ts').AdaptiveFormStatus>;
+  detectForm(): Promise<{ status: import('./adaptiveForms.ts').AdaptiveFormStatus; form?: import('./adaptiveForms.ts').AdaptiveFormData }>;
+  requestPlan(form: import('./adaptiveForms.ts').AdaptiveFormData): Promise<import('./adaptiveForms.ts').AdaptiveLayoutProposal>;
+  applyPlan(proposal: import('./adaptiveForms.ts').AdaptiveLayoutProposal): Promise<void>;
+  restoreOriginal(): Promise<void>;
+  subscribeStatus(fn: AdaptiveStatusSubscriber): Unsubscribe;
+}

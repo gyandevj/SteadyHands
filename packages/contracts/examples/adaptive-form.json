@@ -1,0 +1,85 @@
+{
+  "v": 1,
+  "requestId": "req-canonical-001",
+  "form": {
+    "formId": "form-workshop-preferences",
+    "fields": [
+      {
+        "id": "field-1",
+        "type": "text",
+        "label": "Participant Nickname",
+        "required": true
+      },
+      {
+        "id": "field-2",
+        "type": "textarea",
+        "label": "Special Interests",
+        "required": false
+      },
+      {
+        "id": "field-3",
+        "type": "radio",
+        "label": "Workshop Track",
+        "required": true,
+        "options": [
+          {
+            "id": "opt-1",
+            "label": "Drawing & Painting"
+          },
+          {
+            "id": "opt-2",
+            "label": "Gardening & Flora"
+          },
+          {
+            "id": "opt-3",
+            "label": "Woodworking Basics"
+          }
+        ]
+      },
+      {
+        "id": "field-4",
+        "type": "checkbox",
+        "label": "Request Large Print Materials",
+        "required": false
+      },
+      {
+        "id": "field-5",
+        "type": "select",
+        "label": "Preferred Time Slot",
+        "required": true,
+        "options": [
+          {
+            "id": "time-1",
+            "label": "Morning (9:00 AM)"
+          },
+          {
+            "id": "time-2",
+            "label": "Afternoon (1:00 PM)"
+          }
+        ]
+      }
+    ],
+    "blocks": [
+      {
+        "id": "block-1",
+        "fieldIds": ["field-1"]
+      },
+      {
+        "id": "block-2",
+        "fieldIds": ["field-2"]
+      },
+      {
+        "id": "block-3",
+        "fieldIds": ["field-3"]
+      },
+      {
+        "id": "block-4",
+        "fieldIds": ["field-4"]
+      },
+      {
+        "id": "block-5",
+        "fieldIds": ["field-5"]
+      }
+    ]
+  }
+}
