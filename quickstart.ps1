@@ -70,7 +70,7 @@ if ($HardwarePort -ne "") {
 
 # 4. Open Test Form & Diagnostics Monitor in Browser
 Write-Host "[4/4] Launching test form and tremor oscilloscope in browser..." -ForegroundColor Yellow
-$FormPath = "$RepoRoot\apps\fixtures\registration.html"
+$FormPath = "$RepoRoot\apps\fixtures\adaptive-forms.html"
 $MonitorPath = "$RepoRoot\apps\fixtures\monitor.html"
 $DistPath = "$RepoRoot\apps\extension\dist"
 
