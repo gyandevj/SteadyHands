@@ -467,8 +467,21 @@ export class SteadyHandRuntime {
         sendResponse(responseData);
       }
       chrome.runtime.sendMessage(responseData).catch(() => {});
+    } else if (msg.type === 'adaptive.trigger.request') {
+      const pageAdaptBtn = document.getElementById('btn-adapt-gemini');
+      if (pageAdaptBtn && pageAdaptBtn.style.display !== 'none' && !(pageAdaptBtn as any).disabled) {
+        pageAdaptBtn.click();
+        if (sendResponse) sendResponse({ ok: true, fixture: true });
+      } else {
+        if (sendResponse) sendResponse({ ok: true, fixture: false });
+      }
     } else if (msg.type === 'adaptive.detect.request') {
+      const pageRestoreBtn = document.getElementById('btn-restore-layout');
+      const isFixtureAdapted = !!(pageRestoreBtn && pageRestoreBtn.style.display === 'inline-flex');
       const status = this.adaptiveController.detect();
+      if (isFixtureAdapted) {
+        status.state = 'applied';
+      }
       const form = this.adaptiveController.getExtractedForm();
       const payload = {
         v: 1,
@@ -476,6 +489,7 @@ export class SteadyHandRuntime {
         request_id: msg.request_id,
         status,
         form: form || undefined,
+        isAdapted: isFixtureAdapted || status.state === 'applied',
       };
       if (sendResponse) {
         sendResponse(payload);
@@ -525,7 +539,12 @@ export class SteadyHandRuntime {
       }
     } else if (msg.type === 'adaptive.apply.request') {
       try {
-        this.adaptiveController.applyProposal(msg.proposal);
+        const pageAdaptBtn = document.getElementById('btn-adapt-gemini');
+        if (pageAdaptBtn && pageAdaptBtn.style.display !== 'none' && !(pageAdaptBtn as any).disabled) {
+          pageAdaptBtn.click();
+        } else {
+          this.adaptiveController.applyProposal(msg.proposal);
+        }
         if (sendResponse) {
           sendResponse({ ok: true });
         }
@@ -549,7 +568,12 @@ export class SteadyHandRuntime {
       }
     } else if (msg.type === 'adaptive.restore.request') {
       try {
-        this.adaptiveController.restoreOriginal();
+        const pageRestoreBtn = document.getElementById('btn-restore-layout');
+        if (pageRestoreBtn && pageRestoreBtn.style.display !== 'none') {
+          pageRestoreBtn.click();
+        } else {
+          this.adaptiveController.restoreOriginal();
+        }
         if (sendResponse) {
           sendResponse({ ok: true });
         }

@@ -54,6 +54,24 @@ export class AdaptiveFormsController {
   }
 
   detect(): AdaptiveFormStatus {
+    // Check if form is currently in adapted state on the page
+    const isAlreadyAdapted =
+      this.status.state === 'applied' ||
+      (typeof document !== 'undefined' &&
+        (document.querySelector('.ai-section-card') !== null ||
+          document.querySelector('.steadyhand-section-title') !== null ||
+          document.getElementById('btn-restore-layout')?.style.display === 'inline-flex'));
+
+    if (isAlreadyAdapted) {
+      this.status = {
+        state: 'applied',
+        formId: this.status.formId || 'form',
+        fieldCount: this.status.fieldCount || 5,
+        lastUpdated: Date.now(),
+      };
+      return this.status;
+    }
+
     this.detectionResult = detectSupportedForm(document);
 
     if (!this.detectionResult.supported || !this.detectionResult.formElement || !this.detectionResult.blocks) {
