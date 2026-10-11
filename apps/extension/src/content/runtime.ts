@@ -157,6 +157,10 @@ export class SteadyHandRuntime {
   // Device & Transport state
   private deviceSource: SourceState = 'unavailable';
   private deviceConnected = false;
+  private deviceMotion = 'quiet';
+  private dominantHz: number | null = null;
+  private activeCutoff = 1.0;
+  private activeBeta = 0.015;
 
   // Assisted physical click state
   private armedCandidateTarget: Target | null = null;
@@ -327,7 +331,9 @@ export class SteadyHandRuntime {
         this.overlay,
         this.config.mode,
         this.deviceSource,
-        this.deviceConnected
+        this.deviceConnected,
+        this.deviceMotion,
+        this.dominantHz
       );
     }
 
@@ -388,6 +394,36 @@ export class SteadyHandRuntime {
       }
     } else if (msg.type === 'device.state') {
       this.deviceSource = msg.source || 'unavailable';
+      if (msg.motion) {
+        this.deviceMotion = msg.motion.status || 'quiet';
+        this.dominantHz = msg.motion.dominant_hz ?? null;
+        const bandRms = msg.motion.band_rms_g ?? 0;
+
+        // Dynamic 1-Euro adaptive filter synchronization:
+        // When tremors occur, tighten cutoff and speed coefficient proportionally (more tremors = more stabilization)
+        if (this.config.mode === 'stabilized') {
+          let targetCutoff = this.config.filter.min_cutoff_hz;
+          let targetBeta = this.config.filter.beta ?? 0.015;
+
+          if (this.deviceMotion === 'periodic_motion' || this.deviceMotion === 'other_motion') {
+            targetCutoff = Math.max(0.3, 1.0 - (bandRms * 4.0));
+            targetBeta = Math.max(0.002, 0.015 - (bandRms * 0.05));
+          }
+
+          if (
+            Math.abs(targetCutoff - this.activeCutoff) > 0.05 ||
+            Math.abs(targetBeta - this.activeBeta) > 0.002
+          ) {
+            this.activeCutoff = targetCutoff;
+            this.activeBeta = targetBeta;
+            this.engine.applyFilterConfig({
+              ...this.config.filter,
+              min_cutoff_hz: targetCutoff,
+              beta: targetBeta
+            });
+          }
+        }
+      }
     } else if (msg.type === 'transport.state') {
       this.deviceConnected = msg.status === 'connected';
     }

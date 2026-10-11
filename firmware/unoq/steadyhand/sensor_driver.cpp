@@ -46,16 +46,37 @@ bool UnconfiguredHardwareSensorDriver::read_sample(float &ax, float &ay, float &
 
 
 // --- Physical Grove MMA7660FC Sensor Driver ---
-#include <MMA7660.h>
-
-static MMA7660 mma7660_inst;
+#define MMA7660_I2C_ADDR 0x4C
 
 Mma7660SensorDriver::Mma7660SensorDriver() : initialized(false) {}
 
 bool Mma7660SensorDriver::init() {
     Wire.begin();
-    mma7660_inst.init();
-    mma7660_inst.setSampleRate(AUTO_SLEEP_64);
+    Wire.setClock(400000);
+    Wire.setWireTimeout(3000, true); // 3ms timeout, reset bus on timeout
+
+    // 1. Put MMA7660 into standby to configure registers
+    Wire.beginTransmission(MMA7660_I2C_ADDR);
+    Wire.write(0x07); // MODE register
+    Wire.write(0x00); // Standby
+    if (Wire.endTransmission() != 0) {
+        return false;
+    }
+
+    // 2. Set sample rate to 64 samples/sec (AUTO_SLEEP_64 = 0x01)
+    Wire.beginTransmission(MMA7660_I2C_ADDR);
+    Wire.write(0x08); // SR register
+    Wire.write(0x01); // 64 Hz ODR
+    Wire.endTransmission();
+
+    // 3. Put MMA7660 into ACTIVE mode
+    Wire.beginTransmission(MMA7660_I2C_ADDR);
+    Wire.write(0x07); // MODE register
+    Wire.write(0x01); // Active
+    if (Wire.endTransmission() != 0) {
+        return false;
+    }
+
     initialized = true;
     return true;
 }
@@ -67,19 +88,51 @@ bool Mma7660SensorDriver::read_sample(float &ax, float &ay, float &az, bool &val
         saturated = false;
         return false;
     }
-    float x = 0, y = 0, z = 0;
-    if (mma7660_inst.getAcceleration(&x, &y, &z)) {
-        ax = x;
-        ay = y;
-        az = z;
-        valid = true;
-        // Range check (MMA7660FC is +/- 1.5g)
-        saturated = (fabsf(ax) >= 1.48f || fabsf(ay) >= 1.48f || fabsf(az) >= 1.48f);
-        return true;
+
+    // Direct, bounded, non-blocking MMA7660 register read (0x00 XOUT, 0x01 YOUT, 0x02 ZOUT)
+    Wire.beginTransmission(MMA7660_I2C_ADDR);
+    Wire.write(0x00);
+    if (Wire.endTransmission(false) != 0) {
+        valid = false;
+        saturated = false;
+        return false;
     }
-    valid = false;
-    saturated = false;
-    return false;
+
+    if (Wire.requestFrom((uint8_t)MMA7660_I2C_ADDR, (uint8_t)3) != 3) {
+        valid = false;
+        saturated = false;
+        return false;
+    }
+
+    uint8_t rawX = Wire.read();
+    uint8_t rawY = Wire.read();
+    uint8_t rawZ = Wire.read();
+
+    // If bit 6 (ALERT) is set on any axis, the register was being updated when read.
+    // Non-blocking: simply drop this sample and wait for next interval (prevents infinite lockups)
+    if ((rawX & 0x40) || (rawY & 0x40) || (rawZ & 0x40)) {
+        valid = false;
+        saturated = false;
+        return false;
+    }
+
+    // Sign extend 6-bit signed integer (bit 5 is sign bit)
+    int8_t sx = (int8_t)rawX;
+    int8_t sy = (int8_t)rawY;
+    int8_t sz = (int8_t)rawZ;
+
+    if (sx & 0x20) sx |= 0xC0;
+    if (sy & 0x20) sy |= 0xC0;
+    if (sz & 0x20) sz |= 0xC0;
+
+    // Convert to g (21.33 counts per g for +/- 1.5g range)
+    ax = (float)sx / 21.33f;
+    ay = (float)sy / 21.33f;
+    az = (float)sz / 21.33f;
+
+    valid = true;
+    saturated = (fabsf(ax) >= 1.45f || fabsf(ay) >= 1.45f || fabsf(az) >= 1.45f);
+    return true;
 }
 
 

@@ -26,9 +26,8 @@ uint64_t SampleQueue::extend_micros(uint32_t now_raw_us) {
     return extended_micros_base + now_raw_us;
 }
 
-bool SampleQueue::push(float ax, float ay, float az, bool valid, bool saturated, bool haptic_active) {
-    uint32_t now_raw = micros();
-    uint64_t t_extended = extend_micros(now_raw);
+bool SampleQueue::push_with_time(float ax, float ay, float az, bool valid, bool saturated, bool haptic_active, uint32_t sample_raw_us) {
+    uint64_t t_extended = extend_micros(sample_raw_us);
 
     if (count == SAMPLE_QUEUE_CAPACITY) {
         // Drop oldest to favor fresh state
@@ -51,6 +50,10 @@ bool SampleQueue::push(float ax, float ay, float az, bool valid, bool saturated,
     head = (head + 1) % SAMPLE_QUEUE_CAPACITY;
     count++;
     return true;
+}
+
+bool SampleQueue::push(float ax, float ay, float az, bool valid, bool saturated, bool haptic_active) {
+    return push_with_time(ax, ay, az, valid, saturated, haptic_active, micros());
 }
 
 uint8_t SampleQueue::drain(RawSample *out_samples, uint8_t max_count) {

@@ -25,9 +25,20 @@ export class LocalInteractionEngine implements InteractionEngine {
     this.config = { ...config };
   }
 
+  applyFilterConfig(filter: AssistanceConfig['filter']): void {
+    this.config.filter = { ...filter };
+  }
+
   applyConfig(config: AssistanceConfig): void {
+    const dwellChanged = (
+      this.config.mode !== config.mode ||
+      this.config.dwell.enabled !== config.dwell.enabled ||
+      this.config.dwell.duration_ms !== config.dwell.duration_ms
+    );
     this.config = { ...config };
-    this.cancel('config_applied');
+    if (dwellChanged) {
+      this.cancel('config_applied');
+    }
   }
 
   reset(point: Point): void {

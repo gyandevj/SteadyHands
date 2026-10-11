@@ -43,6 +43,7 @@ public:
     uint64_t extend_micros(uint32_t now_raw_us);
 
     bool push(float ax, float ay, float az, bool valid, bool saturated, bool haptic_active);
+    bool push_with_time(float ax, float ay, float az, bool valid, bool saturated, bool haptic_active, uint32_t sample_raw_us);
     uint8_t drain(RawSample *out_samples, uint8_t max_count);
 
     uint16_t size() const { return count; }

@@ -45,12 +45,14 @@ float latestAx = 0.0f, latestAy = 0.0f, latestAz = 0.0f;
 
 void setup() {
     Serial.begin(115200);
+    Serial.setTimeout(5);
     while (!Serial && millis() < 2000) {
         // Short pause for serial CDC
     }
 
     // 1. Initialize LCD RGB Backlight
     lcdDisplay.begin(16, 2);
+    Wire.setClock(400000); // 400 kHz Fast-mode I2C
     // Solid white backlight (255, 255, 255) as specified
     lcdDisplay.setRGB(255, 255, 255);
     lcdDisplay.setCursor(0, 0);
@@ -62,6 +64,7 @@ void setup() {
     hapticController.init();
     sampleQueue.reset();
     bool sensorOk = sensorDriver.init();
+    Wire.setClock(400000); // Ensure 400 kHz
 
     bridgeRpc.init(NULL);
     bridgeRpc.send_hello(sensorDriver, hapticController);
@@ -82,9 +85,12 @@ void setup() {
 void loop() {
     uint32_t nowUs = micros();
 
-    // 1. Timed sample acquisition (~64 Hz)
-    if ((nowUs - lastSampleTimeUs) >= sampleIntervalUs) {
+    // 1. Timed sample acquisition (~64 Hz = 15,625 us interval)
+    // Catch up any samples if loop was momentarily delayed, bounded to max 4 iterations
+    uint8_t loopCount = 0;
+    while ((nowUs - lastSampleTimeUs) >= sampleIntervalUs && loopCount < 4) {
         lastSampleTimeUs += sampleIntervalUs;
+        loopCount++;
 
         float ax = 0.0f, ay = 0.0f, az = 0.0f;
         bool valid = false, saturated = false;
@@ -94,25 +100,30 @@ void loop() {
             latestAy = ay;
             latestAz = az;
 
-            sampleQueue.push(
+            sampleQueue.push_with_time(
                 ax, ay, az,
                 valid, saturated,
-                hapticController.is_active()
+                hapticController.is_active(),
+                lastSampleTimeUs
             );
         } else {
             sampleQueue.increment_i2c_error();
         }
     }
+    // Prevent long freeze desync
+    if ((nowUs - lastSampleTimeUs) > (4 * sampleIntervalUs)) {
+        lastSampleTimeUs = nowUs;
+    }
 
-    // 2. Batch transport flush (~10 samples per flush or 100 ms)
+    // 2. Batch transport flush (~4 samples per flush or 60 ms)
     uint32_t nowMs = millis();
-    if (sampleQueue.size() >= 10 || (nowMs - lastFlushTimeMs) >= flushIntervalMs) {
+    if (sampleQueue.size() >= 4 || (nowMs - lastFlushTimeMs) >= 60) {
         lastFlushTimeMs = nowMs;
         bridgeRpc.flush_batch(sampleQueue, sensorDriver);
     }
 
-    // 3. LCD screen real-time readout update (solid white backlight maintained)
-    if ((nowMs - lastLcdUpdateMs) >= lcdUpdateIntervalMs) {
+    // 3. LCD screen real-time readout update (solid white backlight maintained, 350 ms cadence)
+    if ((nowMs - lastLcdUpdateMs) >= 350) {
         lastLcdUpdateMs = nowMs;
         lcdDisplay.setCursor(0, 1);
         char buf[17];

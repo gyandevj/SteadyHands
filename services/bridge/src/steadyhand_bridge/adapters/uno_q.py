@@ -54,17 +54,32 @@ class UnoQDeviceAdapter(BaseDeviceAdapter):
         return self._connected
 
     async def start(self) -> None:
-        """Attempt connection to Arduino serial port."""
+        """Attempt connection to Arduino serial port with safety timeout."""
         loop = asyncio.get_running_loop()
-        await loop.run_in_executor(None, self._open_serial)
+        try:
+            await asyncio.wait_for(loop.run_in_executor(None, self._open_serial), timeout=1.5)
+        except asyncio.TimeoutError:
+            logger.warning(f"Initial connect timeout on {self.port}; continuing startup")
 
     def _open_serial(self) -> None:
         try:
             import serial
             if self._ser and self._ser.is_open:
-                self._ser.close()
+                try:
+                    self._ser.close()
+                except Exception:
+                    pass
 
-            self._ser = serial.Serial(self.port, self.baud, timeout=0.05)
+            s = serial.Serial()
+            s.port = self.port
+            s.baudrate = self.baud
+            s.timeout = 0.05
+            s.write_timeout = 0.05
+            s.dtr = True
+            s.rts = True
+            s.open()
+
+            self._ser = s
             self._connected = True
             self._transport_error = None
             logger.info(f"Opened physical Arduino bridge on {self.port} at {self.baud} baud")

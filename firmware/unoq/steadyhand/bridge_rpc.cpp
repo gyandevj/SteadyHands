@@ -43,7 +43,7 @@ void BridgeRpc::send_hello(ISensorDriver &driver, HapticController &haptics) {
 }
 
 void BridgeRpc::flush_batch(SampleQueue &queue, ISensorDriver &driver) {
-    if (queue.size() == 0) return;
+    if (!Serial || queue.size() == 0) return;
 
     RawSample drain_buf[16];
     uint8_t count = queue.drain(drain_buf, 16);
@@ -62,66 +62,66 @@ void BridgeRpc::flush_batch(SampleQueue &queue, ISensorDriver &driver) {
     Serial.print(batch_seq++);
     Serial.print(",\"samples\":[");
 
+    char sbuf[128];
     for (uint8_t i = 0; i < count; i++) {
-        if (i > 0) Serial.print(",");
-        Serial.print("{\"seq\":");
-        Serial.print(drain_buf[i].seq);
-        Serial.print(",\"t_us\":");
-        // Print 64-bit microsecond safely
-        uint32_t high = (uint32_t)(drain_buf[i].t_us >> 32);
         uint32_t low = (uint32_t)(drain_buf[i].t_us & 0xFFFFFFFF);
-        if (high > 0) {
-            // Composite representation
-            Serial.print(low);
-        } else {
-            Serial.print(low);
-        }
-        Serial.print(",\"a_g\":[");
-        Serial.print(drain_buf[i].ax, 4);
-        Serial.print(",");
-        Serial.print(drain_buf[i].ay, 4);
-        Serial.print(",");
-        Serial.print(drain_buf[i].az, 4);
-        Serial.print("],\"valid\":");
-        Serial.print(drain_buf[i].valid ? "true" : "false");
-        Serial.print(",\"saturated\":");
-        Serial.print(drain_buf[i].saturated ? "true" : "false");
-        Serial.print(",\"haptic_active\":");
-        Serial.print(drain_buf[i].haptic_active ? "true" : "false");
-        Serial.print("}");
+        snprintf(sbuf, sizeof(sbuf),
+            "%s{\"seq\":%lu,\"t_us\":%lu,\"a_g\":[%.4f,%.4f,%.4f],\"valid\":%s,\"saturated\":%s,\"haptic_active\":%s}",
+            (i > 0 ? "," : ""),
+            (unsigned long)drain_buf[i].seq,
+            (unsigned long)low,
+            drain_buf[i].ax, drain_buf[i].ay, drain_buf[i].az,
+            drain_buf[i].valid ? "true" : "false",
+            drain_buf[i].saturated ? "true" : "false",
+            drain_buf[i].haptic_active ? "true" : "false"
+        );
+        Serial.print(sbuf);
     }
 
-    Serial.print("],\"counters\":{\"i2c_errors\":");
-    Serial.print(counters.i2c_errors);
-    Serial.print(",\"dropped_samples\":");
-    Serial.print(counters.dropped_samples);
-    Serial.print(",\"queue_overflows\":");
-    Serial.print(counters.queue_overflows);
-    Serial.println("}}");
+    snprintf(sbuf, sizeof(sbuf),
+        "],\"counters\":{\"i2c_errors\":%lu,\"dropped_samples\":%lu,\"queue_overflows\":%lu}}\n",
+        (unsigned long)counters.i2c_errors,
+        (unsigned long)counters.dropped_samples,
+        (unsigned long)counters.queue_overflows
+    );
+    Serial.print(sbuf);
 }
 
 void BridgeRpc::process_inbound(HapticController &haptics) {
-    if (!Serial.available()) return;
+    if (!Serial || !Serial.available()) return;
 
-    // Read newline-delimited command JSON
-    String line = Serial.readStringUntil('\n');
-    line.trim();
-    if (line.length() == 0) return;
+    static char in_buf[128];
+    static uint8_t in_pos = 0;
 
-    // Simple parser for haptic.request
-    if (line.indexOf("haptic.request") >= 0) {
-        int id_idx = line.indexOf("\"command_id\":\"");
-        int dur_idx = line.indexOf("\"duration_ms\":");
-        if (id_idx >= 0 && dur_idx >= 0) {
-            String cmd_id = line.substring(id_idx + 14, line.indexOf("\"", id_idx + 14));
-            int dur_val = line.substring(dur_idx + 14).toInt();
-            bool ok = haptics.trigger_pulse(cmd_id.c_str(), dur_val);
-
-            Serial.print("{\"v\":1,\"type\":\"haptic.ack\",\"command_id\":\"");
-            Serial.print(cmd_id);
-            Serial.print("\",\"accepted\":");
-            Serial.print(ok ? "true" : "false");
-            Serial.println("}");
+    while (Serial.available()) {
+        char c = (char)Serial.read();
+        if (c == '\n' || c == '\r') {
+            if (in_pos > 0) {
+                in_buf[in_pos] = '\0';
+                if (strstr(in_buf, "haptic.request") != NULL) {
+                    char *id_ptr = strstr(in_buf, "\"command_id\":\"");
+                    char *dur_ptr = strstr(in_buf, "\"duration_ms\":");
+                    if (id_ptr && dur_ptr) {
+                        id_ptr += 14;
+                        char *id_end = strchr(id_ptr, '\"');
+                        if (id_end) {
+                            *id_end = '\0';
+                            int dur_val = atoi(dur_ptr + 14);
+                            bool ok = haptics.trigger_pulse(id_ptr, dur_val);
+                            Serial.print("{\"v\":1,\"type\":\"haptic.ack\",\"command_id\":\"");
+                            Serial.print(id_ptr);
+                            Serial.print("\",\"accepted\":");
+                            Serial.print(ok ? "true" : "false");
+                            Serial.println("}");
+                        }
+                    }
+                }
+                in_pos = 0;
+            }
+        } else if (in_pos < sizeof(in_buf) - 1) {
+            in_buf[in_pos++] = c;
+        } else {
+            in_pos = 0;
         }
     }
 }

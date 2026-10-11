@@ -36,24 +36,12 @@ def _try_import_signal_library() -> bool:
     except ImportError:
         pass
 
-    # 2. Check candidate search paths
-    candidates = []
-    env_path = os.environ.get("STEADYHAND_ANALYSIS_PATH")
-    if env_path:
-        candidates.append(Path(env_path))
-
-    # Repo-relative analysis/src
-    repo_root = Path(__file__).resolve().parents[4]
-    candidates.append(repo_root / "analysis" / "src")
-
-    # Temp archive from session inspection
-    temp_dir = os.environ.get("TEMP", "")
-    if temp_dir:
-        candidates.append(Path(temp_dir) / "opencode" / "dedeepya-750ba1a" / "analysis" / "src")
-
-    for candidate in candidates:
-        if candidate.exists() and (candidate / "steadyhand_signal").exists():
-            cand_str = str(candidate)
+    # 1. Search repo-relative analysis/src by inspecting parents
+    cur = Path(__file__).resolve()
+    for parent in cur.parents:
+        cand = parent / "analysis" / "src"
+        if (cand / "steadyhand_signal").exists():
+            cand_str = str(cand)
             if cand_str not in sys.path:
                 sys.path.insert(0, cand_str)
             try:
@@ -62,7 +50,23 @@ def _try_import_signal_library() -> bool:
                 _ANALYSIS_AVAILABLE = True
                 return True
             except ImportError:
-                continue
+                break
+
+    # 2. Check explicit env path if specified
+    env_path = os.environ.get("STEADYHAND_ANALYSIS_PATH")
+    if env_path:
+        cand = Path(env_path)
+        if cand.exists() and (cand / "steadyhand_signal").exists():
+            cand_str = str(cand)
+            if cand_str not in sys.path:
+                sys.path.insert(0, cand_str)
+            try:
+                import steadyhand_signal  # type: ignore[import-not-found]
+                _SIGNAL_LIB = steadyhand_signal
+                _ANALYSIS_AVAILABLE = True
+                return True
+            except ImportError:
+                pass
 
     _ANALYSIS_AVAILABLE = False
     return False
