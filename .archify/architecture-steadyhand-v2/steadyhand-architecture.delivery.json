@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "7a01126a-212e-4306-9007-a50b6edd5861",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "C:\\Dedee\\SteadyHand_Extension_Full_Plan\\.archify\\architecture-steadyhand-v2\\candidate.json",
+  "output": "C:\\Dedee\\SteadyHand_Extension_Full_Plan\\.archify\\architecture-steadyhand-v2\\steadyhand-architecture.html",
+  "specification": {
+    "sha256": "84338055bfc7062f0c69dada8daa224c85941d56a892a137fad94e35e6bdcd6e",
+    "bytes": 5955
+  },
+  "artifact": {
+    "sha256": "4902ff34ff45e87b7d9e7c54ef44745dee21b238ad6caf298398a2ccfe4ea245",
+    "bytes": 773182
+  }
+}

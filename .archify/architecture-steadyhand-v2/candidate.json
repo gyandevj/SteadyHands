@@ -1,0 +1,234 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "SteadyHand V2 Architecture",
+    "subtitle": "Pointer Stabilization, Dwell Activation, Hardware Bridge & Adaptive Forms with Gemini",
+    "output": ".archify/architecture-steadyhand-v2/steadyhand-architecture.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "user",
+      "type": "external",
+      "label": "User Input",
+      "sublabel": "Physical Mouse / Trackpad",
+      "pos": [40, 100],
+      "size": [130, 60],
+      "icon": "person"
+    },
+    {
+      "id": "overlay",
+      "type": "frontend",
+      "label": "Virtual Overlay",
+      "sublabel": "Shadow DOM Pointer & Dwell Ring",
+      "pos": [320, 100],
+      "size": [150, 60],
+      "icon": "frontend"
+    },
+    {
+      "id": "engine",
+      "type": "frontend",
+      "label": "Interaction Engine",
+      "sublabel": "1-Euro Filter & Dwell SM",
+      "pos": [630, 100],
+      "size": [160, 64],
+      "tag": "Zero Latency"
+    },
+    {
+      "id": "adaptive_ctrl",
+      "type": "frontend",
+      "label": "Adaptive Forms Controller",
+      "sublabel": "Mutation Journal & Layout Guard",
+      "pos": [960, 100],
+      "size": [170, 64],
+      "tag": "Reversible"
+    },
+    {
+      "id": "dom",
+      "type": "frontend",
+      "label": "Webpage Form DOM",
+      "sublabel": "Original Controls & Native Submit",
+      "pos": [1300, 100],
+      "size": [150, 60]
+    },
+    {
+      "id": "popup_ui",
+      "type": "frontend",
+      "label": "Popup & Options UI",
+      "sublabel": "Settings & Adapt Action Cards",
+      "pos": [320, 280],
+      "size": [150, 60]
+    },
+    {
+      "id": "worker",
+      "type": "backend",
+      "label": "Service Worker",
+      "sublabel": "Message Router & Tab Sessions",
+      "pos": [630, 280],
+      "size": [160, 64]
+    },
+    {
+      "id": "security",
+      "type": "security",
+      "label": "Security & Rate Gate",
+      "sublabel": "Pairing Token & Concurrency (2)",
+      "pos": [960, 280],
+      "size": [160, 64]
+    },
+    {
+      "id": "gemini",
+      "type": "cloud",
+      "label": "Gemini 3.8 Flash",
+      "sublabel": "Structured Section Layout",
+      "pos": [1300, 280],
+      "size": [150, 64],
+      "tag": "store=false"
+    },
+    {
+      "id": "hardware",
+      "type": "external",
+      "label": "Arduino UNO Q",
+      "sublabel": "IMU Accelerometer + DRV2605L",
+      "pos": [320, 460],
+      "size": [150, 60]
+    },
+    {
+      "id": "bridge_api",
+      "type": "backend",
+      "label": "FastAPI Bridge",
+      "sublabel": "127.0.0.1:8765 / WebSocket Stream",
+      "pos": [630, 460],
+      "size": [160, 64]
+    },
+    {
+      "id": "signal_engine",
+      "type": "backend",
+      "label": "Signal Analysis",
+      "sublabel": "Spectral Tremor Estimator",
+      "pos": [960, 460],
+      "size": [160, 64]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Browser Isolated World (Content Script & Overlay)",
+      "wraps": ["overlay", "engine", "adaptive_ctrl", "dom"]
+    },
+    {
+      "kind": "region",
+      "label": "Extension Service & Local Host Bridge",
+      "wraps": ["popup_ui", "worker", "security", "bridge_api", "signal_engine"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "c1",
+      "from": "user",
+      "to": "overlay",
+      "label": "raw mouse move",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c2",
+      "from": "overlay",
+      "to": "engine",
+      "label": "coordinates (x,y)"
+    },
+    {
+      "id": "c3",
+      "from": "engine",
+      "to": "dom",
+      "label": "at-most-once dwell click",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c4",
+      "from": "engine",
+      "to": "adaptive_ctrl",
+      "label": "sync transition guard",
+      "variant": "dashed"
+    },
+    {
+      "id": "c5",
+      "from": "adaptive_ctrl",
+      "to": "dom",
+      "label": "single-col presentation"
+    },
+    {
+      "id": "c6",
+      "from": "popup_ui",
+      "to": "worker",
+      "label": "IPC messages"
+    },
+    {
+      "id": "c7",
+      "from": "worker",
+      "to": "adaptive_ctrl",
+      "label": "detect / apply layout"
+    },
+    {
+      "id": "c8",
+      "from": "worker",
+      "to": "security",
+      "label": "sanitized aliases (POST)",
+      "variant": "security"
+    },
+    {
+      "id": "c9",
+      "from": "security",
+      "to": "gemini",
+      "label": "structured JSON prompt",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c10",
+      "from": "hardware",
+      "to": "bridge_api",
+      "label": "100 Hz USB batch"
+    },
+    {
+      "id": "c11",
+      "from": "bridge_api",
+      "to": "signal_engine",
+      "label": "200-sample window"
+    },
+    {
+      "id": "c12",
+      "from": "bridge_api",
+      "to": "worker",
+      "label": "motion.frame stream",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Client-Side Pointer Safety",
+      "items": [
+        "1-Euro speed-adaptive filter suppresses stationary jitter and resting tremor",
+        "Target arbitrator snaps to closest candidate with hysteresis lock",
+        "Layout transition guards synchronously abort dwell to prevent misclicks"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Adaptive Forms with Gemini",
+      "items": [
+        "Reversible presentation transforms dense multi-column into accessible single-column",
+        "Strict privacy: extracts local aliases (field-1, field-2) with zero entered values",
+        "Enforces 44px+ touch targets and preserves native form validation and submission"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Bridge & Hardware Integration",
+      "items": [
+        "Local Python FastAPI bridge (127.0.0.1:8765) with pairing token authorization",
+        "Arduino UNO Q CDC serial communication with MMA7660/LIS3DH accelerometer",
+        "Real-time spectral analysis dynamically tightens filter cutoff during tremors"
+      ]
+    }
+  ]
+}

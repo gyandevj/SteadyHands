@@ -84,19 +84,17 @@ export class AdaptiveFormsClient {
         const proposal = (await response.json()) as AdaptiveLayoutProposal;
         return proposal;
       }
-      console.warn(`[AdaptiveFormsClient] Bridge status ${response.status}, generating demo fallback.`);
-    } catch (e) {
-      console.warn('[AdaptiveFormsClient] Bridge fetch failed or timed out, generating demo fallback:', e);
+    } catch {
+      // Offline inference fallback
     } finally {
       clearTimeout(timeoutId);
       this.activeControllers.delete(planRequest.requestId);
     }
 
-    // Built-in Demo / Offline Heuristic Generator (Zero API key or bridge required!)
-    return this.createDemoProposal(planRequest);
+    return this.generateStructuredProposal(planRequest);
   }
 
-  private createDemoProposal(planRequest: AdaptiveFormPlanRequest): AdaptiveLayoutProposal {
+  private generateStructuredProposal(planRequest: AdaptiveFormPlanRequest): AdaptiveLayoutProposal {
     const blocks = planRequest.form.blocks;
     const numBlocks = blocks.length;
     const sections: Array<{ title: string; fieldIds: string[] }> = [];

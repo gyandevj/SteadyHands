@@ -1,5 +1,7 @@
 # Runtime architecture
 
+> **Interactive V2 Architecture Diagram**: Open [architecture-diagram.html](architecture-diagram.html) for an interactive, full-fidelity visualization of SteadyHand V2 components, data flows, and security boundaries.
+
 ## 1. Component boundaries
 
 ```mermaid

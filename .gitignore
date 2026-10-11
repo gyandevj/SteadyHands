@@ -43,3 +43,7 @@ Thumbs.db
 *.o
 .arduino/
 build/
+
+# Agent skills cache
+.agents/
+skills-lock.json
